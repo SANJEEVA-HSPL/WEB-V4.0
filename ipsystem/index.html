@@ -76,9 +76,9 @@ input[type="number"] { -moz-appearance: textfield; }
 @page { size: A4 portrait; margin: 0; }
 @media print { body { background: #fff !important; padding: 0; margin: 0; overflow: visible; } .top-controls-bar, .print-hide { display: none !important; } .workspace { padding: 0 !important; display: block; margin: 0; } .view-section { display: none !important; } .view-section.active { display: flex !important; } .a4-page { width: 100% !important; min-height: 100% !important; margin: 0 !important; padding: 4mm !important; border: none !important; box-shadow: none !important; transform: scale(1) !important; page-break-after: avoid; page-break-before: avoid; } .a4-content { border: 1px solid #0f766e !important; padding: 8mm !important; } .line-input, .date-field { border-bottom: 1.5px dotted #0f766e !important; } }
 
-/* CM010 - Form 3D Input Styles */
-.input-3d { width: 100%; border: 1px solid #cbd5e1; border-bottom: 2px solid #64748b; border-right: 2px solid #64748b; border-radius: 4px; padding: 2px 6px; font-size: 0.65rem; font-weight: 900; color: #1e293b; outline: none; transition: all 0.1s; box-shadow: inset 1px 1px 3px rgba(0,0,0,0.15), 0 1px 2px rgba(255,255,255,0.9); background: linear-gradient(to bottom, #f8fafc, #e2e8f0); font-family: 'Roboto Slab', serif; text-transform: uppercase; }
-.input-3d:focus { border-bottom: 2px solid #0d9488; border-right: 2px solid #0d9488; background: #ffffff; box-shadow: inset 1px 1px 5px rgba(13,148,136,0.3), 0 1px 2px rgba(255,255,255,0.9); color: #0f766e; }
+/* CM010 - Form HD Input Styles */
+.input-hd { width: 100%; border: 1px solid #94a3b8; border-radius: 4px; padding: 3px 6px; font-size: 0.65rem; font-weight: 900; color: #1e293b; outline: none; transition: all 0.2s; background: #ffffff; font-family: 'Roboto Slab', serif; text-transform: uppercase; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+.input-hd:focus { border-color: #0d9488; box-shadow: 0 0 0 2px rgba(13, 148, 136, 0.2); color: #0f766e; }
 
 </style>
 </head>
@@ -116,50 +116,50 @@ input[type="number"] { -moz-appearance: textfield; }
 <div class="grid grid-cols-1 md:grid-cols-12 gap-x-2 gap-y-1.5 mb-0.5">
 <div class="col-span-1 md:col-span-4 flex items-center bg-teal-50/50 p-0.5 rounded border border-teal-100 shadow-[inset_0_1px_3px_rgba(0,0,0,0.05)]">
 <label class="font-black text-teal-900 text-[0.6rem] mr-1 w-16 text-right drop-shadow-sm">IP NO :</label>
-<input type="text" class="sync-ipNo input-3d !text-blue-800 !bg-white !font-black !text-[0.7rem]" value="NEW">
+<input type="text" class="sync-ipNo input-hd !text-blue-800 !bg-white !font-black !text-[0.7rem]" value="NEW">
 </div>
 <div class="col-span-1 md:col-span-4 flex items-center">
 <label class="font-black text-slate-700 text-[0.6rem] mr-1 w-16 text-right drop-shadow-sm">DATE :</label>
 <div class="relative w-full flex items-center">
-<input type="text" class="sync-date input-3d !text-blue-800 cursor-pointer !font-black !text-[0.7rem]" placeholder="DD MON YYYY" readonly>
+<input type="text" class="sync-date input-hd !text-blue-800 cursor-pointer !font-black !text-[0.7rem]" placeholder="DD MON YYYY" readonly>
 <input type="date" class="absolute inset-0 opacity-0 cursor-pointer w-full" onchange="formatDateSync(this, 'sync-date')">
 <i class="fas fa-calendar-alt absolute right-2 text-teal-700 pointer-events-none text-[0.7rem] drop-shadow-sm"></i>
 </div>
 </div>
 <div class="col-span-1 md:col-span-4 flex items-center">
 <label class="font-black text-slate-700 text-[0.6rem] mr-1 w-16 text-right drop-shadow-sm">MOBILE :</label>
-<input type="text" class="sync-mobile input-3d !font-black !text-[0.7rem]">
+<input type="text" class="sync-mobile input-hd !font-black !text-[0.7rem]">
 </div>
 <div class="col-span-1 md:col-span-6 flex items-center">
 <label class="font-black text-slate-700 text-[0.6rem] mr-1 w-20 text-right drop-shadow-sm">FULL NAME :</label>
-<select class="sync-title input-3d cursor-pointer !w-20 mr-1 !font-black !text-[0.7rem] !bg-slate-100"><option value="MR.">MR.</option><option value="MRS.">MRS.</option><option value="SMT.">SMT.</option><option value="MASTER">MASTER</option><option value="BABY">BABY</option></select>
-<input type="text" class="sync-patientName input-3d flex-grow !font-black !text-[0.7rem]">
+<select class="sync-title input-hd cursor-pointer !w-20 mr-1 !font-black !text-[0.7rem] !bg-slate-100"><option value="MR.">MR.</option><option value="MRS.">MRS.</option><option value="SMT.">SMT.</option><option value="MASTER">MASTER</option><option value="BABY">BABY</option></select>
+<input type="text" class="sync-patientName input-hd flex-grow !font-black !text-[0.7rem]">
 </div>
 <div class="col-span-1 md:col-span-6 flex items-center">
 <label class="font-black text-slate-700 text-[0.6rem] mr-1 w-20 text-right drop-shadow-sm">RELATIVE :</label>
-<select class="sync-relation input-3d cursor-pointer !w-16 mr-1 !font-black !text-[0.7rem] !bg-slate-100"><option value="S/O">S/O</option><option value="W/O">W/O</option><option value="D/O">D/O</option><option value="C/O">C/O</option></select>
-<input type="text" class="sync-relativeName input-3d flex-grow !font-black !text-[0.7rem]">
+<select class="sync-relation input-hd cursor-pointer !w-16 mr-1 !font-black !text-[0.7rem] !bg-slate-100"><option value="S/O">S/O</option><option value="W/O">W/O</option><option value="D/O">D/O</option><option value="C/O">C/O</option></select>
+<input type="text" class="sync-relativeName input-hd flex-grow !font-black !text-[0.7rem]">
 </div>
 <div class="col-span-1 md:col-span-4 flex items-center">
 <label class="font-black text-slate-700 text-[0.6rem] mr-1 w-20 text-right drop-shadow-sm">VILLAGE :</label>
-<input type="text" class="sync-village input-3d !font-black !text-[0.7rem]">
+<input type="text" class="sync-village input-hd !font-black !text-[0.7rem]">
 </div>
 <div class="col-span-1 md:col-span-4 flex items-center">
 <label class="font-black text-slate-700 text-[0.6rem] mr-1 w-16 text-right drop-shadow-sm">MANDAL :</label>
-<input type="text" class="sync-mandal input-3d !font-black !text-[0.7rem]">
+<input type="text" class="sync-mandal input-hd !font-black !text-[0.7rem]">
 </div>
 <div class="col-span-1 md:col-span-4 flex items-center">
 <label class="font-black text-slate-700 text-[0.6rem] mr-1 w-16 text-right drop-shadow-sm">DISTRICT :</label>
-<input type="text" class="sync-dist input-3d !font-black !text-[0.7rem]">
+<input type="text" class="sync-dist input-hd !font-black !text-[0.7rem]">
 </div>
 <div class="col-span-1 md:col-span-7 flex items-center">
 <label class="font-black text-slate-700 text-[0.6rem] mr-1 w-20 text-right leading-tight drop-shadow-sm">DIAGNOSIS :</label>
-<input type="text" class="sync-diagnosis input-3d !font-black !text-[0.7rem]">
+<input type="text" class="sync-diagnosis input-hd !font-black !text-[0.7rem]">
 </div>
 <div class="col-span-1 md:col-span-5 flex items-center">
 <label class="font-black text-slate-700 text-[0.6rem] mr-1 w-20 text-right drop-shadow-sm">FROM DATE :</label>
 <div class="relative w-full flex items-center">
-<input type="text" class="sync-fromDate input-3d !text-blue-800 cursor-pointer !font-black !text-[0.7rem]" placeholder="DD MON YYYY" readonly>
+<input type="text" class="sync-fromDate input-hd !text-blue-800 cursor-pointer !font-black !text-[0.7rem]" placeholder="DD MON YYYY" readonly>
 <input type="date" class="absolute inset-0 opacity-0 cursor-pointer w-full" onchange="formatDateSync(this, 'sync-fromDate')">
 <i class="fas fa-calendar-alt absolute right-2 text-teal-700 pointer-events-none text-[0.7rem] drop-shadow-sm"></i>
 </div>
@@ -174,7 +174,7 @@ input[type="number"] { -moz-appearance: textfield; }
 <div class="flex items-center gap-3 mr-1">
 <div class="relative flex items-center">
 <i class="fa-solid fa-magnifying-glass absolute left-2 text-slate-500 text-[0.6rem] z-10"></i>
-<input type="text" id="localTableSearch" onkeyup="filterTable()" placeholder="SEARCH DATA..." class="input-3d !pl-6 !pr-2 !py-1 !w-48 !text-[0.6rem] !bg-white !shadow-inner placeholder-slate-400 !border-teal-500 text-slate-800 normal-case font-bold">
+<input type="text" id="localTableSearch" onkeyup="filterTable()" placeholder="SEARCH DATA..." class="input-hd !pl-6 !pr-2 !py-1 !w-48 !text-[0.6rem] !bg-white !shadow-inner placeholder-slate-400 !border-teal-500 text-slate-800 normal-case font-bold">
 </div>
 <button class="bg-gradient-to-b from-teal-500 to-teal-700 hover:from-teal-400 hover:to-teal-600 text-white text-[0.6rem] px-3 py-1 rounded shadow-md border border-teal-900 font-black transition-all active:scale-95 flex items-center gap-1 drop-shadow-sm" onclick="loadTableData()">
 <i class="fa-solid fa-rotate"></i> REFRESH
