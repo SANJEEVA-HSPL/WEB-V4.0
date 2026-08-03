@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sanjeeva Hospital - IP Register & Bill</title>
+<link rel="icon" type="image/png" href="https://sanjeeva-hspl.github.io/SM-IMG/01-SMH-FEVICON_ICON.png">
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;600;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+
+/* CM001 - Styling Body */
+body { font-family: 'Roboto Slab', serif; background-color: #cbd5e1; margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
+
+/* CM002 - Top Bar Styles */
+.top-controls-bar { margin: 10px auto; width: 98%; max-width: 1400px; background: #ffffff; border-radius: 8px; padding: 6px 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 1px solid #cbd5e1; display: flex; align-items: center; justify-content: center; gap: 8px; z-index: 1000; flex-wrap: wrap; }
+
+/* CM003 - Tab Group Styles */
+.tab-group { display: flex; gap: 4px; background: #f1f5f9; padding: 3px; border-radius: 6px; box-shadow: inset 1px 1px 3px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; flex-shrink: 0; }
+.tab-btn { padding: 4px 10px; font-weight: 900; font-size: 0.6rem; cursor: pointer; transition: all 0.2s; outline: none; border: none; border-radius: 4px; color: #475569; background: transparent; text-transform: uppercase; letter-spacing: 0.05em; font-family: 'Roboto Slab', serif; }
+.tab-btn.active { background: linear-gradient(145deg, #0d9488, #0f766e); color: #ffffff; box-shadow: 0 2px 4px rgba(0,0,0,0.2); text-shadow: 0 1px 1px rgba(0,0,0,0.2); }
+.tab-btn:not(.active):hover { color: #0f766e; background: rgba(13,148,136,0.1); }
+
+/* CM004 - Search Group Styles */
+.search-group { display: flex; align-items: center; gap: 4px; background: #f8fafc; padding: 3px 6px; border-radius: 6px; box-shadow: inset 1px 1px 3px rgba(0,0,0,0.05); border: 1px solid #cbd5e1; flex-shrink: 0; flex-wrap: wrap; justify-content: center; }
+.search-input { border: 1px solid #cbd5e1; background: #ffffff; padding: 3px 8px; border-radius: 4px; font-size: 0.65rem; font-weight: 800; outline: none; color: #0d9488; box-shadow: inset 1px 1px 2px rgba(0,0,0,0.05); letter-spacing: 0.05em; font-family: 'Roboto Slab', serif; }
+.search-input::placeholder { color: #94a3b8; font-weight: 600; }
+.search-input:focus { box-shadow: inset 1px 1px 3px rgba(0,0,0,0.1), inset 0 0 0 1px #0d9488; border-color: #0d9488; color: #0f766e; }
+.input-ip { width: 140px; }
+.input-mobile { width: 180px; }
+
+/* CM005 - 3D Buttons Styles */
+.btn-3d { position: relative; padding: 4px 10px; border-radius: 4px; font-weight: 900; font-size: 0.6rem; cursor: pointer; border: none; display: flex; align-items: center; gap: 4px; color: white; transition: all 0.1s; text-transform: uppercase; letter-spacing: 0.05em; flex-shrink: 0; top: 0; margin-bottom: 3px; font-family: 'Roboto Slab', serif; }
+.btn-verify { background: linear-gradient(145deg, #0d9488, #0f766e); box-shadow: 0 3px 0 #115e59, 0 4px 4px rgba(0,0,0,0.2); }
+.btn-verify:active:not(:disabled) { top: 3px; box-shadow: 0 0px 0 #115e59, 0 1px 2px rgba(0,0,0,0.2); margin-bottom: 0px; }
+.btn-verify:disabled { opacity: 0.6; cursor: not-allowed; }
+.btn-reset { background: linear-gradient(145deg, #e11d48, #be123c); box-shadow: 0 3px 0 #881337, 0 4px 4px rgba(0,0,0,0.2); }
+.btn-reset:active { top: 3px; box-shadow: 0 0px 0 #881337, 0 1px 2px rgba(0,0,0,0.2); margin-bottom: 0px; }
+.btn-save { background: linear-gradient(145deg, #059669, #047857); box-shadow: 0 3px 0 #064e3b, 0 4px 4px rgba(0,0,0,0.2); }
+.btn-save:active { top: 3px; box-shadow: 0 0px 0 #064e3b, 0 1px 2px rgba(0,0,0,0.2); margin-bottom: 0px; }
+.btn-print { background: linear-gradient(145deg, #2563eb, #1d4ed8); box-shadow: 0 3px 0 #1e3a8a, 0 4px 4px rgba(0,0,0,0.2); }
+.btn-print:active:not(:disabled) { top: 3px; box-shadow: 0 0px 0 #1e3a8a, 0 1px 2px rgba(0,0,0,0.2); margin-bottom: 0px; }
+.btn-print:disabled { opacity: 0.4; cursor: not-allowed; filter: grayscale(100%); pointer-events: none; top: 3px; box-shadow: 0 0px 0 #1e3a8a, 0 1px 2px rgba(0,0,0,0.2); margin-bottom: 0px; }
+
+/* CM006 - Workspace and A4 Page Setup */
+.workspace { display: flex; justify-content: center; flex-grow: 1; padding-bottom: 20px; }
+.view-section { display: none; }
+.view-section.active { display: flex; }
+.a4-page { width: 210mm; min-height: 297mm; background: #ffffff; flex-direction: column; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.2), 0 0 0 1px rgba(0,0,0,0.05); overflow: hidden; padding: 4mm; margin: 10px auto; transform: scale(0.85); transform-origin: top center; margin-bottom: -40mm; box-sizing: border-box; }
+.a4-content { border: 1px solid #0f766e; height: 100%; min-height: calc(297mm - 8mm); padding: 8mm; position: relative; display: flex; flex-direction: column; z-index: 10; box-sizing: border-box; }
+.watermark-bg { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 500px; height: 500px; object-fit: contain; opacity: 0.04; z-index: 0; pointer-events: none; }
+
+/* CM007 - Header and Typography Elements */
+.header-container { display: flex; flex-direction: column; border-bottom: 2px solid #0f766e; padding-bottom: 8px; margin-bottom: 12px; z-index: 10; position: relative; }
+.header-top { display: flex; align-items: center; justify-content: flex-start; gap: 20px; width: 100%; }
+.logo-img { height: 110px; width: 130px; object-fit: contain; }
+.hospital-name { font-size: 1.4rem; font-weight: 900; color: #0f766e; text-transform: uppercase; line-height: 1.2; letter-spacing: 0.03em; }
+.receipt-headline { font-size: 1.1rem; font-weight: 900; color: #0f766e; text-decoration: underline; text-transform: uppercase; letter-spacing: 0.08em; text-align: center; margin: 10px 0; z-index: 10; position: relative; }
+.receipt-paragraph { font-size: 0.75rem; line-height: 2.4; color: #0f172a; text-align: justify; font-weight: 800; text-transform: uppercase; z-index: 10; position: relative; margin-bottom: 12px; }
+
+/* CM008 - Inputs Dates and Number Spinners */
+.line-input { border: none; border-bottom: 1.5px dotted #0f766e; outline: none; padding: 0 4px; font-weight: 900; color: #1e3a8a; text-align: center; background: transparent; font-size: 0.75rem; display: inline-block; vertical-align: bottom; font-family: 'Roboto Slab', serif; }
+.date-input-container { position: relative; display: inline-flex; align-items: center; }
+.date-input-container input[type="date"] { position: absolute; opacity: 0; width: 100%; cursor: pointer; }
+.date-field { border: none; border-bottom: 1.5px dotted #0f766e; outline: none; padding: 0 4px; color: #1e3a8a; font-weight: 900; width: 100px; text-align: center; font-size: 0.7rem; cursor: pointer; background: transparent; font-family: 'Roboto Slab', serif; }
+.toggle-btn-inline { background-color: #ccfbf1; color: #0f766e; padding: 2px 6px; border-radius: 4px; font-weight: 900; cursor: pointer; font-size: 0.7rem; border: 1px solid #5eead4; display: inline-block; user-select: none; margin: 0 2px; }
+input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+input[type="number"] { -moz-appearance: textfield; }
+
+/* CM009 - Bill Table and Print Setup */
+.bill-table { width: 100%; border-collapse: collapse; margin-top: 5px; margin-bottom: 10px; font-size: 0.7rem; z-index: 10; position: relative; }
+.bill-table th { background-color: #f1f5f9; border: 1px solid #0f766e; padding: 5px 8px; color: #0f766e; font-weight: 900; text-align: left; text-transform: uppercase; }
+.bill-table td { border: 1px solid #0f766e; padding: 4px 8px; font-weight: 800; vertical-align: middle; color: #0f172a; }
+.bill-input { width: 100%; border: none; outline: none; background: transparent; text-align: right; font-weight: 900; color: #1e3a8a; padding: 2px; font-size: 0.75rem; font-family: 'Roboto Slab', serif; }
+@page { size: A4 portrait; margin: 0; }
+@media print { body { background: #fff !important; padding: 0; margin: 0; overflow: visible; } .top-controls-bar, .print-hide { display: none !important; } .workspace { padding: 0 !important; display: block; margin: 0; } .view-section { display: none !important; } .view-section.active { display: flex !important; } .a4-page { width: 100% !important; min-height: 100% !important; margin: 0 !important; padding: 4mm !important; border: none !important; box-shadow: none !important; transform: scale(1) !important; page-break-after: avoid; page-break-before: avoid; } .a4-content { border: 1px solid #0f766e !important; padding: 8mm !important; } .line-input, .date-field { border-bottom: 1.5px dotted #0f766e !important; } }
+
+/* CM010 - Form 3D Input Styles */
+.input-3d { width: 100%; border: 1px solid #cbd5e1; border-bottom: 2px solid #64748b; border-right: 2px solid #64748b; border-radius: 4px; padding: 2px 6px; font-size: 0.65rem; font-weight: 900; color: #1e293b; outline: none; transition: all 0.1s; box-shadow: inset 1px 1px 3px rgba(0,0,0,0.15), 0 1px 2px rgba(255,255,255,0.9); background: linear-gradient(to bottom, #f8fafc, #e2e8f0); font-family: 'Roboto Slab', serif; text-transform: uppercase; }
+.input-3d:focus { border-bottom: 2px solid #0d9488; border-right: 2px solid #0d9488; background: #ffffff; box-shadow: inset 1px 1px 5px rgba(13,148,136,0.3), 0 1px 2px rgba(255,255,255,0.9); color: #0f766e; }
+
+</style>
+</head>
+<body>
+
+<!-- CM011 - Top Controls Container -->
+<div class="top-controls-bar">
+<div class="tab-group">
+<button id="tab_register" class="tab-btn active" onclick="switchTab('register')">IP REGISTER</button>
+<button id="tab_bill" class="tab-btn inactive" onclick="switchTab('bill')">IP BILL</button>
+</div>
+<div class="search-group">
+<span class="text-[0.6rem] font-black text-slate-600 tracking-wider">SEARCH:</span>
+<input type="text" id="search_ip" class="search-input input-ip" placeholder="IP No" oninput="this.value=this.value.toUpperCase()">
+<span class="text-[0.6rem] font-black text-teal-700 mx-0.5">OR</span>
+<input type="text" id="search_mobile" class="search-input input-mobile" placeholder="Mobile No" oninput="this.value=this.value.replace(/[^0-9]/g, '').slice(0, 10)">
+<button id="verifyBtn" class="btn-3d btn-verify" onclick="performSearch()">
+<i id="verifyIcon" class="fa-solid fa-magnifying-glass"></i> VERIFY
+</button>
+<button class="btn-3d btn-reset ml-3" onclick="confirmReset()"><i class="fa-solid fa-trash-can"></i> RESET</button>
+<button class="btn-3d btn-save" id="commitBtn" onclick="handleSaveOrUpdate()"><i class="fa-solid fa-cloud-arrow-up" id="saveIcon"></i> <span id="btnText">SAVE</span></button>
+<button class="btn-3d btn-print" id="printBtn" onclick="window.print()" disabled><i class="fa-solid fa-print"></i> PRINT</button>
+</div>
+</div>
+
+<!-- CM012 - Workspace Container -->
+<div class="workspace">
+
+<!-- CM013 - Register View Section -->
+<div id="view_register" class="view-section active w-full max-w-[98%] mx-auto flex-col gap-2 mt-1">
+
+<!-- CM014 - Register Form Area Reduced and Condensed -->
+<div class="bg-gradient-to-b from-white to-slate-50 rounded-md shadow-lg border border-teal-300 p-2 relative z-20">
+<h1 class="text-center text-teal-800 text-sm font-black uppercase mb-1.5 border-b-2 border-teal-700/20 pb-0.5 tracking-wide drop-shadow-sm">Sanjeeva Multispecialty Hospital</h1>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-x-2 gap-y-1.5 mb-0.5">
+<div class="col-span-1 md:col-span-4 flex items-center bg-teal-50/50 p-0.5 rounded border border-teal-100 shadow-[inset_0_1px_3px_rgba(0,0,0,0.05)]">
+<label class="font-black text-teal-900 text-[0.6rem] mr-1 w-16 text-right drop-shadow-sm">IP NO :</label>
+<input type="text" class="sync-ipNo input-3d !text-blue-800 !bg-white !font-black !text-[0.7rem]" value="NEW">
+</div>
+<div class="col-span-1 md:col-span-4 flex items-center">
+<label class="font-black text-slate-700 text-[0.6rem] mr-1 w-16 text-right drop-shadow-sm">DATE :</label>
+<div class="relative w-full flex items-center">
+<input type="text" class="sync-date input-3d !text-blue-800 cursor-pointer !font-black !text-[0.7rem]" placeholder="DD MON YYYY" readonly>
+<input type="date" class="absolute inset-0 opacity-0 cursor-pointer w-full" onchange="formatDateSync(this, 'sync-date')">
+<i class="fas fa-calendar-alt absolute right-2 text-teal-700 pointer-events-none text-[0.7rem] drop-shadow-sm"></i>
+</div>
+</div>
+<div class="col-span-1 md:col-span-4 flex items-center">
+<label class="font-black text-slate-700 text-[0.6rem] mr-1 w-16 text-right drop-shadow-sm">MOBILE :</label>
+<input type="text" class="sync-mobile input-3d !font-black !text-[0.7rem]">
+</div>
+<div class="col-span-1 md:col-span-6 flex items-center">
+<label class="font-black text-slate-700 text-[0.6rem] mr-1 w-20 text-right drop-shadow-sm">FULL NAME :</label>
+<select class="sync-title input-3d cursor-pointer !w-20 mr-1 !font-black !text-[0.7rem] !bg-slate-100"><option value="MR.">MR.</option><option value="MRS.">MRS.</option><option value="SMT.">SMT.</option><option value="MASTER">MASTER</option><option value="BABY">BABY</option></select>
+<input type="text" class="sync-patientName input-3d flex-grow !font-black !text-[0.7rem]">
+</div>
+<div class="col-span-1 md:col-span-6 flex items-center">
+<label class="font-black text-slate-700 text-[0.6rem] mr-1 w-20 text-right drop-shadow-sm">RELATIVE :</label>
+<select class="sync-relation input-3d cursor-pointer !w-16 mr-1 !font-black !text-[0.7rem] !bg-slate-100"><option value="S/O">S/O</option><option value="W/O">W/O</option><option value="D/O">D/O</option><option value="C/O">C/O</option></select>
+<input type="text" class="sync-relativeName input-3d flex-grow !font-black !text-[0.7rem]">
+</div>
+<div class="col-span-1 md:col-span-4 flex items-center">
+<label class="font-black text-slate-700 text-[0.6rem] mr-1 w-20 text-right drop-shadow-sm">VILLAGE :</label>
+<input type="text" class="sync-village input-3d !font-black !text-[0.7rem]">
+</div>
+<div class="col-span-1 md:col-span-4 flex items-center">
+<label class="font-black text-slate-700 text-[0.6rem] mr-1 w-16 text-right drop-shadow-sm">MANDAL :</label>
+<input type="text" class="sync-mandal input-3d !font-black !text-[0.7rem]">
+</div>
+<div class="col-span-1 md:col-span-4 flex items-center">
+<label class="font-black text-slate-700 text-[0.6rem] mr-1 w-16 text-right drop-shadow-sm">DISTRICT :</label>
+<input type="text" class="sync-dist input-3d !font-black !text-[0.7rem]">
+</div>
+<div class="col-span-1 md:col-span-7 flex items-center">
+<label class="font-black text-slate-700 text-[0.6rem] mr-1 w-20 text-right leading-tight drop-shadow-sm">DIAGNOSIS :</label>
+<input type="text" class="sync-diagnosis input-3d !font-black !text-[0.7rem]">
+</div>
+<div class="col-span-1 md:col-span-5 flex items-center">
+<label class="font-black text-slate-700 text-[0.6rem] mr-1 w-20 text-right drop-shadow-sm">FROM DATE :</label>
+<div class="relative w-full flex items-center">
+<input type="text" class="sync-fromDate input-3d !text-blue-800 cursor-pointer !font-black !text-[0.7rem]" placeholder="DD MON YYYY" readonly>
+<input type="date" class="absolute inset-0 opacity-0 cursor-pointer w-full" onchange="formatDateSync(this, 'sync-fromDate')">
+<i class="fas fa-calendar-alt absolute right-2 text-teal-700 pointer-events-none text-[0.7rem] drop-shadow-sm"></i>
+</div>
+</div>
+</div>
+</div>
+
+<!-- CM015 - Data Table Section Taller Height -->
+<div class="bg-white rounded-md shadow-lg border border-teal-300 flex flex-col flex-grow overflow-hidden z-10" style="min-height: 500px;">
+<div class="bg-gradient-to-r from-teal-800 to-teal-900 text-white p-1.5 flex justify-between items-center border-b-2 border-teal-600 shadow-sm">
+<h2 class="font-black text-xs tracking-wider uppercase ml-2 text-teal-50 drop-shadow-md"><i class="fa-solid fa-server mr-2 text-teal-300"></i>IN PATIENT DATA</h2>
+<div class="flex items-center gap-3 mr-1">
+<div class="relative flex items-center">
+<i class="fa-solid fa-magnifying-glass absolute left-2 text-slate-500 text-[0.6rem] z-10"></i>
+<input type="text" id="localTableSearch" onkeyup="filterTable()" placeholder="SEARCH DATA..." class="input-3d !pl-6 !pr-2 !py-1 !w-48 !text-[0.6rem] !bg-white !shadow-inner placeholder-slate-400 !border-teal-500 text-slate-800 normal-case font-bold">
+</div>
+<button class="bg-gradient-to-b from-teal-500 to-teal-700 hover:from-teal-400 hover:to-teal-600 text-white text-[0.6rem] px-3 py-1 rounded shadow-md border border-teal-900 font-black transition-all active:scale-95 flex items-center gap-1 drop-shadow-sm" onclick="loadTableData()">
+<i class="fa-solid fa-rotate"></i> REFRESH
+</button>
+</div>
+</div>
+<div class="overflow-x-auto overflow-y-auto flex-grow p-0 m-0 bg-slate-50 shadow-[inset_0_5px_10px_rgba(0,0,0,0.05)]">
+<table class="min-w-max w-full border-collapse text-[0.65rem] whitespace-nowrap">
+<thead class="bg-slate-200 sticky top-0 z-10 shadow-md border-b-2 border-teal-600">
+<tr>
+<th class="p-1.5 border border-slate-300 text-left text-teal-900 font-black drop-shadow-sm">S.No</th>
+<th class="p-1.5 border border-slate-300 text-left text-teal-900 font-black drop-shadow-sm">System Date</th>
+<th class="p-1.5 border border-slate-300 text-left text-teal-900 font-black drop-shadow-sm">SMIP Number</th>
+<th class="p-1.5 border border-slate-300 text-left text-teal-900 font-black drop-shadow-sm">Mobile Number</th>
+<th class="p-1.5 border border-slate-300 text-left text-teal-900 font-black drop-shadow-sm">Bill Date</th>
+<th class="p-1.5 border border-slate-300 text-left text-teal-900 font-black drop-shadow-sm">Patient Prefix</th>
+<th class="p-1.5 border border-slate-300 text-left text-teal-900 font-black drop-shadow-sm">Full Name</th>
+<th class="p-1.5 border border-slate-300 text-left text-teal-900 font-black drop-shadow-sm">Relationship Type</th>
+<th class="p-1.5 border border-slate-300 text-left text-teal-900 font-black drop-shadow-sm">Relative Name</th>
+<th class="p-1.5 border border-slate-300 text-left text-teal-900 font-black drop-shadow-sm">Village</th>
+<th class="p-1.5 border border-slate-300 text-left text-teal-900 font-black drop-shadow-sm">Mandal</th>
+<th class="p-1.5 border border-slate-300 text-left text-teal-900 font-black drop-shadow-sm">District</th>
+<th class="p-1.5 border border-slate-300 text-left text-teal-900 font-black drop-shadow-sm">Diagnosis Of</th>
+<th class="p-1.5 border border-slate-300 text-left text-teal-900 font-black drop-shadow-sm">From Date</th>
+<th class="p-1.5 border border-slate-300 text-left text-teal-900 font-black drop-shadow-sm">To Date</th>
+<th class="p-1.5 border border-slate-300 text-right text-teal-900 font-black drop-shadow-sm">Consultation Fees</th>
+<th class="p-1.5 border border-slate-300 text-right text-teal-900 font-black drop-shadow-sm">Bed Charges</th>
+<th class="p-1.5 border border-slate-300 text-left text-teal-900 font-black drop-shadow-sm">Bed Period From</th>
+<th class="p-1.5 border border-slate-300 text-left text-teal-900 font-black drop-shadow-sm">Bed Period To</th>
+<th class="p-1.5 border border-slate-300 text-right text-teal-900 font-black drop-shadow-sm">Nursing Charges</th>
+<th class="p-1.5 border border-slate-300 text-right text-teal-900 font-black drop-shadow-sm">Pediatrician Charges</th>
+<th class="p-1.5 border border-slate-300 text-right text-teal-900 font-black drop-shadow-sm">Surgeon Charges</th>
+<th class="p-1.5 border border-slate-300 text-right text-teal-900 font-black drop-shadow-sm">ICU & Anesthesia Charges</th>
+<th class="p-1.5 border border-slate-300 text-right text-teal-900 font-black drop-shadow-sm">OT & Medical Charges</th>
+<th class="p-1.5 border border-slate-300 text-right text-teal-900 font-black drop-shadow-sm">Physician Charges</th>
+<th class="p-1.5 border border-slate-300 text-right text-teal-900 font-black drop-shadow-sm">Medical Phototherapy Charges</th>
+<th class="p-1.5 border border-slate-300 text-right text-teal-900 font-black drop-shadow-sm">Laboratory Investigation Charges</th>
+<th class="p-1.5 border border-slate-300 text-right text-teal-900 font-black drop-shadow-sm">Drugs & Consumables</th>
+<th class="p-1.5 border border-slate-300 text-right text-teal-900 font-black drop-shadow-sm">Others / Extra Services</th>
+<th class="p-1.5 border border-slate-300 text-right text-teal-900 font-black drop-shadow-sm">Total Bill Amount</th>
+<th class="p-1.5 border border-slate-300 text-left text-teal-900 font-black drop-shadow-sm">Rupees in Words</th>
+</tr>
+</thead>
+<tbody class="text-slate-700 font-bold bg-white" id="ipDataTableBody">
+<tr><td colspan="31" class="text-center p-6 text-slate-400 font-normal"><i class="fa-solid fa-inbox text-xl mb-1 block"></i>Waiting for data to populate...</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+<!-- CM016 - Bill View Section -->
+<div id="view_bill" class="view-section a4-page">
+
+<!-- CM017 - Bill Inner Content Border -->
+<div class="a4-content">
+<img src="https://sanjeeva-hspl.github.io/SM-IMG/02-SMH-HOSPITAL%20LOGO.png" class="watermark-bg" alt="watermark">
+
+<!-- CM018 - Bill Header -->
+<div class="header-container">
+<div class="header-top">
+<img src="https://sanjeeva-hspl.github.io/SM-IMG/02-SMH-HOSPITAL%20LOGO.png" class="logo-img">
+<div class="header-text flex-grow">
+<h1 class="hospital-name">Sanjeeva Multispecialty Hospital</h1>
+<div class="flex items-center justify-between mt-1 text-[0.7rem] font-black text-teal-700">
+<span>"HEALTH CARE WITH ETHICS"</span>
+<div class="text-right leading-tight">
+<div><i class="fas fa-phone-alt"></i> 9100349825</div>
+<div class="mt-0.5"><i class="fas fa-globe"></i> www.sanjeevahospital.in</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- CM019 - Bill Patient Info -->
+<div class="flex flex-col justify-start relative z-10">
+<div class="flex justify-between w-full mt-1 font-black text-teal-800 border-b-2 border-teal-700/20 pb-2 text-[0.7rem] uppercase">
+<div>IP No: <span contenteditable="plaintext-only" class="sync-ipNo line-input text-blue-800" style="min-width:60px;">NEW</span></div>
+<div>Mobile: <span contenteditable="plaintext-only" class="sync-mobile line-input text-blue-800" style="min-width:90px;"></span></div>
+<div class="date-input-container">Date:
+<input type="text" class="sync-date date-field text-blue-800" placeholder="DD MON YYYY" readonly>
+<input type="date" onchange="formatDateSync(this, 'sync-date')">
+<i class="fas fa-calendar-alt ml-1 text-teal-700 cursor-pointer print-hide"></i>
+</div>
+</div>
+<div class="receipt-headline">INPATIENT MEDICAL BILL</div>
+<p class="receipt-paragraph text-slate-900">
+RECEIVED WITH THANKS FROM 
+<span id="bill_title" onclick="toggleText('bill_title', ['MR.', 'MRS.', 'SMT.', 'MASTER', 'BABY'])" class="toggle-btn-inline sync-title">MR.</span>
+<span contenteditable="plaintext-only" class="sync-patientName line-input text-blue-800 w-44"></span> 
+<span id="bill_rel" onclick="toggleText('bill_rel', ['S/O', 'W/O', 'D/O', 'C/O'])" class="toggle-btn-inline sync-relation">S/O</span> 
+<span contenteditable="plaintext-only" class="sync-relativeName line-input text-blue-800 w-44"></span>, 
+RESIDENT OF <span contenteditable="plaintext-only" class="sync-village line-input text-blue-800 w-32"></span>, 
+MANDAL <span contenteditable="plaintext-only" class="sync-mandal line-input text-blue-800 w-24"></span>, 
+DIST <span contenteditable="plaintext-only" class="sync-dist line-input text-blue-800 w-24"></span>. 
+THIS BEING THE MEDICAL BILL INCURRED BY <span id="bill_pronoun" onclick="toggleText('bill_pronoun', ['HIM', 'HER'])" class="toggle-btn-inline sync-pronoun">HIM</span> 
+WHILE <span id="bill_heshe" onclick="toggleText('bill_heshe', ['HE', 'SHE'])" class="toggle-btn-inline sync-heshe">HE</span> WAS ADMITTED WITH DIAGNOSIS OF 
+<span contenteditable="plaintext-only" class="sync-diagnosis line-input text-blue-800 w-44"></span> 
+FROM 
+<span class="date-input-container">
+<input type="text" class="sync-fromDate date-field text-blue-800" placeholder="DD MON YYYY" readonly>
+<input type="date" onchange="formatDateSync(this, 'sync-fromDate')">
+<i class="fas fa-calendar-alt ml-1 text-teal-700 cursor-pointer print-hide"></i>
+</span> 
+TO 
+<span class="date-input-container">
+<input type="text" class="sync-toDate date-field text-blue-800" placeholder="DD MON YYYY" readonly>
+<input type="date" onchange="formatDateSync(this, 'sync-toDate')">
+<i class="fas fa-calendar-alt ml-1 text-teal-700 cursor-pointer print-hide"></i>
+</span>.
+THE DETAILS OF THE INPATIENT BILL ARE LISTED BELOW:
+</p>
+</div>
+
+<!-- CM020 - Bill Table -->
+<table class="bill-table flex-grow">
+<thead>
+<tr><th style="width: 8%; text-align: center;">S.No.</th><th style="width: 67%">Particulars of Service Charges</th><th style="width: 25%; text-align: right;">Amount (Rs.)</th></tr>
+</thead>
+<tbody>
+<tr><td class="text-center">1</td><td><span contenteditable="plaintext-only" class="outline-none">Consultation Fees</span></td><td><input type="number" id="val_consult" class="bill-input text-blue-800" value="" placeholder="" oninput="calculateTotal()"></td></tr>
+<tr>
+<td class="text-center">2</td>
+<td>
+<div class="flex flex-col">
+<span contenteditable="plaintext-only" class="outline-none">Bed Charges / Room Rent</span>
+<div class="text-[0.65rem] text-slate-800 mt-0.5 flex items-center gap-1 font-bold">
+<span>Period:</span>
+<span class="date-input-container">
+<input type="text" class="sync-bedFrom date-field text-blue-800 !w-[75px] !text-[10px] !border-b-0" placeholder="From Date" readonly>
+<input type="date" onchange="formatDateSync(this, 'sync-bedFrom')">
+<i class="fas fa-calendar-alt text-[0.6rem] ml-0.5 text-teal-700 cursor-pointer print-hide"></i>
+</span>
+<span>to</span>
+<span class="date-input-container">
+<input type="text" class="sync-bedTo date-field text-blue-800 !w-[75px] !text-[10px] !border-b-0" placeholder="To Date" readonly>
+<input type="date" onchange="formatDateSync(this, 'sync-bedTo')">
+<i class="fas fa-calendar-alt text-[0.6rem] ml-0.5 text-teal-700 cursor-pointer print-hide"></i>
+</span>
+</div>
+</div>
+</td>
+<td><input type="number" id="val_bed" class="bill-input text-blue-800" value="" placeholder="" oninput="calculateTotal()"></td>
+</tr>
+<tr><td class="text-center">3</td><td><span contenteditable="plaintext-only" class="outline-none">Nursing Charges</span></td><td><input type="number" id="val_nursing" class="bill-input text-blue-800" value="" placeholder="" oninput="calculateTotal()"></td></tr>
+<tr><td class="text-center">4</td><td><span contenteditable="plaintext-only" class="outline-none sync-pedLabel">Pediatrician Charges</span></td><td><input type="number" id="val_pediatrician" class="bill-input text-blue-800" value="" placeholder="" oninput="calculateTotal()"></td></tr>
+<tr><td class="text-center">5</td><td><span contenteditable="plaintext-only" class="outline-none sync-surgLabel">Surgeon Charges</span></td><td><input type="number" id="val_surgeon" class="bill-input text-blue-800" value="" placeholder="" oninput="calculateTotal()"></td></tr>
+<tr><td class="text-center">6</td><td><span contenteditable="plaintext-only" class="outline-none">ICU & Anesthesia Charges</span></td><td><input type="number" id="val_icu" class="bill-input text-blue-800" value="" placeholder="" oninput="calculateTotal()"></td></tr>
+<tr><td class="text-center">7</td><td><span contenteditable="plaintext-only" class="outline-none">OT & Medical Charges</span></td><td><input type="number" id="val_ot_gas" class="bill-input text-blue-800" value="" placeholder="" oninput="calculateTotal()"></td></tr>
+<tr><td class="text-center">8</td><td><span contenteditable="plaintext-only" class="outline-none">Physician Charges</span></td><td><input type="number" id="val_pgcn" class="bill-input text-blue-800" value="" placeholder="" oninput="calculateTotal()"></td></tr>
+<tr><td class="text-center">9</td><td><span contenteditable="plaintext-only" class="outline-none">Medical phototherapy Charges</span></td><td><input type="number" id="val_photo" class="bill-input text-blue-800" value="" placeholder="" oninput="calculateTotal()"></td></tr>
+<tr><td class="text-center">10</td><td><span contenteditable="plaintext-only" class="outline-none">Laboratory Investigation Charges</span></td><td><input type="number" id="val_lab" class="bill-input text-blue-800" value="" placeholder="" oninput="calculateTotal()"></td></tr>
+<tr><td class="text-center">11</td><td><span contenteditable="plaintext-only" class="outline-none">Drugs & Consumables (Hospital Supply)</span></td><td><input type="number" id="val_drugs" class="bill-input text-blue-800" value="" placeholder="" oninput="calculateTotal()"></td></tr>
+<tr><td class="text-center">12</td><td><span contenteditable="plaintext-only" class="outline-none">Others / Extra Services</span></td><td><input type="number" id="val_others" class="bill-input text-blue-800" value="" placeholder="" oninput="calculateTotal()"></td></tr>
+<tr style="background-color: #f1f5f9; font-weight: 900;">
+<td colspan="2" style="text-align: right; color: #0f766e; font-size: 0.75rem; padding: 6px 8px;">TOTAL BILL AMOUNT (RS.) :</td>
+<td style="text-align: right; color: #0f766e; font-size: 0.8rem; padding: 6px 8px;" id="totalBillDisplay">0</td>
+</tr>
+</tbody>
+</table>
+
+<!-- CM021 - Bill Words and Footer -->
+<div class="w-full flex flex-col" style="margin-top: auto;">
+<div class="my-1 p-2 bg-teal-50 border border-teal-700/20 rounded text-[0.7rem] font-black text-teal-900 z-10 uppercase tracking-wide">
+RUPEES IN WORDS: <span id="rupeesInWords" class="text-blue-800 ml-1">ZERO RUPEES ONLY</span>
+</div>
+<div class="flex justify-between items-end text-[0.65rem] font-bold italic mt-4 z-10 relative text-slate-600">
+<div><p class="text-[0.55rem] text-slate-500 not-italic mt-0.5">Digitally signed & verified transaction record</p></div>
+<div class="text-right"><div style="width: 130px; border-bottom: 1.5px solid #0f172a; margin-bottom: 4px; margin-left: auto;"></div><p>Doctor / Auth. Signatory</p></div>
+</div>
+<hr style="border:none;border-top:1.5px solid #0f766e;margin-top:12px; margin-bottom:6px;" class="z-10 relative">
+<div class="footer text-center text-teal-800 z-10 relative">
+<p class="text-[0.6rem] font-black tracking-wide">D NO:1-7-26, PEDDANNA STREET, OPPO RAMANA FUNCTION HALL, G V TEXSTILES BACKSIDE, ALLAGADDA, NANDYALA DIS, AP-518543.</p>
+<p class="text-[0.5rem] font-bold mt-1 tracking-wider">© 2026 All Rights Reserved | Sanjeeva Multispecialty Hospital</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- CM022 - Modals Container & Very Stylish Login Overlay -->
+<div id="resetPopup" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,0.8);z-index:9999;align-items:center;justify-content:center;">
+<div style="background:#f8fafc;padding:12px;border-radius:8px;text-align:center;min-width:240px;font-family:'Roboto Slab',serif;" class="shadow-2xl border border-rose-500">
+<h3 class="font-black text-slate-800 text-sm tracking-wide">Are You Sure To Reset ?</h3>
+<p class="text-[9px] text-slate-600 mt-1 font-bold">This will clear all edited inputs.</p>
+<div style="margin-top:10px;" class="flex justify-center gap-2">
+<button class="btn-3d btn-reset !text-[9px] !px-2 !py-1 !text-white" onclick="doReset()">YES, RESET</button>
+<button class="btn-3d btn-print !bg-slate-500 !shadow-slate-700 !text-[9px] !px-2 !py-1 !text-white" onclick="closePopup('resetPopup')">CANCEL</button>
+</div>
+</div>
+</div>
+<div id="successPopup" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,0.8);z-index:99999;align-items:center;justify-content:center;">
+<div style="background:#ffffff;padding:12px;border-radius:8px;text-align:center;min-width:200px;font-family:'Roboto Slab',serif;" class="shadow-xl border-2 border-emerald-500">
+<i class="fa-solid fa-circle-check" style="font-size:24px;color:#10b981;"></i>
+<h2 style="margin-top:4px;font-black;color:#10b981;" class="text-xs tracking-wide">SUCCESS</h2>
+<p id="successText" style="font-bold;margin-top:2px;" class="text-slate-700 text-[9px]"></p>
+<button class="btn-3d btn-save mt-2 mx-auto !text-[8px] !px-3 !py-1" onclick="closePopup('successPopup'); resetSaveIcon();">OK</button>
+</div>
+</div>
+<div id="errorPopup" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,0.8);z-index:99999;align-items:center;justify-content:center;">
+<div style="background:#ffffff;padding:12px;border-radius:8px;text-align:center;min-width:200px;font-family:'Roboto Slab',serif;" class="shadow-xl border-2 border-rose-500">
+<i class="fa-solid fa-circle-exclamation" style="font-size:24px;color:#f43f5e;"></i>
+<h2 style="margin-top:4px;font-black;color:#f43f5e;" class="text-xs tracking-wide">ERROR</h2>
+<p id="errorText" style="font-bold;margin-top:2px;" class="text-slate-700 text-[9px]"></p>
+<button class="btn-3d btn-reset mt-2 mx-auto !text-[8px] !px-3 !py-1" onclick="closePopup('errorPopup')">OK</button>
+</div>
+</div>
+<div id="loginOverlay" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,0.85);z-index:999999;align-items:center;justify-content:center;backdrop-filter:blur(8px);">
+<div class="bg-white/80 p-5 rounded-2xl text-center shadow-[0_15px_35px_rgba(13,148,136,0.4)] border border-white w-full max-w-[260px] box-border relative overflow-hidden backdrop-blur-xl">
+<div class="absolute inset-0 bg-gradient-to-br from-teal-500/10 to-blue-500/10 pointer-events-none"></div>
+<img src="https://sanjeeva-hspl.github.io/SM-IMG/02-SMH-HOSPITAL%20LOGO.png" class="h-12 mx-auto mb-3 drop-shadow-lg relative z-10">
+<h2 class="text-teal-900 font-black text-sm mb-4 tracking-widest uppercase relative z-10 drop-shadow-sm">System Login</h2>
+<div class="relative w-full mb-3 box-border z-10">
+<i class="fa-solid fa-user absolute left-3 top-1/2 transform -translate-y-1/2 text-teal-600/70 text-[11px]"></i>
+<input type="text" id="loginUser" placeholder="USERNAME" class="w-full pl-8 pr-3 py-1.5 border-none rounded bg-white/70 font-black text-center outline-none focus:ring-2 focus:ring-teal-400 text-teal-900 shadow-[inset_0_2px_4px_rgba(0,0,0,0.05)] box-border text-[10px] placeholder-teal-700/50 transition-all" oninput="this.value=this.value.toUpperCase()">
+</div>
+<div class="relative w-full mb-4 box-border z-10">
+<i class="fa-solid fa-lock absolute left-3 top-1/2 transform -translate-y-1/2 text-teal-600/70 text-[11px]"></i>
+<input type="password" id="loginPass" placeholder="PASSWORD" class="w-full pl-8 pr-3 py-1.5 border-none rounded bg-white/70 font-black text-center outline-none focus:ring-2 focus:ring-teal-400 text-teal-900 shadow-[inset_0_2px_4px_rgba(0,0,0,0.05)] box-border text-[10px] placeholder-teal-700/50 transition-all">
+</div>
+<button id="loginBtn" class="w-full justify-center py-2 text-[10px] rounded bg-gradient-to-r from-teal-600 to-teal-800 text-white font-black shadow-[0_4px_10px_rgba(13,148,136,0.3)] hover:shadow-[0_6px_15px_rgba(13,148,136,0.4)] hover:-translate-y-0.5 active:translate-y-0.5 transition-all z-10 relative uppercase tracking-wider border border-teal-500/50" onclick="attemptLogin()"><i class="fa-solid fa-shield-halved mr-1"></i> Secure Login</button>
+<p id="loginError" class="text-rose-600 font-black text-[9px] mt-2 hidden bg-rose-50/80 border border-rose-200/50 p-1 rounded uppercase tracking-wider shadow-inner z-10 relative">Invalid Credentials!</p>
+</div>
+</div>
+
+<script>
+
+/* CM023 - Constants & Switch Tab */
+const URL = "https://script.google.com/macros/s/AKfycbxh9ggeGX1AwFwQyhoKa_bF7yEet1TXhkpUcz1q-Sv_Gn02CP696wrU2UkQRdQhk9ZwCA/exec";
+const switchTab = (tabName) => { document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active')); document.querySelectorAll('.tab-btn').forEach(el => { el.classList.remove('active'); el.classList.add('inactive'); }); document.getElementById(`view_${tabName}`).classList.add('active'); document.getElementById(`tab_${tabName}`).classList.add('active'); document.getElementById(`tab_${tabName}`).classList.remove('inactive'); };
+
+/* CM024 - Input Sync Listeners */
+const handleSyncInput = (e) => { const el = e.target; const syncClass = Array.from(el.classList).find(c => c.startsWith('sync-')); if (syncClass) { const val = (el.tagName === 'INPUT' || el.tagName === 'SELECT') ? el.value : el.innerText; document.querySelectorAll('.' + syncClass).forEach(node => { if (node !== el) { if (node.tagName === 'INPUT' || node.tagName === 'SELECT') node.value = val; else node.innerText = val; } }); saveFormData(); } };
+document.addEventListener('input', handleSyncInput);
+document.addEventListener('change', handleSyncInput);
+
+/* CM025 - Toggle Text Helper */
+const toggleText = (id, options) => { const el = document.getElementById(id); const curIdx = options.indexOf(el.innerText); const nextIdx = (curIdx + 1) % options.length; const newVal = options[nextIdx]; const syncClass = Array.from(el.classList).find(c => c.startsWith('sync-')); if (syncClass) { setSyncVal(syncClass, newVal); } else { el.innerText = newVal; } saveFormData(); };
+
+/* CM026 - Sync Value Get/Set */
+const getSyncVal = (cls, isInput=false) => { const el = document.querySelector('.' + cls); if (!el) return ''; if (el.tagName === 'INPUT' || el.tagName === 'SELECT') return el.value; return el.innerText; };
+const setSyncVal = (cls, val, isInput=false) => { document.querySelectorAll('.' + cls).forEach(el => { if (el.tagName === 'INPUT' || el.tagName === 'SELECT') { el.value = val || ''; } else { el.innerText = val || (cls === 'sync-ipNo' ? 'NEW' : ''); } }); };
+
+/* CM027 - Number to Words Converter */
+const numToWords = (num) => { if (num == 0) return 'Zero Rupees Only'; const a = ['','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen']; const b = ['','','Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety']; const format = (n, suffix) => n > 0 ? (n < 20 ? a[n] : b[Math.floor(n/10)] + (n%10 ? ' ' + a[n%10] : '')) + ' ' + suffix + ' ' : ''; let str = ''; str += format(Math.floor(num/10000000), 'Crore'); str += format(Math.floor((num%10000000)/100000), 'Lakh'); str += format(Math.floor((num%100000)/1000), 'Thousand'); str += format(Math.floor((num%1000)/100), 'Hundred'); const rem = num % 100; if (rem > 0) { str += (str != '' ? 'and ' : '') + (rem < 20 ? a[rem] : b[Math.floor(rem/10)] + (rem%10 ? ' ' + a[rem%10] : '')); } return str.trim() + ' Rupees Only'; };
+
+/* CM028 - Calculator & Formatter */
+const calculateTotal = () => { const ids = ['val_consult', 'val_bed', 'val_nursing', 'val_pediatrician', 'val_surgeon', 'val_icu', 'val_ot_gas', 'val_pgcn', 'val_photo', 'val_lab', 'val_drugs', 'val_others']; let sum = 0; ids.forEach(id => { sum += parseFloat(document.getElementById(id).value) || 0; }); document.getElementById('totalBillDisplay').innerText = sum; document.getElementById('rupeesInWords').innerText = numToWords(sum); saveFormData(); };
+const formatDateSync = (input, syncClass) => { const d = new Date(input.value); if (isNaN(d)) return; const m = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"]; const formatted = `${("0"+d.getDate()).slice(-2)} ${m[d.getMonth()]} ${d.getFullYear()}`; setSyncVal(syncClass, formatted, true); saveFormData(); };
+const normalizeDate = (v) => { if (!v) return ""; if (!v.includes('T') && !isNaN(Date.parse(v))) { const d = new Date(v); const m = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"]; return `${("0"+d.getDate()).slice(-2)} ${m[d.getMonth()]} ${d.getFullYear()}`; } if (!v.includes('T')) return v; const d = new Date(v); const m = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"]; return `${("0"+d.getDate()).slice(-2)} ${m[d.getMonth()]} ${d.getFullYear()}`; };
+
+/* CM029 - Init Default Dates & Local Table Filter */
+const initDefaultDates = () => { const d = new Date(); const m = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"]; const f = `${("0"+d.getDate()).slice(-2)} ${m[d.getMonth()]} ${d.getFullYear()}`; if(!getSyncVal('sync-date',true)) setSyncVal('sync-date',f,true); if(!getSyncVal('sync-fromDate',true)) setSyncVal('sync-fromDate',f,true); };
+const filterTable = () => { const term = document.getElementById('localTableSearch').value.toLowerCase(); const rows = document.querySelectorAll('#ipDataTableBody tr'); rows.forEach(row => { row.style.display = row.innerText.toLowerCase().includes(term) ? '' : 'none'; }); };
+
+/* CM030 - Data Save & Load */
+const saveFormData = () => { const formData = { certNo: localStorage.getItem('vsr_cert') || '', receiptDate: getSyncVal('sync-date', true), deliveryDate: getSyncVal('sync-fromDate', true), deliveryTimeTo: getSyncVal('sync-toDate', true), motherName: getSyncVal('sync-patientName'), fatherName: getSyncVal('sync-relativeName'), village: getSyncVal('sync-village'), mandal: getSyncVal('sync-mandal'), dist: getSyncVal('sync-dist'), title: getSyncVal('sync-title'), relation: getSyncVal('sync-relation'), pronoun: getSyncVal('sync-pronoun'), heshe: getSyncVal('sync-heshe'), admittedFor: getSyncVal('sync-diagnosis'), ipNo: getSyncVal('sync-ipNo'), mobile: getSyncVal('sync-mobile'), bedFrom: getSyncVal('sync-bedFrom', true), bedTo: getSyncVal('sync-bedTo', true), surgeonLabel: getSyncVal('sync-surgLabel'), pediatricianLabel: getSyncVal('sync-pedLabel'), charges: { val_consult: document.getElementById('val_consult').value, val_bed: document.getElementById('val_bed').value, val_nursing: document.getElementById('val_nursing').value, val_pediatrician: document.getElementById('val_pediatrician').value, val_surgeon: document.getElementById('val_surgeon').value, val_icu: document.getElementById('val_icu').value, val_ot_gas: document.getElementById('val_ot_gas').value, val_pgcn: document.getElementById('val_pgcn').value, val_photo: document.getElementById('val_photo').value, val_lab: document.getElementById('val_lab').value, val_drugs: document.getElementById('val_drugs').value, val_others: document.getElementById('val_others').value } }; localStorage.setItem('vsr_form_data', JSON.stringify(formData)); };
+const loadFormData = () => { const data = JSON.parse(localStorage.getItem('vsr_form_data') || '{}'); if (!Object.keys(data).length) return; setSyncVal('sync-date', data.receiptDate, true); setSyncVal('sync-fromDate', data.deliveryDate, true); setSyncVal('sync-toDate', data.deliveryTimeTo, true); setSyncVal('sync-patientName', data.motherName); setSyncVal('sync-relativeName', data.fatherName); setSyncVal('sync-village', data.village); setSyncVal('sync-mandal', data.mandal); setSyncVal('sync-dist', data.dist); setSyncVal('sync-title', data.title || 'MR.'); setSyncVal('sync-relation', data.relation || 'S/O'); setSyncVal('sync-pronoun', data.pronoun || 'HIM'); setSyncVal('sync-heshe', data.heshe || 'HE'); setSyncVal('sync-diagnosis', data.admittedFor); setSyncVal('sync-ipNo', data.ipNo || 'NEW'); setSyncVal('sync-mobile', data.mobile); setSyncVal('sync-bedFrom', data.bedFrom, true); setSyncVal('sync-bedTo', data.bedTo, true); setSyncVal('sync-surgLabel', data.surgeonLabel || 'Surgeon Charges'); setSyncVal('sync-pedLabel', data.pediatricianLabel || 'Pediatrician Charges'); if (data.charges) { Object.keys(data.charges).forEach(id => { const el = document.getElementById(id); if (el) el.value = data.charges[id] == 0 ? '' : data.charges[id]; }); } if (data.certNo) { document.getElementById('search_ip').value = data.certNo; document.getElementById('printBtn').disabled = false; } calculateTotal(); };
+
+/* CM031 - UI Feedback Popups */
+const showSuccess = (msg) => { document.getElementById('successText').innerHTML = msg; document.getElementById('successPopup').style.display = 'flex'; };
+const showError = (msg) => { document.getElementById('errorText').innerHTML = msg; document.getElementById('errorPopup').style.display = 'flex'; };
+const closePopup = (id) => { document.getElementById(id).style.display = 'none'; };
+const resetSaveIcon = () => { document.getElementById('saveIcon').className = 'fa-solid fa-cloud-arrow-up'; document.getElementById('btnText').innerText = 'SAVE'; };
+
+/* CM032 - Reset Logic */
+const confirmReset = () => { document.getElementById('resetPopup').style.display = 'flex'; };
+const doReset = () => { localStorage.removeItem('vsr_cert'); localStorage.removeItem('vsr_form_data'); document.getElementById('search_ip').value = ''; document.getElementById('search_mobile').value = ''; setSyncVal('sync-date', '', true); setSyncVal('sync-fromDate', '', true); setSyncVal('sync-toDate', '', true); setSyncVal('sync-patientName', ''); setSyncVal('sync-relativeName', ''); setSyncVal('sync-village', ''); setSyncVal('sync-mandal', ''); setSyncVal('sync-dist', ''); setSyncVal('sync-diagnosis', ''); setSyncVal('sync-ipNo', 'NEW'); setSyncVal('sync-mobile', ''); setSyncVal('sync-bedFrom', '', true); setSyncVal('sync-bedTo', '', true); setSyncVal('sync-title', 'MR.'); setSyncVal('sync-relation', 'S/O'); setSyncVal('sync-pronoun', 'HIM'); setSyncVal('sync-heshe', 'HE'); setSyncVal('sync-surgLabel', 'Surgeon Charges'); setSyncVal('sync-pedLabel', 'Pediatrician Charges'); const ids = ['val_consult', 'val_bed', 'val_nursing', 'val_pediatrician', 'val_surgeon', 'val_icu', 'val_ot_gas', 'val_pgcn', 'val_photo', 'val_lab', 'val_drugs', 'val_others']; ids.forEach(id => document.getElementById(id).value = ''); calculateTotal(); document.getElementById('printBtn').disabled = true; initDefaultDates(); closePopup('resetPopup'); };
+
+/* CM033 - Search Verification */
+const performSearch = () => { const ip = document.getElementById('search_ip').value.trim(); const mob = document.getElementById('search_mobile').value.trim(); const query = ip || mob; if (!query) { showError("Please enter IP No or Mobile No to search."); return; } document.getElementById('verifyBtn').disabled = true; document.getElementById('verifyIcon').className = 'fa-solid fa-spinner fa-spin'; fetch(`${URL}?certNo=${encodeURIComponent(query)}`).then(r => r.json()).then(d => { if (d.status === "success") { setSyncVal('sync-patientName', d.data['Mothers Name'] || d.data['patientName'] || ''); setSyncVal('sync-relativeName', d.data['Father Name'] || d.data['relativeName'] || ''); setSyncVal('sync-village', d.data['village'] || ''); setSyncVal('sync-mandal', d.data['Mandal'] || d.data['mandal'] || ''); setSyncVal('sync-dist', d.data['Dist'] || d.data['dist'] || ''); setSyncVal('sync-date', normalizeDate(d.data['Date'] || d.data['receiptDate']), true); setSyncVal('sync-fromDate', normalizeDate(d.data['On Date'] || d.data['admissionFrom']), true); setSyncVal('sync-toDate', normalizeDate(d.data['Time'] || d.data['admissionTo']), true); setSyncVal('sync-ipNo', d.data['ipNo'] || d.data['IP Bill ID'] || 'NEW'); setSyncVal('sync-mobile', d.data['mobile'] || d.data['Mobile'] || d.data['Phone'] || mob || ''); setSyncVal('sync-bedFrom', normalizeDate(d.data['bedFrom']) || '', true); setSyncVal('sync-bedTo', normalizeDate(d.data['bedTo']) || '', true); setSyncVal('sync-diagnosis', d.data['admittedFor'] || d.data['Diagnosis'] || ''); if (d.data['surgeonLabel']) setSyncVal('sync-surgLabel', d.data['surgeonLabel']); if (d.data['pediatricianLabel']) setSyncVal('sync-pedLabel', d.data['pediatricianLabel']); if (d.data['title']) setSyncVal('sync-title', d.data['title']); if (d.data['relation']) setSyncVal('sync-relation', d.data['relation']); if (d.data['pronoun']) setSyncVal('sync-pronoun', d.data['pronoun']); if (d.data['heshe']) setSyncVal('sync-heshe', d.data['heshe']); const charges = ['val_consult', 'val_bed', 'val_nursing', 'val_pediatrician', 'val_surgeon', 'val_icu', 'val_ot_gas', 'val_pgcn', 'val_photo', 'val_lab', 'val_drugs', 'val_others']; charges.forEach(ch => { if (d.data[ch] !== undefined) { document.getElementById(ch).value = d.data[ch] == 0 ? '' : d.data[ch]; } }); calculateTotal(); localStorage.setItem('vsr_cert', query); saveFormData(); document.getElementById('printBtn').disabled = false; } else { showError('Record not found for given IP No or Mobile No!'); document.getElementById('printBtn').disabled = true; } document.getElementById('verifyBtn').disabled = false; document.getElementById('verifyIcon').className = 'fa-solid fa-magnifying-glass'; }).catch(err => { document.getElementById('verifyBtn').disabled = false; document.getElementById('verifyIcon').className = 'fa-solid fa-magnifying-glass'; console.error(err); showError('Communication error trying to read Google Sheet database!'); }); };
+
+/* CM034 - Save & Update API */
+const handleSaveOrUpdate = () => { const receiptDate = getSyncVal('sync-date', true).trim(); const deliveryDate = getSyncVal('sync-fromDate', true).trim(); const motherName = getSyncVal('sync-patientName').trim(); const fatherName = getSyncVal('sync-relativeName').trim(); const mobileNum = getSyncVal('sync-mobile').trim(); if (!receiptDate) { showError("Please Select Bill Date!"); return; } if (!deliveryDate) { showError("Please Select Admission From Date!"); return; } if (!motherName) { showError("Please Enter Patient Name!"); return; } if (!fatherName) { showError("Please Enter Relative/Father Name!"); return; } document.getElementById('saveIcon').className = 'fa-solid fa-spinner fa-spin'; document.getElementById('btnText').innerText = 'SAVING'; const p = { certNo: localStorage.getItem('vsr_cert') || "NEW", date: getSyncVal('sync-date', true), title: getSyncVal('sync-title'), motherName: getSyncVal('sync-patientName'), relation: getSyncVal('sync-relation'), fatherName: getSyncVal('sync-relativeName'), village: getSyncVal('sync-village'), mandal: getSyncVal('sync-mandal'), dist: getSyncVal('sync-dist'), pronoun: getSyncVal('sync-pronoun'), heshe: getSyncVal('sync-heshe'), admittedFor: getSyncVal('sync-diagnosis'), mobile: mobileNum, onDate: getSyncVal('sync-fromDate', true), time: getSyncVal('sync-toDate', true), bedFrom: getSyncVal('sync-bedFrom', true), bedTo: getSyncVal('sync-bedTo', true), surgeonLabel: getSyncVal('sync-surgLabel'), pediatricianLabel: getSyncVal('sync-pedLabel'), val_consult: parseFloat(document.getElementById('val_consult').value) || 0, val_bed: parseFloat(document.getElementById('val_bed').value) || 0, val_nursing: parseFloat(document.getElementById('val_nursing').value) || 0, val_pediatrician: parseFloat(document.getElementById('val_pediatrician').value) || 0, val_surgeon: parseFloat(document.getElementById('val_surgeon').value) || 0, val_icu: parseFloat(document.getElementById('val_icu').value) || 0, val_ot_gas: parseFloat(document.getElementById('val_ot_gas').value) || 0, val_pgcn: parseFloat(document.getElementById('val_pgcn').value) || 0, val_photo: parseFloat(document.getElementById('val_photo').value) || 0, val_lab: parseFloat(document.getElementById('val_lab').value) || 0, val_drugs: parseFloat(document.getElementById('val_drugs').value) || 0, val_others: parseFloat(document.getElementById('val_others').value) || 0, delivered: parseFloat(document.getElementById('totalBillDisplay').innerText) || 0 }; fetch(URL, { method: "POST", body: JSON.stringify(p) }).then(r => r.json()).then(d => { if (d.status === "success") { setSyncVal('sync-ipNo', d.certNo); localStorage.setItem('vsr_cert', d.certNo); document.getElementById('saveIcon').className = 'fa-solid fa-circle-check'; document.getElementById('btnText').innerText = 'UPDATED'; showSuccess('Record Saved Successfully!<br><br>IP No: <b>' + d.certNo + '</b><br><span style="font-size:0.5rem;color:#f43f5e;margin-top:6px;display:block;">Auto-resetting fields in 3 seconds...</span>'); saveFormData(); document.getElementById('printBtn').disabled = false; loadTableData(); setTimeout(() => { doReset(); closePopup('successPopup'); resetSaveIcon(); }, 3000); } else { showError('Database logic rejected the save command: ' + d.message); resetSaveIcon(); } }).catch(err => { resetSaveIcon(); console.error(err); showError("Failed to communicate with Server!"); }); };
+
+/* CM035 - Login Authentication Logic */
+const checkLogin = () => { if (!localStorage.getItem('vsr_logged_in')) { document.getElementById('loginOverlay').style.display = 'flex'; } else { loadFormData(); initDefaultDates(); loadTableData(); } };
+const attemptLogin = () => { const u = document.getElementById('loginUser').value.trim(); const p = document.getElementById('loginPass').value.trim(); const btn = document.getElementById('loginBtn'); const err = document.getElementById('loginError'); if (!u || !p) { err.style.display = 'block'; err.innerText = 'Please enter Username & Password'; return; } btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> VERIFYING...'; btn.disabled = true; err.style.display = 'none'; fetch(URL, { method: 'POST', body: JSON.stringify({ action: 'login', username: u, password: p }) }).then(r => r.json()).then(d => { if (d.status === 'success') { localStorage.setItem('vsr_logged_in', u); document.getElementById('loginOverlay').style.display = 'none'; loadFormData(); initDefaultDates(); loadTableData(); } else { err.style.display = 'block'; err.innerText = d.message || 'Invalid Credentials!'; btn.innerHTML = '<i class="fa-solid fa-shield-halved mr-1"></i> SECURE LOGIN'; btn.disabled = false; } }).catch(e => { err.style.display = 'block'; err.innerText = 'Network Error! Check connection.'; btn.innerHTML = '<i class="fa-solid fa-shield-halved mr-1"></i> SECURE LOGIN'; btn.disabled = false; }); };
+window.addEventListener('load', checkLogin);
+
+/* CM036 - Table Data Fetching */
+const loadTableData = () => { const tbody = document.getElementById('ipDataTableBody'); tbody.innerHTML = `<tr><td colspan="31" class="text-center p-8 text-slate-400 font-normal"><i class="fa-solid fa-spinner fa-spin text-2xl mb-2 block"></i>Fetching Data from Database...</td></tr>`; fetch(`${URL}?action=get_all`).then(r => r.json()).then(d => { if (d.status === "success") { if (d.data.length === 0) { tbody.innerHTML = `<tr><td colspan="31" class="text-center p-8 text-slate-400 font-normal"><i class="fa-solid fa-folder-open text-2xl mb-2 block"></i>No patient records found in database.</td></tr>`; return; } let html = ''; for (let rIdx = d.data.length - 1; rIdx >= 0; rIdx--) { const row = d.data[rIdx]; html += '<tr class="border-b border-slate-200 hover:bg-teal-50 transition">'; for (let i = 0; i < 31; i++) { let cellData = row[i] !== undefined && row[i] !== null ? row[i] : ''; let alignClass = 'text-left'; if (i === 0 || i === 2) alignClass = 'text-center text-teal-800'; else if (i >= 15 && i <= 29) alignClass = 'text-right font-black text-blue-700'; html += `<td class="p-2 border border-slate-200 ${alignClass}">${cellData}</td>`; } html += '</tr>'; } tbody.innerHTML = html; } else { tbody.innerHTML = `<tr><td colspan="31" class="text-center p-8 text-rose-500 font-bold"><i class="fa-solid fa-circle-exclamation text-2xl mb-2 block"></i>Error: ${d.message}</td></tr>`; } }).catch(err => { tbody.innerHTML = `<tr><td colspan="31" class="text-center p-8 text-rose-500 font-bold"><i class="fa-solid fa-wifi text-2xl mb-2 block"></i>Network Error. Unable to reach server.</td></tr>`; }); };
+
+/* CM037 - Enter Key Navigation */
+document.addEventListener('keydown', (e) => { if (e.key === 'Enter') { const target = e.target; if (target.tagName === 'TEXTAREA' || target.tagName === 'BUTTON') return; e.preventDefault(); const els = Array.from(document.querySelectorAll('input:not([type="hidden"]):not([readonly]), [contenteditable="plaintext-only"]')).filter(el => el.offsetParent !== null && !el.disabled); const idx = els.indexOf(target); if (idx > -1 && idx < els.length - 1) { els[idx + 1].focus(); if (els[idx + 1].select) els[idx + 1].select(); } else if (target.id === 'loginUser') { document.getElementById('loginPass').focus(); } else if (target.id === 'loginPass') { attemptLogin(); } else if (target.id === 'search_ip' || target.id === 'search_mobile') { performSearch(); } } });
+
+</script>
+</body>
+</html>

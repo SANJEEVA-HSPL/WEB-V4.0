@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hospital Forms Manager</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="https://sanjeeva-hspl.github.io/SM-IMG/01-SMH-FEVICON_ICON.png">
+<style>
+
+/* CM001 - CSS Variables */
+:root { --primary-blue: #1e40af; --bg-body: #f3f4f6; --bg-surface: #ffffff; --bg-hover: #f9fafb; --text-main: #111827; --text-muted: #6b7280; --border-color: #e5e7eb; --header-height: 62px; --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05); --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1); --radius-md: 6px; }
+
+/* CM002 - Global Reset */
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto Slab', serif; }
+
+/* CM003 - Body Base */
+body { background-color: var(--bg-body); color: var(--text-main); font-size: 13px; min-height: 100vh; display: flex; flex-direction: column; }
+
+/* CM004 - Scrollbar Elements */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--bg-surface); }
+::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* CM005 - Header Animated Layout */
+.main-header { height: var(--header-height); background: linear-gradient(-45deg, #0f172a, #1e40af, #1d4ed8, #0369a1, #111827); background-size: 400% 400%; animation: gradientBg 18s ease infinite; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: space-between; padding: 0 18px; box-shadow: var(--shadow-sm); z-index: 100; position: sticky; top: 0; width: 100%; }
+@keyframes gradientBg { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+.header-brand { display: flex; align-items: center; gap: 10px; }
+.header-logo-circle { width: 44px; height: 44px; background: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: 2px; box-shadow: 0 2px 6px rgba(0,0,0,0.3); flex-shrink: 0; }
+.header-logo { height: 36px; width: 36px; object-fit: contain; }
+.header-title { font-size: 0.98rem; font-weight: 700; color: #ffffff; letter-spacing: 0.3px; white-space: nowrap; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
+
+/* CM006 - Header Right Controls Layout */
+.header-right { display: flex; align-items: center; gap: 12px; }
+
+/* CM007 - Live Clock & Logout Button Styles */
+.live-clock { color: #f8fafc; background: rgba(255,255,255,0.12); padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; font-family: monospace, 'Roboto Slab'; border: 1px solid rgba(255,255,255,0.2); letter-spacing: 0.5px; box-shadow: inset 0 1px 2px rgba(0,0,0,0.2); }
+.logout-btn { background: #ef4444; color: #ffffff; border: none; padding: 5px 14px; border-radius: 4px; font-size: 0.78rem; font-weight: 600; cursor: pointer; transition: all 0.2s; display: none; align-items: center; gap: 4px; box-shadow: 0 2px 4px rgba(239,68,68,0.3); }
+.logout-btn:hover { background: #dc2626; transform: translateY(-1px); }
+
+/* CM008 - Security Ticker Styles */
+.ticker-container { width: 100%; background: transparent; border-bottom: 1px solid rgba(255,255,255,0.1); overflow: hidden; height: 26px; display: flex; align-items: center; position: sticky; top: var(--header-height); z-index: 99; transition: background-color 0.3s ease; }
+.ticker-content { display: inline-block; white-space: nowrap; padding-left: 38px; animation: scrollTicker 75s linear infinite; color: #f43f5e; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.2px; }
+.ticker-container:hover .ticker-content { animation-play-state: paused; }
+@keyframes scrollTicker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
+
+/* CM009 - Dropdown Styles */
+.form-dropdown { padding: 4px 10px; font-size: 0.8rem; height: 30px; border: 1px solid rgba(255,255,255,0.3); border-radius: var(--radius-md); background-color: rgba(255,255,255,0.95); color: var(--text-main); cursor: pointer; outline: none; transition: all 0.2s; min-width: 190px; max-width: 270px; font-weight: 600; display: none; }
+.form-dropdown:hover, .form-dropdown:focus { border-color: #ffffff; background-color: #ffffff; box-shadow: 0 0 5px rgba(255,255,255,0.5); }
+
+/* CM012 - Content Area & Responsive Frame */
+.main-container { display: none; flex-direction: column; position: relative; flex: 1; }
+.content-area { position: relative; background-color: var(--bg-body); padding: 8px; display: flex; flex-direction: column; flex: 1; }
+.iframe-container { background-color: var(--bg-surface); border-radius: var(--radius-md); box-shadow: var(--shadow-md); overflow: hidden; position: relative; border: 1px solid var(--border-color); min-height: 80vh; height: auto; flex: 1; }
+iframe { width: 100%; min-height: 80vh; height: 100%; border: none; display: block; }
+
+/* CM013 - Loading Overlay Element */
+.loader-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-surface); display: flex; flex-direction: column; justify-content: flex-start; padding-top: 120px; align-items: center; z-index: 10; transition: opacity 0.3s; }
+.loader-overlay.hidden { opacity: 0; pointer-events: none; }
+.spinner { width: 24px; height: 24px; border: 2px solid var(--border-color); border-top: 2px solid var(--primary-blue); border-radius: 50%; animation: spin 1s linear infinite; }
+.loader-text { margin-top: 8px; font-size: 0.8rem; font-weight: 500; color: var(--text-muted); }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+/* CM014 - Stylish Authorization Login Screen */
+.login-wrapper { flex: 1; display: flex; justify-content: center; align-items: center; padding: 30px 20px; background: linear-gradient(135deg, #0f172a, #1e293b, #1e3a8a); }
+.login-box { background: rgba(255, 255, 255, 0.98); padding: 32px 28px; border-radius: 14px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5), 0 10px 15px -3px rgba(0,0,0,0.3); width: 100%; max-width: 340px; border: 1px solid rgba(255,255,255,0.3); text-align: center; }
+.login-header-icon { width: 48px; height: 48px; background: #eff6ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px auto; color: var(--primary-blue); font-size: 20px; font-weight: bold; border: 2px solid #bfdbfe; }
+.login-title { font-size: 1.1rem; font-weight: 700; color: #1e3a8a; margin-bottom: 4px; letter-spacing: 0.2px; }
+.login-subtitle { font-size: 0.72rem; color: var(--text-muted); margin-bottom: 20px; font-weight: 500; }
+.login-field-group { text-align: left; margin-bottom: 16px; }
+.login-label { display: block; font-size: 0.72rem; font-weight: 700; color: #374151; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
+.login-input-wrapper { position: relative; display: flex; align-items: center; }
+.login-input-icon { position: absolute; left: 10px; font-size: 0.85rem; color: #64748b; pointer-events: none; user-select: none; }
+.login-input { width: 100%; padding: 10px 12px 10px 34px; border: 1px solid #d1d5db; border-radius: var(--radius-md); font-size: 0.85rem; outline: none; transition: all 0.2s; background-color: #f9fafb; font-weight: 500; }
+.login-input:focus { border-color: var(--primary-blue); background-color: #ffffff; box-shadow: 0 0 0 3px rgba(30,64,175,0.15); }
+.login-btn { width: 100%; padding: 11px; background: linear-gradient(135deg, #1e40af, #1d4ed8); color: white; border: none; border-radius: var(--radius-md); font-size: 0.88rem; cursor: pointer; transition: all 0.2s; font-weight: 700; margin-top: 6px; box-shadow: 0 4px 6px -1px rgba(30,64,175,0.3); }
+.login-btn:hover { background: linear-gradient(135deg, #1e3a8a, #1e40af); box-shadow: 0 6px 10px -1px rgba(30,64,175,0.4); transform: translateY(-1px); }
+.error-msg { color: #dc2626; font-size: 0.75rem; font-weight: 600; background-color: #fef2f2; border: 1px solid #fecdd3; padding: 6px; border-radius: 4px; margin-bottom: 12px; display: none; }
+
+/* CM015 - Main Footer Section */
+.main-footer { background: linear-gradient(135deg, #0f172a, #1e293b); color: #94a3b8; font-size: 0.63rem; padding: 8px 12px; text-align: center; border-top: 2px solid #1e40af; margin-top: auto; z-index: 100; position: relative; }
+.footer-address { color: #e2e8f0; font-weight: 500; margin-bottom: 3px; letter-spacing: 0.2px; font-size: 0.65rem; }
+.footer-rights { color: #94a3b8; font-weight: 400; letter-spacing: 0.2px; font-size: 0.63rem; }
+.footer-highlight { color: #60a5fa; font-weight: 600; }
+
+</style>
+</head>
+<body>
+
+<!-- CM016 - Main Header Section -->
+<header class="main-header">
+<div class="header-brand">
+<div class="header-logo-circle">
+<img src="https://sanjeeva-hspl.github.io/SM-IMG/01-SMH-FEVICON_ICON.png" alt="Hospital Logo" class="header-logo" onerror="this.style.display='none'">
+</div>
+<span class="header-title">SANJEEVA MULTISPECIALITY HOSPITAL - Document Manager</span>
+</div>
+<div class="header-right">
+<div id="liveClock" class="live-clock">--:--:-- --</div>
+<button id="logoutBtn" class="logout-btn" onclick="handleLogout()">🚪 Logout</button>
+<select id="formDropdown" class="form-dropdown"></select>
+</div>
+</header>
+
+<!-- CM017 - Security Notice Ticker Section -->
+<div id="tickerContainer" class="ticker-container">
+<div class="ticker-content">Security Notice: All forms, applications, and systems are authorised and owned by SANJEEVA MULTISPECIALITY HOSPITAL. Every action is securely authenticated, recorded, and monitored. Any unauthorised access, use, or attempt to access these systems from an unapproved device is strictly prohibited. The hospital reserves the right to collect device and access information for security purposes, and strict legal action will be taken against any unauthorised activity.</div>
+</div>
+
+<!-- CM019 - Authorization Login Section -->
+<div id="loginWrapper" class="login-wrapper">
+<div class="login-box">
+<div class="login-header-icon">🔒</div>
+<div class="login-title">Authorization Login</div>
+<div class="login-subtitle">SANJEEVA MULTISPECIALITY HOSPITAL</div>
+<div id="loginError" class="error-msg">Invalid Username or Password</div>
+<div class="login-field-group">
+<label class="login-label" for="usernameInput">Username</label>
+<div class="login-input-wrapper">
+<span class="login-input-icon">👤</span>
+<input type="text" id="usernameInput" class="login-input" placeholder="Enter Username" oninput="this.value = this.value.toUpperCase()" onkeydown="handleUsernameKey(event)" autocomplete="off">
+</div>
+</div>
+<div class="login-field-group">
+<label class="login-label" for="passwordInput">Password</label>
+<div class="login-input-wrapper">
+<span class="login-input-icon">🔒</span>
+<input type="password" id="passwordInput" class="login-input" placeholder="Enter Password" onkeydown="handleEnter(event)">
+</div>
+</div>
+<button class="login-btn" onclick="handleLogin()">Login System</button>
+</div>
+</div>
+
+<!-- CM020 - Main Content Wrapper -->
+<main id="mainContainer" class="main-container">
+<section class="content-area">
+<div class="iframe-container" id="viewContainer">
+<div class="loader-overlay" id="iframeLoader"><div class="spinner"></div><div class="loader-text">Loading Form...</div></div>
+<iframe id="formViewer" src="about:blank" title="Form Viewer"></iframe>
+</div>
+</section>
+</main>
+
+<!-- CM021 - Main Footer Section -->
+<footer class="main-footer">
+<div class="footer-address">ADDRESS: D NO:1-7-26, PEDDANNA STREET, OPPO RAMANA FUNCTION HALL, G V TEXSTILES BACKSIDE, ALLAGADDA, NANDYALA DIS, AP-518543.</div>
+<div class="footer-rights">© ALL RIGHTS ARE RESERVED UNDER <span class="footer-highlight">SANJEEVA MULTISPECIALTY HOSPITAL</span> | ARCHITECTURE BY <span class="footer-highlight">SRI VEDA ORG</span></div>
+</footer>
+
+<script>
+
+// CM022 - Application State & Data Setup
+const defaultFormsData = [
+{id:"form_1",file:"https://sanjeevahospital.in/documentmanager/deliverycertificate.html",name:"Delivery Certificate"},
+{id:"form_2",file:"https://sanjeevahospital.in/documentmanager/dischargesummary.html",name:"Discharge Summary"},
+{id:"form_3",file:"https://sanjeevahospital.in/documentmanager/feereceipt.html",name:"Fee Receipt"},
+{id:"form_4",file:"https://sanjeevahospital.in/documentmanager/ob1report.html",name:"OB1 Report"},
+{id:"form_5",file:"https://sanjeevahospital.in/documentmanager/ob2report.html",name:"OB2 Report"},
+{id:"form_6",file:"https://sanjeevahospital.in/documentmanager/obreport.html",name:"OB Report"},
+{id:"form_7",file:"https://sanjeevahospital.in/documentmanager/sterilaizationcertificate.html",name:"Sterilization Certificate"},
+{id:"form_8",file:"https://sanjeevahospital.in/documentmanager/medicinebill.html",name:"Medicine Bill"}
+];
+const patientDatabase = [
+{ppid:"PID101",fullName:"K. RAMESH REDDY",gender:"MALE",mobile:"9876543210",village:"ALLAGADDA"},
+{ppid:"PID102",fullName:"S. LAKSHMI DEVI",gender:"FEMALE",mobile:"9123456789",village:"NANDYALA"},
+{ppid:"PID103",fullName:"B. VENKATA SWAMY",gender:"MALE",mobile:"9988776655",village:"GOPAVARAM"},
+{ppid:"PID104",fullName:"M. ANITHA REDDY",gender:"FEMALE",mobile:"9848022334",village:"SIRVELLA"}
+];
+let activeFormId = null;
+
+// CM023 - Cached DOM References
+const formDropdown = document.getElementById('formDropdown');
+const formViewer = document.getElementById('formViewer');
+const iframeLoader = document.getElementById('iframeLoader');
+const loginWrapper = document.getElementById('loginWrapper');
+const usernameInput = document.getElementById('usernameInput');
+const passwordInput = document.getElementById('passwordInput');
+const loginError = document.getElementById('loginError');
+const liveClock = document.getElementById('liveClock');
+const logoutBtn = document.getElementById('logoutBtn');
+const tickerContainer = document.getElementById('tickerContainer');
+const mainContainer = document.getElementById('mainContainer');
+
+// CM024 - App Initialization Method
+function initApp() { startClock(); checkSession(); renderDropdown(); loadForm('form_1'); setupEvents(); }
+
+// CM025 - Live Digital Clock Logic
+function startClock() { updateClock(); setInterval(updateClock, 1000); }
+function updateClock() { const now = new Date(); liveClock.textContent = now.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' }); }
+
+// CM026 - Session Check, Login & Keyboard Navigation Logic
+function checkSession() { if (sessionStorage.getItem('isLoggedIn') === 'true') { loginWrapper.style.display = 'none'; formDropdown.style.display = 'inline-block'; logoutBtn.style.display = 'inline-flex'; tickerContainer.style.background = '#ffffff'; tickerContainer.style.borderBottom = '1px solid #e2e8f0'; mainContainer.style.display = 'flex'; } else { loginWrapper.style.display = 'flex'; formDropdown.style.display = 'none'; logoutBtn.style.display = 'none'; tickerContainer.style.background = 'transparent'; tickerContainer.style.borderBottom = '1px solid rgba(255,255,255,0.1)'; mainContainer.style.display = 'none'; } }
+function handleLogin() { const user = usernameInput.value.trim().toUpperCase(); const pass = passwordInput.value.trim(); if (user === 'SM01' && pass === '1111') { sessionStorage.setItem('isLoggedIn', 'true'); checkSession(); loginError.style.display = 'none'; } else { loginError.style.display = 'block'; passwordInput.value = ''; } }
+function handleLogout() { sessionStorage.removeItem('isLoggedIn'); usernameInput.value = ''; passwordInput.value = ''; checkSession(); }
+function handleUsernameKey(e) { if (e.key === 'Enter') { e.preventDefault(); passwordInput.focus(); } }
+function handleEnter(e) { if (e.key === 'Enter') { e.preventDefault(); handleLogin(); } }
+
+// CM027 - Dropdown Rendering Logic
+function renderDropdown() { formDropdown.innerHTML = ''; defaultFormsData.forEach(form => { const option = document.createElement('option'); option.value = form.id; option.textContent = form.name; option.dataset.file = form.file; formDropdown.appendChild(option); }); }
+
+// CM028 - Form Loader & Dynamic Height Resizing Logic
+function loadForm(id) { 
+    const form = defaultFormsData.find(f => f.id === id); 
+    if(!form) return; 
+    activeFormId = id; 
+    formDropdown.value = id; 
+    formViewer.style.display = 'block'; 
+    
+    // Show the loader overlay
+    iframeLoader.classList.remove('hidden'); 
+    
+    // Set the source of the iframe
+    formViewer.src = form.file; 
+    
+    // Attempt to hide loader when iframe says it's loaded
+    formViewer.onload = () => { 
+        iframeLoader.classList.add('hidden'); 
+    }; 
+    
+    // Attempt to hide loader if there's an error
+    formViewer.onerror = () => { 
+        iframeLoader.classList.add('hidden'); 
+    }; 
+
+    // FALLBACK: Hide the loader forcibly after 3 seconds 
+    // to prevent getting stuck if cross-origin blocks onload
+    setTimeout(() => {
+        if (!iframeLoader.classList.contains('hidden')) {
+             iframeLoader.classList.add('hidden');
+        }
+    }, 3000);
+}
+
+// CM030 - Event Listeners & Input Filters
+function setupEvents() { formDropdown.addEventListener('change', (e) => { loadForm(e.target.value); }); }
+document.addEventListener('DOMContentLoaded', initApp);
+
+</script>
+</body>
+</html>

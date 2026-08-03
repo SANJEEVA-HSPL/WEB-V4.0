@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sanjeeva Multispecialty Hospital - OB Report Portal</title>
+<link rel="icon" type="image/png" href="https://sanjeeva-hspl.github.io/SM-IMG/01-SMH-FEVICON_ICON.png">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+
+/* CM001 - Base Elements */
+body, input, select, textarea, button { font-family: 'Roboto Slab', serif !important; }
+
+/* CM002 - A4 Page Layout */
+.a4-page { width: 210mm; height: 297mm; margin: 0 auto; background: white; position: relative; box-sizing: border-box; padding: 6mm; display: flex; flex-direction: column; box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
+
+/* CM003 - Outer Green Border 90 Degrees */
+.border-frame { border: 2px solid #0f766e; padding: 6mm; display: flex; flex-direction: column; box-sizing: border-box; flex-grow: 1; border-radius: 0; position: relative; }
+
+/* CM004 - Date Picker Customization */
+input[type="date"]::-webkit-calendar-picker-indicator { cursor: pointer; opacity: 0.7; filter: invert(0%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(0%) contrast(100%); transition: opacity 0.2s; }
+
+/* CM005 - Date Picker Hover */
+input[type="date"]::-webkit-calendar-picker-indicator:hover { opacity: 1; }
+
+/* CM006 - Print Media Queries */
+@media print { @page { size: A4; margin: 0; } body, html { background: white; margin: 0; padding: 0; height: 297mm; overflow: hidden; -webkit-print-color-adjust: exact; print-color-adjust: exact; } .no-print { display: none !important; } .a4-page { width: 210mm; height: 297mm; margin: 0; box-shadow: none; padding: 6mm; box-sizing: border-box; display: flex; flex-direction: column; } .border-frame { border: 2px solid #0f766e !important; padding: 6mm; flex-grow: 1; box-sizing: border-box; border-radius: 0; } input, select, textarea { background: transparent !important; outline: none !important; box-shadow: none !important; appearance: none; -webkit-appearance: none; color: black !important; padding: 0 !important; margin: 0 !important; border-bottom: 1.5px solid #9ca3af !important; } textarea { border: 1.5px solid #9ca3af !important; } ::placeholder { color: transparent !important; } }
+</style>
+</head>
+<body class="bg-slate-200 min-h-screen text-black flex flex-col justify-start">
+
+<!-- CM007 - Main Page Content Wrapper -->
+<main class="flex-grow w-full flex flex-col items-center pt-4 pb-8">
+
+<!-- CM008 - Top Action Bar (Outside A4 Page) -->
+<div class="no-print w-[210mm] flex flex-row items-center justify-between pb-3 mb-2 shrink-0 px-2">
+<div class="flex items-center gap-2">
+<button onclick="resetForm()" class="bg-gradient-to-b from-rose-500 to-rose-600 border border-rose-800 shadow-[0_2px_0_#9f1239] active:shadow-none active:translate-y-[2px] text-white text-[10px] font-black px-3 py-1.5 h-[28px] rounded transition-all flex items-center gap-1 uppercase tracking-wider"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg> Reset</button>
+<button id="btn-save" onclick="saveReport()" class="bg-gradient-to-b from-amber-400 to-amber-500 border border-amber-700 shadow-[0_2px_0_#b45309] active:shadow-none active:translate-y-[2px] text-black text-[10px] font-black px-3 py-1.5 h-[28px] rounded transition-all flex items-center gap-1 uppercase tracking-wider"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Save</button>
+<button id="btn-print" onclick="triggerPrint()" disabled class="bg-gradient-to-b from-teal-500 to-teal-600 border border-teal-800 shadow-[0_2px_0_#115e59] active:shadow-none active:translate-y-[2px] disabled:opacity-50 disabled:shadow-none disabled:translate-y-[2px] disabled:cursor-not-allowed text-white text-[10px] font-black px-3 py-1.5 h-[28px] rounded transition-all flex items-center gap-1 uppercase tracking-wider"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="14" height="8" x="5" y="14"/></svg> Print</button>
+</div>
+<div class="flex items-center gap-2">
+<div class="relative w-48">
+<div class="absolute inset-y-0 left-0 flex items-center pl-2 pointer-events-none"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="text-gray-500"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></div>
+<input type="text" id="search-id-input" placeholder="Search OBID" class="pl-7 pr-2 py-1 h-[28px] w-full border border-gray-400 rounded focus:border-teal-600 focus:outline-none text-black text-[11px] font-bold shadow-inner" />
+</div>
+<button id="btn-verify" onclick="verifyAndSearchReport()" class="bg-gradient-to-b from-emerald-500 to-emerald-600 border border-emerald-800 shadow-[0_2px_0_#065f46] active:shadow-none active:translate-y-[2px] text-white text-[10px] font-black px-3 py-1.5 h-[28px] rounded transition-all flex items-center gap-1 uppercase tracking-wide"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Verify</button>
+</div>
+</div>
+
+<!-- CM009 - A4 Size Print Area -->
+<div id="print-area" class="a4-page">
+
+<!-- CM010 - Main Content Border Frame -->
+<div class="border-frame">
+
+<!-- CM011 - Hospital Header -->
+<header class="border-b-[2px] border-teal-800 pb-3 flex items-center gap-4">
+<img src="https://sanjeeva-hspl.github.io/SM-IMG/02-SMH-HOSPITAL%20LOGO.png" alt="Sanjeeva Hospital Logo" class="h-[60px] object-contain shrink-0" onerror="this.src='https://placehold.co/180x60?text=SANJEEVA+HOSPITAL'">
+<div class="flex-grow flex flex-col justify-center pt-1.5">
+<h2 class="text-[20px] font-black text-black tracking-wide uppercase leading-tight whitespace-nowrap">SANJEEVA MULTISPECIALTY HOSPITAL</h2>
+<div class="mt-1 flex items-center gap-3">
+<span class="inline-block bg-teal-800 text-white font-bold text-[9px] tracking-widest px-2 py-0.5 uppercase max-w-fit">HEALTH CARE WITH ETHICS</span>
+<span class="text-[11px] font-black text-black tracking-wider">www.sanjeevahospital.in</span>
+</div>
+</div>
+</header>
+
+<!-- CM012 - Doctor Details Section -->
+<section class="border-b-[1.5px] border-gray-400 py-2.5 px-1 flex justify-between items-center text-black">
+<div>
+<h3 class="text-[12px] font-black uppercase tracking-wider">Dr. E. Sujata Anjaneyulu</h3>
+<p class="text-[10px] font-bold uppercase tracking-wider mt-0.5">M.B.B.S., M.S. (OBG)</p>
+<p class="text-[9px] font-bold uppercase mt-0.5">Civil Assistant Surgeon</p>
+</div>
+<div class="text-right">
+<p class="text-[10px] font-black uppercase tracking-wider">Obstetrician & Gynecologist</p>
+<p class="text-[9px] font-bold uppercase tracking-widest mt-0.5">Regd. No. 62254</p>
+</div>
+</section>
+
+<!-- CM013 - Report Title -->
+<div class="text-center my-3.5">
+<span class="border-b-[3px] border-double border-black px-10 py-1 text-[15px] font-black tracking-widest text-black uppercase">OB Report</span>
+</div>
+
+<!-- CM014 - Patient Details Form -->
+<section class="mb-3.5">
+<div class="grid grid-cols-12 gap-x-4 gap-y-3 px-2">
+<div class="col-span-12 md:col-span-4 flex flex-col justify-center border-b md:border-b-0 md:border-r border-gray-400 pb-2 md:pb-0 md:pr-4">
+<span class="text-[11px] font-extrabold tracking-widest text-black uppercase mb-1">OB Report ID</span>
+<input type="text" id="ob-report-id" value="[Auto-Generated]" readonly class="w-full bg-transparent border-b-[1.5px] border-gray-400 font-extrabold text-black text-[13px] focus:outline-none pb-0.5 select-all" />
+</div>
+<div class="col-span-12 md:col-span-8 grid grid-cols-2 gap-x-5 gap-y-3">
+<div class="flex flex-col col-span-2">
+<span class="text-[10px] font-black text-black uppercase tracking-wider">Patient Name</span>
+<input type="text" id="p-name" placeholder="Enter Full Patient Name" class="w-full bg-transparent border-b-[1.5px] border-gray-400 text-black text-[12px] font-bold focus:border-black focus:outline-none pb-0.5" />
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] font-black text-black uppercase tracking-wider">Exam Date</span>
+<input type="date" id="p-exam-date" class="w-full bg-transparent text-black text-[12px] font-bold focus:outline-none pb-0.5 border-b-[1.5px] border-gray-400" />
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] font-black text-black uppercase tracking-wider">Sex</span>
+<select id="p-sex" class="w-full bg-transparent border-b-[1.5px] border-gray-400 text-black text-[12px] font-bold focus:border-black focus:outline-none pb-0.5 cursor-pointer">
+<option value="Female" selected>Female</option>
+<option value="Male">Male</option>
+<option value="Other">Other</option>
+</select>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] font-black text-black uppercase tracking-wider">Patient Village</span>
+<input type="text" id="p-village" placeholder="Enter Village" class="w-full bg-transparent border-b-[1.5px] border-gray-400 text-black text-[12px] font-bold focus:border-black focus:outline-none pb-0.5" />
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] font-black text-black uppercase tracking-wider">LND / LMP</span>
+<input type="date" id="p-lmp" class="w-full bg-transparent text-black text-[12px] font-bold focus:outline-none pb-0.5 border-b-[1.5px] border-gray-400" />
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] font-black text-black uppercase tracking-wider">EDD</span>
+<input type="date" id="p-edd" class="w-full bg-transparent text-black text-[12px] font-bold focus:outline-none pb-0.5 border-b-[1.5px] border-gray-400" />
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] font-black text-black uppercase tracking-wider">Gravida</span>
+<input type="text" id="p-gravida" placeholder="e.g. G2 P1 L1 A0" class="w-full bg-transparent border-b-[1.5px] border-gray-400 text-black text-[12px] font-black focus:border-black focus:outline-none pb-0.5" />
+</div>
+</div>
+</div>
+</section>
+
+<!-- CM015 - Ultrasound Evaluation Section -->
+<section class="mb-3.5 mt-2">
+<div class="bg-gray-100 py-1.5 px-3 mb-2.5 border-y-[1.5px] border-gray-300">
+<span class="text-[11px] font-black tracking-widest uppercase text-black">Ultrasound Evaluation Parameters</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-3 px-2">
+<div class="flex items-center justify-between border-b-[1.5px] border-gray-300 pb-1">
+<label for="ob-asiub" class="text-[11px] font-black text-black uppercase tracking-wide">ASIUB:</label>
+<input type="text" id="ob-asiub" placeholder="Enter findings" class="w-40 bg-transparent text-right border-b-[1.5px] border-gray-400 text-black text-[12px] font-bold focus:border-black focus:outline-none pb-0.5" />
+</div>
+<div class="flex items-center justify-between border-b-[1.5px] border-gray-300 pb-1">
+<label for="ob-crl" class="text-[11px] font-black text-black uppercase tracking-wide">CRL (Crown-Rump Length):</label>
+<input type="text" id="ob-crl" placeholder="e.g. 52 mm" class="w-40 bg-transparent text-right border-b-[1.5px] border-gray-400 text-black text-[12px] font-bold focus:border-black focus:outline-none pb-0.5" />
+</div>
+<div class="flex items-center justify-between border-b-[1.5px] border-gray-300 pb-1">
+<label for="ob-uga" class="text-[11px] font-black text-black uppercase tracking-wide">UGA / VGA / UDA:</label>
+<input type="text" id="ob-uga" placeholder="e.g. 12 Wks 1 Day" class="w-40 bg-transparent text-right border-b-[1.5px] border-gray-400 text-black text-[12px] font-bold focus:border-black focus:outline-none pb-0.5" />
+</div>
+<div class="flex items-center justify-between border-b-[1.5px] border-gray-300 pb-1">
+<label for="ob-cardiac" class="text-[11px] font-black text-black uppercase tracking-wide">Cardiac Activity:</label>
+<input type="text" id="ob-cardiac" placeholder="Present" class="w-40 bg-transparent text-right border-b-[1.5px] border-gray-400 text-black text-[12px] font-bold focus:border-black focus:outline-none pb-0.5" />
+</div>
+<div class="flex items-center justify-between border-b-[1.5px] border-gray-300 pb-1 md:col-span-2">
+<label for="ob-edd" class="text-[11px] font-black text-black uppercase tracking-wide">Estimated Date of Delivery (EDD):</label>
+<input type="date" id="ob-edd" class="bg-transparent text-right text-black text-[12px] font-bold focus:outline-none pb-0.5 border-b-[1.5px] border-gray-400 w-40" />
+</div>
+</div>
+</section>
+
+<!-- CM016 - Clinical Remarks Section -->
+<section class="mb-3.5 flex-grow">
+<div class="bg-gray-100 py-1.5 px-3 mb-2.5 border-y-[1.5px] border-gray-300">
+<span class="text-[11px] font-black tracking-widest text-black uppercase">Clinical Observations / Advice</span>
+</div>
+<textarea id="ob-remarks" rows="3" placeholder="Enter clinical notes, patient-specific remarks, recommendations..." class="w-full text-[12px] text-black font-bold bg-transparent border-[1.5px] border-gray-400 rounded px-2.5 py-2 focus:border-black focus:outline-none resize-none"></textarea>
+</section>
+
+<!-- CM017 - Signature Section -->
+<section class="mt-auto flex justify-end pb-3 pr-2">
+<div class="text-center w-48 border-t-[2px] border-black pt-2">
+<span class="text-[10px] font-black tracking-wider text-black uppercase">Consulting Gynecologist</span>
+<p class="text-[9px] text-black font-bold mt-1">Sanjeeva Hospital Services</p>
+</div>
+</section>
+
+<!-- CM018 - Footer Address Area (Inside Border) -->
+<footer class="pt-2 px-1 mt-3 border-t-[2px] border-black w-full">
+<div class="text-[10px] text-black font-bold tracking-wide leading-relaxed">
+<span class="font-black text-black block mb-1 text-[11px] uppercase tracking-wider">Hospital Address & Contact:</span>
+D NO:1-7-26, PEDDANNA STREET, OPPO RAMANA FUNCTION HALL, <br>
+G V TEXSTILES BACKSIDE, ALLAGADDA, NANDYALA DIS, AP-518543. <br>
+<span class="text-black font-black text-[11px]">PHONE: +91 9100349825</span>
+</div>
+</footer>
+
+</div>
+</div>
+</main>
+
+<script>
+/* CM019 - Global Initialization */
+const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbx6co6odiuuA7i1W0Qf5jFtserIoFMY9_uHRqAIIVvXfX8QgoNwiMHrRXsLi-POmqvm/exec'; window.addEventListener('DOMContentLoaded', () => { document.getElementById('p-exam-date').value = new Date().toISOString().substring(0, 10); });
+
+/* CM020 - Reset Action */
+function resetForm() { const today = new Date().toISOString().substring(0, 10); document.getElementById('ob-report-id').value = '[Auto-Generated]'; document.getElementById('p-name').value = ''; document.getElementById('p-exam-date').value = today; document.getElementById('p-sex').value = 'Female'; document.getElementById('p-village').value = ''; document.getElementById('p-lmp').value = ''; document.getElementById('p-edd').value = ''; document.getElementById('p-gravida').value = ''; document.getElementById('ob-asiub').value = ''; document.getElementById('ob-crl').value = ''; document.getElementById('ob-uga').value = ''; document.getElementById('ob-cardiac').value = ''; document.getElementById('ob-edd').value = ''; document.getElementById('ob-remarks').value = ''; document.getElementById('btn-print').disabled = true; }
+
+/* CM021 - Save Data API */
+async function saveReport() { const saveBtn = document.getElementById('btn-save'); saveBtn.disabled = true; saveBtn.innerHTML = '<svg class="animate-spin h-3 w-3 mr-1 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Saving...'; const payload = { action: 'save', reportId: document.getElementById('ob-report-id').value, patientName: document.getElementById('p-name').value, examDate: document.getElementById('p-exam-date').value, sex: document.getElementById('p-sex').value, village: document.getElementById('p-village').value, lmp: document.getElementById('p-lmp').value, edd: document.getElementById('p-edd').value, gravida: document.getElementById('p-gravida').value, asiub: document.getElementById('ob-asiub').value, crl: document.getElementById('ob-crl').value, uga: document.getElementById('ob-uga').value, cardiac: document.getElementById('ob-cardiac').value, obEdd: document.getElementById('ob-edd').value, remarks: document.getElementById('ob-remarks').value }; try { const response = await fetch(GAS_API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(payload) }); const text = await response.text(); const result = JSON.parse(text); if (result.status === 'success') { document.getElementById('ob-report-id').value = result.reportId; document.getElementById('btn-print').disabled = false; saveBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Saved!'; setTimeout(() => { saveBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Save'; saveBtn.disabled = false; }, 2000); return; } } catch (err) { console.error(err); } saveBtn.disabled = false; saveBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Save'; }
+
+/* CM022 - Verify Data API */
+async function verifyAndSearchReport() { const searchId = document.getElementById('search-id-input').value.trim(); if (!searchId) return; const verifyBtn = document.getElementById('btn-verify'); const originalHtml = verifyBtn.innerHTML; verifyBtn.innerHTML = '<svg class="animate-spin h-3 w-3 mr-1 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>...'; try { const response = await fetch(GAS_API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ action: 'verify', reportId: searchId }) }); const text = await response.text(); const result = JSON.parse(text); if (result.status === 'success' && result.data) { const data = result.data; document.getElementById('ob-report-id').value = data.reportId || ''; document.getElementById('p-name').value = data.patientName || ''; document.getElementById('p-exam-date').value = data.examDate || ''; document.getElementById('p-sex').value = data.sex || 'Female'; document.getElementById('p-village').value = data.village || ''; document.getElementById('p-lmp').value = data.lmp || ''; document.getElementById('p-edd').value = data.edd || ''; document.getElementById('p-gravida').value = data.gravida || ''; document.getElementById('ob-asiub').value = data.asiub || ''; document.getElementById('ob-crl').value = data.crl || ''; document.getElementById('ob-uga').value = data.uga || ''; document.getElementById('ob-cardiac').value = data.cardiac || ''; document.getElementById('ob-edd').value = data.obEdd || ''; document.getElementById('ob-remarks').value = data.remarks || ''; document.getElementById('btn-print').disabled = false; verifyBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Found!'; setTimeout(() => { verifyBtn.innerHTML = originalHtml; }, 2000); return; } } catch (err) { console.error(err); } verifyBtn.innerHTML = originalHtml; }
+
+/* CM023 - Print Action */
+function triggerPrint() { window.print(); }
+</script>
+</body>
+</html>

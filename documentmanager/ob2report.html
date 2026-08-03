@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sanjeeva Multispecialty Hospital - OB2 Twin Report Portal</title>
+<link rel="icon" type="image/png" href="https://sanjeeva-hspl.github.io/SM-IMG/01-SMH-FEVICON_ICON.png">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+
+/* CM001 - Base Typography and Resets */
+body { font-family: 'Roboto Slab', serif !important; margin: 0; padding: 0; } input { font-family: 'Roboto Slab', serif !important; } select { font-family: 'Roboto Slab', serif !important; } textarea { font-family: 'Roboto Slab', serif !important; } button { font-family: 'Roboto Slab', serif !important; }
+
+/* CM002 - Modal Styles */
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); display: flex; align-items: center; justify-content: center; z-index: 100; } .modal-box { background: white; padding: 24px; border-radius: 0px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); max-width: 400px; width: 90%; text-align: center; }
+
+/* CM003 - A4 Page Canvas */
+.a4-page { width: 210mm; height: 297mm; margin: 0 auto; background: #ffffff; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); border-radius: 0; position: relative; box-sizing: border-box; padding: 8mm; overflow: hidden; }
+
+/* CM004 - Main Border Frame */
+.border-frame { border: 3.5px solid #0f766e; border-radius: 0; height: 100%; padding: 4mm 6mm; display: flex; flex-direction: column; justify-content: space-between; box-sizing: border-box; position: relative; overflow: hidden; }
+
+/* CM005 - Input Utilities */
+.input-underlined { background: transparent; border-bottom: 1px solid #cbd5e1; font-weight: 700; color: #0f172a; outline: none; padding-bottom: 1px; text-align: center; } .input-underlined:focus { border-bottom-color: #0f766e; }
+
+/* CM006 - 3D Buttons Design */
+.btn-3d { border: none; transition: all 0.1s ease; display: inline-flex; align-items: center; justify-content: center; gap: 4px; border-radius: 0px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; outline: none; cursor: pointer; padding: 4px 8px; font-size: 9px; background: #ffffff; box-shadow: inset 2px 2px 4px rgba(255,255,255,1), inset -2px -2px 4px rgba(0,0,0,0.15), 2px 2px 5px rgba(0,0,0,0.1); }
+.btn-3d:active:not(:disabled) { box-shadow: inset 2px 2px 4px rgba(0,0,0,0.15), inset -2px -2px 4px rgba(255,255,255,1), 0px 0px 0px transparent; transform: translate(1px, 1px); }
+.btn-3d:disabled { opacity: 0.55; cursor: not-allowed; transform: none; filter: grayscale(100%); }
+
+/* CM007 - Button Specific Colors (Text & Icons inside only) */
+.btn-reset { color: #e11d48; }
+.btn-save { color: #ea580c; }
+.btn-print { color: #059669; }
+.btn-verify { color: #0284c7; }
+
+/* CM008 - Search Input 3D */
+.search-input-3d { background: #ffffff; border: none; box-shadow: inset 2px 2px 4px rgba(0,0,0,0.15), inset -2px -2px 4px rgba(255,255,255,1); border-radius: 0px; padding: 4px 8px; font-size: 9px; font-weight: 800; color: #0f172a; outline: none; transition: all 0.2s; }
+.search-input-3d:focus { box-shadow: inset 2px 2px 4px rgba(15,118,110,0.25); color: #0f766e; }
+
+/* CM009 - Print Media Queries */
+@media print { @page { size: A4; margin: 0; } body { background: white; margin: 0; padding: 0; height: 297mm; overflow: hidden; } html { height: 297mm; overflow: hidden; } .no-print { display: none !important; } .a4-page { width: 210mm; height: 297mm; max-height: 297mm; margin: 0; box-shadow: none; border-radius: 0; padding: 8mm; page-break-after: avoid; page-break-before: avoid; page-break-inside: avoid; box-sizing: border-box; overflow: hidden; } .border-frame { border: 3.5px solid #0f766e !important; border-radius: 0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; height: 100%; box-sizing: border-box; } input, select, textarea { border: none !important; background: transparent !important; padding: 0 !important; outline: none !important; box-shadow: none !important; appearance: none; -webkit-appearance: none; } ::placeholder { color: transparent !important; } .input-underlined { border-bottom: none !important; } }
+
+</style>
+</head>
+<body class="bg-slate-100 min-h-screen text-slate-800 flex flex-col justify-between">
+
+<!-- CM010 - Main Header & Actions -->
+<header class="bg-transparent relative z-50 no-print py-2 px-4 w-full">
+<div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-center gap-3">
+<div class="flex items-center gap-2 shrink-0">
+<button onclick="resetForm()" class="btn-3d btn-reset"><svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>Reset</button>
+<button id="btn-save" onclick="saveReport()" class="btn-3d btn-save"><svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Save</button>
+<button id="btn-print" onclick="triggerPrint()" disabled class="btn-3d btn-print"><svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>Print</button>
+<input type="text" id="search-id-input" placeholder="OB ID (e.g. SMOB2001)" class="search-input-3d w-full md:w-32 placeholder-slate-400" />
+<button onclick="verifyAndSearchReport()" class="btn-3d btn-verify"><svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>Verify</button>
+</div>
+</div>
+</header>
+
+<!-- CM011 - Reset Confirmation Modal -->
+<div id="reset-modal" class="modal-overlay hidden no-print">
+<div class="modal-box rounded-none">
+<h3 class="text-base font-black text-slate-800 tracking-wide uppercase leading-tight mb-2">Reset Report</h3>
+<p class="text-xs text-slate-600 font-medium mb-6">Are you sure want to reset?</p>
+<div class="flex items-center justify-center gap-4">
+<button onclick="confirmReset(true)" class="bg-[#de1a44] hover:bg-rose-700 text-white text-xs font-bold px-6 py-2 rounded-none transition-all shadow uppercase tracking-wider">Yes</button>
+<button onclick="confirmReset(false)" class="bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold px-6 py-2 rounded-none transition-all shadow uppercase tracking-wider">No</button>
+</div>
+</div>
+</div>
+
+<!-- CM012 - Toast Notifications Container -->
+<div id="toast-container" class="fixed top-24 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+<!-- CM013 - Main A4 Print Container -->
+<main class="flex-grow p-1 flex justify-center items-start">
+<div id="print-area" class="a4-page">
+<div class="border-frame">
+<div class="space-y-1.5">
+
+<header class="border-b-2 border-teal-800 pb-2 flex items-center justify-between gap-4">
+<div class="flex items-center gap-4">
+<img src="https://sanjeeva-hspl.github.io/SM-IMG/02-SMH-HOSPITAL%20LOGO.png" alt="Sanjeeva Hospital Logo" class="h-10 md:h-12 object-contain shrink-0" onerror="this.src='https://placehold.co/180x40?text=SANJEEVA+HOSPITAL'">
+<div class="flex-grow flex flex-col justify-center">
+<h2 class="text-sm md:text-lg font-black text-teal-800 tracking-wide uppercase leading-tight whitespace-nowrap">SANJEEVA MULTISPECIALTY HOSPITAL</h2>
+<div class="mt-1">
+<span class="inline-block bg-teal-800 text-white font-bold text-[8px] tracking-widest px-2.5 py-1 rounded-none uppercase">HEALTH CARE WITH ETHICS</span>
+</div>
+</div>
+</div>
+<div class="text-right flex flex-col justify-center text-[8.5px] font-black text-teal-900 tracking-wider shrink-0 pr-1">
+<span class="mb-0.5">PHONE: +91 9100349825</span>
+<span>WWW.SANJEEVAHOSPITAL.IN</span>
+</div>
+</header>
+
+<section class="border-b border-teal-800/20 pb-1.5 px-1 flex justify-between items-center text-slate-800">
+<div>
+<h3 class="text-[10px] font-black text-teal-900 uppercase tracking-wider">Dr. E. Sujata Anjaneyulu</h3>
+<p class="text-[9px] font-bold text-slate-600 uppercase tracking-wider">M.B.B.S., M.S. (OBG)</p>
+<p class="text-[8px] text-slate-400 font-semibold uppercase mt-0.5">Civil Assistant Surgeon</p>
+</div>
+<div class="text-right">
+<p class="text-[10px] font-black text-teal-800 uppercase tracking-wider">Obstetrician & Gynecologist</p>
+<p class="text-[8px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">Regd. No. 62254</p>
+</div>
+</section>
+
+<div class="text-center my-0.5">
+<span class="border-b-4 border-double border-teal-800 px-8 py-1.5 text-[10.5px] font-black tracking-widest text-teal-900 uppercase">OB Report (Twin Pregnancy)</span>
+</div>
+
+<section>
+<div class="grid grid-cols-12 gap-x-3 gap-y-2 bg-teal-50/10 p-2.5 rounded-none border border-teal-800/10 text-[9.5px]">
+<div class="col-span-12 md:col-span-4 flex flex-col justify-center border-b md:border-b-0 md:border-r border-teal-800/15 pb-1 md:pb-0 md:pr-3">
+<span class="text-[7.5px] font-extrabold tracking-widest text-teal-800 uppercase mb-1">Register Number</span>
+<input type="text" id="ob-report-id" value="[Auto-Generated]" readonly class="w-full bg-transparent border-b border-slate-300 font-extrabold text-teal-950 text-[10px] focus:outline-none pb-1 select-all" />
+</div>
+<div class="col-span-12 md:col-span-8 grid grid-cols-4 gap-x-2.5 gap-y-1.5">
+<div class="flex flex-col col-span-4 sm:col-span-2">
+<span class="text-[7.5px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Patient Name</span>
+<input type="text" id="p-name" placeholder="Enter Patient Name" class="w-full bg-transparent border-b border-slate-300 text-slate-800 font-bold focus:border-teal-600 focus:outline-none pb-0.5 text-[9.5px]" />
+</div>
+<div class="flex flex-col col-span-2 sm:col-span-1">
+<span class="text-[7.5px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Exam Date</span>
+<div class="flex items-center border-b border-slate-300 pb-0.5 focus-within:border-teal-600">
+<input type="text" id="p-exam-date" inputmode="numeric" maxlength="10" placeholder="DD-MM-YYYY" class="w-full bg-transparent text-slate-800 font-semibold focus:outline-none text-[9.5px]" />
+<div class="relative w-3.5 h-3.5 ml-1 shrink-0 cursor-pointer no-print">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="absolute inset-0 w-full h-full text-teal-800 pointer-events-none"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+<input type="date" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="document.getElementById('p-exam-date').value = ymd2dmy(this.value); this.value='';" />
+</div>
+</div>
+</div>
+<div class="flex flex-col">
+<span class="text-[7.5px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Age</span>
+<input type="text" id="p-age" placeholder="e.g. 24 Yrs" class="w-full bg-transparent border-b border-slate-300 text-slate-800 font-semibold focus:border-teal-600 focus:outline-none pb-0.5 text-[9.5px]" />
+</div>
+<div class="flex flex-col">
+<span class="text-[7.5px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Sex</span>
+<select id="p-sex" class="w-full bg-transparent border-b border-slate-300 text-slate-800 font-semibold focus:border-teal-600 focus:outline-none pb-0.5 cursor-pointer text-[9.5px]"><option value="Female" selected>Female</option><option value="Male">Male</option></select>
+</div>
+<div class="flex flex-col col-span-3">
+<span class="text-[7.5px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">Patient Village</span>
+<input type="text" id="p-village" placeholder="Enter Village" class="w-full bg-transparent border-b border-slate-300 text-slate-800 font-semibold focus:border-teal-600 focus:outline-none pb-0.5 text-[9.5px]" />
+</div>
+</div>
+</div>
+</section>
+
+<section class="text-[9.5px] leading-relaxed">
+<div class="bg-teal-800 text-white py-1 px-3 rounded-none mb-1.5">
+<span class="text-[8px] font-bold tracking-widest uppercase">|| & ||| TRIMSTER :2D- REAL TIME ULTRA – SONOGRAPHY OF THE GRAVID UTEREUS</span>
+</div>
+<div class="grid grid-cols-2 gap-4 px-1 text-slate-800 border-b border-dashed border-teal-800/20 pb-2">
+<div class="bg-slate-50/50 p-2 rounded-none border border-slate-100 space-y-1">
+<p class="font-black text-teal-900 text-[8px] uppercase tracking-wider mb-1">● TWIN A STATUS</p>
+<div class="flex items-center gap-1.5">
+<span class="font-semibold text-slate-600">Presentation:</span>
+<select id="ob-presentation-a" class="font-bold text-teal-900 bg-transparent border-b border-slate-300 focus:outline-none cursor-pointer text-[9.5px]"><option value="CEPHALIC" selected>CEPHALIC</option><option value="BREECH">BREECH</option><option value="TRANSVERSE">TRANSVERSE</option></select>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="font-semibold text-slate-600">FHR:</span>
+<input type="text" id="ob-fhr-bpm-a" placeholder="144" class="w-10 input-underlined text-[9.5px]" />
+<span class="text-slate-500 font-bold">BPM</span>
+<select id="ob-fhr-rhythm-a" class="font-bold text-teal-900 bg-transparent border-b border-slate-300 focus:outline-none cursor-pointer text-[9.5px]"><option value="REGULAR" selected>REGULAR</option><option value="IRREGULAR">IRREGULAR</option></select>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="font-semibold text-slate-600">Movements:</span>
+<select id="ob-fetal-movements-a" class="font-bold text-teal-900 bg-transparent border-b border-slate-300 focus:outline-none cursor-pointer text-[9.5px]"><option value="PRESENT" selected>PRESENT</option><option value="SLUGGISH">SLUGGISH</option><option value="ABSENT">ABSENT</option></select>
+</div>
+</div>
+<div class="bg-slate-50/50 p-2 rounded-none border border-slate-100 space-y-1">
+<p class="font-black text-teal-900 text-[8px] uppercase tracking-wider mb-1">● TWIN B STATUS</p>
+<div class="flex items-center gap-1.5">
+<span class="font-semibold text-slate-600">Presentation:</span>
+<select id="ob-presentation-b" class="font-bold text-teal-900 bg-transparent border-b border-slate-300 focus:outline-none cursor-pointer text-[9.5px]"><option value="CEPHALIC">CEPHALIC</option><option value="BREECH" selected>BREECH</option><option value="TRANSVERSE">TRANSVERSE</option></select>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="font-semibold text-slate-600">FHR:</span>
+<input type="text" id="ob-fhr-bpm-b" placeholder="140" class="w-10 input-underlined text-[9.5px]" />
+<span class="text-slate-500 font-bold">BPM</span>
+<select id="ob-fhr-rhythm-b" class="font-bold text-teal-900 bg-transparent border-b border-slate-300 focus:outline-none cursor-pointer text-[9.5px]"><option value="REGULAR" selected>REGULAR</option><option value="IRREGULAR">IRREGULAR</option></select>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="font-semibold text-slate-600">Movements:</span>
+<select id="ob-fetal-movements-b" class="font-bold text-teal-900 bg-transparent border-b border-slate-300 focus:outline-none cursor-pointer text-[9.5px]"><option value="PRESENT" selected>PRESENT</option><option value="SLUGGISH">SLUGGISH</option><option value="ABSENT">ABSENT</option></select>
+</div>
+</div>
+</div>
+
+<div class="mt-1.5 pt-1 border-t border-slate-100">
+<div class="text-center mb-1">
+<span class="text-[8.5px] font-black tracking-widest text-teal-900 uppercase border-b border-dashed border-teal-800 pb-0.5">FOETAL BIOMETRY</span>
+</div>
+<div id="biometry-twins" class="grid grid-cols-2 gap-4 bg-slate-50/60 p-2 rounded-none border border-slate-100">
+<div class="space-y-1 border-r border-slate-200 pr-3">
+<p class="font-extrabold text-teal-800 text-[8px] tracking-wider uppercase border-b border-slate-200 pb-0.5 mb-1 text-center">Twin A Biometry</p>
+<div class="flex items-center justify-between text-[9.5px]">
+<span class="font-bold text-slate-700">BPD:</span>
+<div class="flex items-center gap-1.5">
+<input type="text" id="ob-bpd-val-a" placeholder="8.2" class="w-8 input-underlined text-[9.5px]" /><span class="text-[7.5px] text-slate-400 font-bold">CM</span>
+<input type="text" id="ob-bpd-wks-a" placeholder="32" class="w-6 input-underlined text-[9.5px]" /><span class="text-[7.5px] text-slate-400 font-bold">WK</span>
+<input type="text" id="ob-bpd-days-a" placeholder="3" class="w-5 input-underlined text-[9.5px]" /><span class="text-[7.5px] text-slate-400 font-bold">D</span>
+</div>
+</div>
+<div class="flex items-center justify-between text-[9.5px]">
+<span class="font-bold text-slate-700">HC:</span>
+<div class="flex items-center gap-1.5">
+<input type="text" id="ob-hc-val-a" placeholder="29.4" class="w-8 input-underlined text-[9.5px]" /><span class="text-[7.5px] text-slate-400 font-bold">CM</span>
+<input type="text" id="ob-hc-wks-a" placeholder="32" class="w-6 input-underlined text-[9.5px]" /><span class="text-[7.5px] text-slate-400 font-bold">WK</span>
+<input type="text" id="ob-hc-days-a" placeholder="2" class="w-5 input-underlined text-[9.5px]" /><span class="text-[7.5px] text-slate-400 font-bold">D</span>
+</div>
+</div>
+<div class="flex items-center justify-between text-[9.5px]">
+<span class="font-bold text-slate-700">AC:</span>
+<div class="flex items-center gap-1.5">
+<input type="text" id="ob-ac-val-a" placeholder="28.1" class="w-8 input-underlined text-[9.5px]" /><span class="text-[7.5px] text-slate-400 font-bold">CM</span>
+<input type="text" id="ob-ac-wks-a" placeholder="32" class="w-6 input-underlined text-[9.5px]" /><span class="text-[7.5px] text-slate-400 font-bold">WK</span>
+<input type="text" id="ob-ac-days-a" placeholder="4" class="w-5 input-underlined text-[9.5px]" /><span class="text-[7.5px] text-slate-400 font-bold">D</span>
+</div>
+</div>
+<div class="flex items-center justify-between text-[9.5px]">
+<span class="font-bold text-slate-700">FL:</span>
+<div class="flex items-center gap-1.5">
+<input type="text" id="ob-fl-val-a" placeholder="6.1" class="w-8 input-underlined text-[9.5px]" /><span class="text-[7.5px] text-slate-400 font-bold">CM</span>
+<input type="text" id="ob-fl-wks-a" placeholder="32" class="w-6 input-underlined text-[9.5px]" /><span class="text-[7.5px] text-slate-400 font-bold">WK</span>
+<input type="text" id="ob-fl-days-a" placeholder="1" class="w-5 input-underlined text-[9.5px]" /><span class="text-[7.5px] text-slate-400 font-bold">D</span>
+</div>
+</div>
+</div>
+<div class="space-y-1 pl-2">
+<p class="font-extrabold text-teal-800 text-[8px] tracking-wider uppercase border-b border-slate-200 pb-0.5 mb-1 text-center">Twin B Biometry</p>
+<div class="flex items-center justify-between text-[9.5px]">
+<span class="font-bold text-slate-700">BPD:</span>
+<div class="flex items-center gap-1.5">
+<input type="text" id="ob-bpd-val-b" placeholder="8.0" class="w-8 input-underlined text-[9.5px]" /><span class="text-[7.5px] text-slate-400 font-bold">CM</span>
+<input type="text" id="ob-bpd-wks-b" placeholder="31" class="w-6 input-underlined text-[9.5px]" /><span class="text-[7.5px] text-slate-400 font-bold">WK</span>
+<input type="text" id="ob-bpd-days-b" placeholder="2" class="w-5 input-underlined text-[9.5px]" /><span class="text-[7.5px] text-slate-400 font-bold">D</span>
+</div>
+</div>
+<div class="flex items-center justify-between text-[9.5px]">
+<span class="font-bold text-slate-700">HC:</span>
+<div class="flex items-center gap-1.5">
+<input type="text" id="ob-hc-val-b" placeholder="29.0" class="w-8 input-underlined text-[9.5px]" /><span class="text-[7.5px] text-slate-400 font-bold">CM</span>
+<input type="text" id="ob-hc-wks-b" placeholder="31" class="w-6 input-underlined text-[9.5px]" /><span class="text-[7.5px] text-slate-400 font-bold">WK</span>
+<input type="text" id="ob-hc-days-b" placeholder="3" class="w-5 input-underlined text-[9.5px]" /><span class="text-[7.5px] text-slate-400 font-bold">D</span>
+</div>
+</div>
+<div class="flex items-center justify-between text-[9.5px]">
+<span class="font-bold text-slate-700">AC:</span>
+<div class="flex items-center gap-1.5">
+<input type="text" id="ob-ac-val-b" placeholder="27.8" class="w-8 input-underlined text-[9.5px]" /><span class="text-[7.5px] text-slate-400 font-bold">CM</span>
+<input type="text" id="ob-ac-wks-b" placeholder="31" class="w-6 input-underlined text-[9.5px]" /><span class="text-[7.5px] text-slate-400 font-bold">WK</span>
+<input type="text" id="ob-ac-days-b" placeholder="1" class="w-5 input-underlined text-[9.5px]" /><span class="text-[7.5px] text-slate-400 font-bold">D</span>
+</div>
+</div>
+<div class="flex items-center justify-between text-[9.5px]">
+<span class="font-bold text-slate-700">FL:</span>
+<div class="flex items-center gap-1.5">
+<input type="text" id="ob-fl-val-b" placeholder="5.9" class="w-8 input-underlined text-[9.5px]" /><span class="text-[7.5px] text-slate-400 font-bold">CM</span>
+<input type="text" id="ob-fl-wks-b" placeholder="31" class="w-6 input-underlined text-[9.5px]" /><span class="text-[7.5px] text-slate-400 font-bold">WK</span>
+<input type="text" id="ob-fl-days-b" placeholder="4" class="w-5 input-underlined text-[9.5px]" /><span class="text-[7.5px] text-slate-400 font-bold">D</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="grid grid-cols-1 gap-y-1 pt-1.5 border-t border-slate-100">
+<div class="flex items-center justify-between border-b border-dashed border-slate-200 pb-0.5">
+<span class="font-bold text-slate-700">* COMPOSITE GESTATIONAL AGE :</span>
+<div class="flex items-center gap-2.5">
+<span class="text-teal-800 font-bold">Twin A:</span>
+<input type="text" id="ob-cga-wks-a" placeholder="32" class="w-8 input-underlined text-[9.5px]" /><span class="text-slate-500 font-bold">WKs</span>
+<input type="text" id="ob-cga-days-a" placeholder="3" class="w-6 input-underlined text-[9.5px]" /><span class="text-slate-500 font-bold">Days</span>
+<span class="text-teal-800 font-bold ml-3">Twin B:</span>
+<input type="text" id="ob-cga-wks-b" placeholder="31" class="w-8 input-underlined text-[9.5px]" /><span class="text-slate-500 font-bold">WKs</span>
+<input type="text" id="ob-cga-days-b" placeholder="2" class="w-6 input-underlined text-[9.5px]" /><span class="text-slate-500 font-bold">Days</span>
+</div>
+</div>
+<div class="flex items-center justify-between border-b border-dashed border-slate-200 pb-0.5">
+<span class="font-bold text-slate-700">* EXPECTED DATE OF CONFINEMENT DELIVERY :</span>
+<div class="flex items-center border-b border-slate-300 pb-0.5 focus-within:border-teal-600">
+<input type="text" id="p-edd" inputmode="numeric" maxlength="10" placeholder="DD-MM-YYYY" class="bg-transparent text-right font-semibold focus:outline-none text-teal-950 w-32 text-[9.5px]" />
+<div class="relative w-3.5 h-3.5 ml-1.5 shrink-0 cursor-pointer no-print">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="absolute inset-0 w-full h-full text-teal-800 pointer-events-none"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+<input type="date" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="document.getElementById('p-edd').value = ymd2dmy(this.value); this.value='';" />
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between border-b border-dashed border-slate-200 pb-0.5">
+<span class="font-bold text-slate-700">* AVERAGE ESTIMATED FOETAL WEIGHT :</span>
+<div class="flex items-center gap-2.5">
+<span class="text-teal-800 font-bold">Twin A:</span>
+<input type="text" id="ob-efw-a" placeholder="1950" class="w-14 input-underlined text-[9.5px]" /><span class="text-slate-500 font-bold">gms</span>
+<span class="text-teal-800 font-bold ml-3">Twin B:</span>
+<input type="text" id="ob-efw-b" placeholder="1800" class="w-14 input-underlined text-[9.5px]" /><span class="text-slate-500 font-bold">gms</span>
+</div>
+</div>
+<div class="flex items-center justify-between border-b border-dashed border-slate-200 pb-0.5">
+<span class="font-bold text-slate-700">* PLACENTA POSITION & GRADE :</span>
+<div class="flex items-center gap-2.5">
+<span class="text-[8.5px] text-slate-500 font-bold">Twin A:</span>
+<select id="ob-placenta-pos-a" class="font-bold text-teal-900 bg-transparent text-[9.5px] focus:outline-none cursor-pointer"><option value="ANTERIOR" selected>ANT</option><option value="POSTERIOR">POST</option><option value="FUNDAL">FUND</option></select>
+<select id="ob-placenta-grade-a" class="font-bold text-teal-900 bg-transparent text-[9.5px] focus:outline-none cursor-pointer"><option value="I" selected>Gr I</option><option value="II">Gr II</option><option value="III">Gr III</option></select>
+<span class="text-[8.5px] text-slate-500 font-bold ml-3">Twin B:</span>
+<select id="ob-placenta-pos-b" class="font-bold text-teal-900 bg-transparent text-[9.5px] focus:outline-none cursor-pointer"><option value="ANTERIOR">ANT</option><option value="POSTERIOR" selected>POST</option><option value="FUNDAL">FUND</option></select>
+<select id="ob-placenta-grade-b" class="font-bold text-teal-900 bg-transparent text-[9.5px] focus:outline-none cursor-pointer"><option value="I">Gr I</option><option value="II" selected>Gr II</option><option value="III">Gr III</option></select>
+</div>
+</div>
+<div class="flex items-center justify-between border-b border-dashed border-slate-200 pb-0.5">
+<span class="font-bold text-slate-700">* AMINIOTIC FLUID / LIQUOR QUANTITY :</span>
+<div class="flex items-center gap-2.5">
+<span class="text-teal-800 font-bold">Twin A:</span>
+<select id="ob-liquor-a" class="font-bold text-teal-900 bg-transparent text-[9.5px] focus:outline-none cursor-pointer"><option value="ADEQUATE" selected>ADEQ</option><option value="OLIGO">OLIGO</option><option value="POLY">POLY</option></select>
+<span class="text-teal-800 font-bold ml-3">Twin B:</span>
+<select id="ob-liquor-b" class="font-bold text-teal-900 bg-transparent text-[9.5px] focus:outline-none cursor-pointer"><option value="ADEQUATE" selected>ADEQ</option><option value="OLIGO">OLIGO</option><option value="POLY">POLY</option></select>
+</div>
+</div>
+<div class="flex items-center justify-between border-b border-dashed border-slate-200 pb-0.5">
+<span class="font-bold text-slate-700">* A.F.I. VALUE :</span>
+<div class="flex items-center gap-2.5">
+<span class="text-teal-800 font-bold">Twin A:</span>
+<input type="text" id="ob-afi-a" placeholder="12" class="w-10 input-underlined text-[9.5px]" /><span class="text-slate-400 font-bold">CMs</span>
+<span class="text-teal-800 font-bold ml-3">Twin B:</span>
+<input type="text" id="ob-afi-b" placeholder="11" class="w-10 input-underlined text-[9.5px]" /><span class="text-slate-400 font-bold">CMs</span>
+</div>
+</div>
+</div>
+<p class="text-[10px] font-bold text-slate-800 pt-1 italic text-center">* NO MAJOR DEMOSTRABLE FOETAL ANOMANES SEEN.</p>
+</section>
+
+<section>
+<div class="bg-teal-800/10 py-1 px-3 rounded-none mb-1">
+<span class="text-[8.5px] font-bold tracking-widest text-teal-900 uppercase">Sonographic Impression</span>
+</div>
+<div class="px-1.5 text-slate-800 text-[9.5px] font-bold flex flex-wrap items-center gap-1.5 leading-relaxed">
+<span>* IMPRESSION: DI-AMNIOTIC DI-CHORIONIC (DADC) TWIN PREGNANCY - TWIN A:</span>
+<input type="text" id="ob-impression-val-a" placeholder="CEPHALIC" class="w-24 input-underlined text-[9.5px]" />
+<span>, TWIN B:</span>
+<input type="text" id="ob-impression-val-b" placeholder="BREECH" class="w-24 input-underlined text-[9.5px]" />
+<span>PRESENTATION.</span>
+</div>
+</section>
+
+<section class="p-1.5 bg-slate-50 border border-slate-300 rounded-none text-[8px] leading-relaxed text-slate-600">
+<p class="font-black text-slate-800 uppercase tracking-wide mb-0.5">NOTE :</p>
+All anomalies canot be ruled out by this scan, since assessment of fetal anomalies depends on fetal position, liquor volume and the period of festation at the time scan. Hence this report has limitation and is not for MEDICO –Legal purpose.
+</section>
+</div>
+
+<!-- CM014 - Footer Section -->
+<div class="mt-auto pt-1">
+<footer class="border-t-2 border-teal-800/40 pt-1.5 pb-0.5">
+<div class="text-[8px] text-slate-600 font-semibold tracking-wide leading-relaxed">
+D NO:1-7-26, PEDDANNA STREET, OPPO RAMANA FUNCTION HALL, G V TEXSTILES BACKSIDE, ALLAGADDA, NANDYALA DIS, AP-518543.
+</div>
+</footer>
+<section class="flex justify-end pb-0.5 mt-0.5">
+<div class="text-center w-48 border-t border-slate-400 pt-1">
+<span class="text-[8.5px] font-bold tracking-wider text-slate-700 uppercase">PROFESSOR</span>
+<p class="text-[8px] text-slate-400 font-medium leading-none mt-1.5">Sanjeeva Hospital Services</p>
+</div>
+</section>
+</div>
+
+</div>
+</div>
+</main>
+
+<script>
+
+/* CM015 - Global Setup */
+const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbxyPe-O6ISxZBTDk1b08rofan_0sU0GWoPYrL9mmfQVHRXceFcRlNcH4QE8cHr6xrW_mg/exec'; window.addEventListener('DOMContentLoaded', () => { document.getElementById('p-exam-date').value = todayDMY(); setupTwinMirroring(); });
+
+/* CM016 - Twin Data Mirroring Helper */
+function setupTwinMirroring() { const pairs = [['ob-presentation-a', 'ob-presentation-b'], ['ob-fhr-bpm-a', 'ob-fhr-bpm-b'], ['ob-fhr-rhythm-a', 'ob-fhr-rhythm-b'], ['ob-fetal-movements-a', 'ob-fetal-movements-b'], ['ob-bpd-val-a', 'ob-bpd-val-b'], ['ob-bpd-wks-a', 'ob-bpd-wks-b'], ['ob-bpd-days-a', 'ob-bpd-days-b'], ['ob-hc-val-a', 'ob-hc-val-b'], ['ob-hc-wks-a', 'ob-hc-wks-b'], ['ob-hc-days-a', 'ob-hc-days-b'], ['ob-ac-val-a', 'ob-ac-val-b'], ['ob-ac-wks-a', 'ob-ac-wks-b'], ['ob-ac-days-a', 'ob-ac-days-b'], ['ob-fl-val-a', 'ob-fl-val-b'], ['ob-fl-wks-a', 'ob-fl-wks-b'], ['ob-fl-days-a', 'ob-fl-days-b'], ['ob-cga-wks-a', 'ob-cga-wks-b'], ['ob-cga-days-a', 'ob-cga-days-b'], ['ob-efw-a', 'ob-efw-b'], ['ob-placenta-pos-a', 'ob-placenta-pos-b'], ['ob-placenta-grade-a', 'ob-placenta-grade-b'], ['ob-liquor-a', 'ob-liquor-b'], ['ob-afi-a', 'ob-afi-b'], ['ob-impression-val-a', 'ob-impression-val-b']]; pairs.forEach(([aId, bId]) => { const aEl = document.getElementById(aId); const bEl = document.getElementById(bId); aEl.addEventListener('input', () => { bEl.value = aEl.value; }); aEl.addEventListener('change', () => { bEl.value = aEl.value; }); }); }
+
+/* CM017 - Date Format Helpers */
+const pad2 = (n) => String(n).padStart(2,'0'); const todayDMY = () => { const d = new Date(); return `${pad2(d.getDate())}-${pad2(d.getMonth()+1)}-${d.getFullYear()}`; }; const ymd2dmy = (s) => { if(!s) return ''; const p = s.split('-'); return p.length===3 ? `${p[2]}-${p[1]}-${p[0]}` : s; };
+
+/* CM018 - Toast Notifications */
+function showToast(msg, type = 'success') { const c = document.getElementById('toast-container'); const t = document.createElement('div'); const cols = { success: 'bg-emerald-600 border-emerald-700 text-white', error: 'bg-rose-600 border-rose-700 text-white', info: 'bg-slate-800 border-slate-900 text-white' }; t.className = `flex items-center gap-2 px-3 py-2 rounded-none shadow-xl border text-[10px] font-semibold ${cols[type]} transition-all duration-300 transform translate-x-12 opacity-0 pointer-events-auto max-w-sm`; t.innerHTML = `<svg class="h-3 w-3 text-white shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg><span>${msg}</span>`; c.appendChild(t); requestAnimationFrame(() => t.classList.remove('translate-x-12', 'opacity-0')); setTimeout(() => { t.classList.add('translate-x-12', 'opacity-0'); setTimeout(() => t.remove(), 300); }, 4500); }
+
+/* CM019 - Reset Actions */
+function resetForm() { document.getElementById('reset-modal').classList.remove('hidden'); } function confirmReset(conf) { document.getElementById('reset-modal').classList.add('hidden'); if (conf) { const ids = ['ob-report-id','p-name','p-age','p-edd','p-village','ob-fhr-bpm-a','ob-fhr-bpm-b','ob-bpd-val-a','ob-bpd-wks-a','ob-bpd-days-a','ob-hc-val-a','ob-hc-wks-a','ob-hc-days-a','ob-ac-val-a','ob-ac-wks-a','ob-ac-days-a','ob-fl-val-a','ob-fl-wks-a','ob-fl-days-a','ob-bpd-val-b','ob-bpd-wks-b','ob-bpd-days-b','ob-hc-val-b','ob-hc-wks-b','ob-hc-days-b','ob-ac-val-b','ob-ac-wks-b','ob-ac-days-b','ob-fl-val-b','ob-fl-wks-b','ob-fl-days-b','ob-cga-wks-a','ob-cga-days-a','ob-cga-wks-b','ob-cga-days-b','ob-efw-a','ob-efw-b','ob-afi-a','ob-afi-b','ob-impression-val-a','ob-impression-val-b']; ids.forEach(i => document.getElementById(i).value = ''); document.getElementById('ob-report-id').value = '[Auto-Generated]'; document.getElementById('p-exam-date').value = todayDMY(); document.getElementById('p-sex').value = 'Female'; document.getElementById('ob-presentation-a').value = 'CEPHALIC'; document.getElementById('ob-presentation-b').value = 'BREECH'; document.getElementById('ob-fhr-rhythm-a').value = 'REGULAR'; document.getElementById('ob-fhr-rhythm-b').value = 'REGULAR'; document.getElementById('ob-fetal-movements-a').value = 'PRESENT'; document.getElementById('ob-fetal-movements-b').value = 'PRESENT'; document.getElementById('ob-placenta-pos-a').value = 'ANTERIOR'; document.getElementById('ob-placenta-pos-b').value = 'POSTERIOR'; document.getElementById('ob-placenta-grade-a').value = 'I'; document.getElementById('ob-placenta-grade-b').value = 'II'; document.getElementById('ob-liquor-a').value = 'ADEQUATE'; document.getElementById('ob-liquor-b').value = 'ADEQUATE'; const p = document.getElementById('btn-print'); p.disabled = true; showToast('Twin report reset. Ready for new row!', 'info'); } }
+
+/* CM020 - Save Data (Fully mapped to 57 distinct columns) */
+async function saveReport() { const btn = document.getElementById('btn-save'); btn.disabled = true; const originalHTML = btn.innerHTML; btn.innerHTML = `<span class="text-[#ea580c] font-black uppercase tracking-widest text-[10px]">SAVING...</span>`; const d = (id) => document.getElementById(id).value; const payload = { action: 'save', reportId: d('ob-report-id'), patientName: d('p-name'), examDate: d('p-exam-date'), age: d('p-age'), sex: d('p-sex'), village: d('p-village'), twinAPresentation: d('ob-presentation-a'), twinAFhrBpm: d('ob-fhr-bpm-a'), twinAFhrRhythm: d('ob-fhr-rhythm-a'), twinAFetalMovements: d('ob-fetal-movements-a'), twinBPresentation: d('ob-presentation-b'), twinBFhrBpm: d('ob-fhr-bpm-b'), twinBFhrRhythm: d('ob-fhr-rhythm-b'), twinBFetalMovements: d('ob-fetal-movements-b'), twinABpdCm: d('ob-bpd-val-a'), twinABpdWeeks: d('ob-bpd-wks-a'), twinABpdDays: d('ob-bpd-days-a'), twinAHcCm: d('ob-hc-val-a'), twinAHcWeeks: d('ob-hc-wks-a'), twinAHcDays: d('ob-hc-days-a'), twinAAcCm: d('ob-ac-val-a'), twinAAcWeeks: d('ob-ac-wks-a'), twinAAcDays: d('ob-ac-days-a'), twinAFlCm: d('ob-fl-val-a'), twinAFlWeeks: d('ob-fl-wks-a'), twinAFlDays: d('ob-fl-days-a'), twinBBpdCm: d('ob-bpd-val-b'), twinBBpdWeeks: d('ob-bpd-wks-b'), twinBBpdDays: d('ob-bpd-days-b'), twinBHcCm: d('ob-hc-val-b'), twinBHcWeeks: d('ob-hc-wks-b'), twinBHcDays: d('ob-hc-days-b'), twinBAcCm: d('ob-ac-val-b'), twinBAcWeeks: d('ob-ac-wks-b'), twinBAcDays: d('ob-ac-days-b'), twinBFlCm: d('ob-fl-val-b'), twinBFlWeeks: d('ob-fl-wks-b'), twinBFlDays: d('ob-fl-days-b'), twinACgaWeeks: d('ob-cga-wks-a'), twinACgaDays: d('ob-cga-days-a'), twinBCgaWeeks: d('ob-cga-wks-b'), twinBCgaDays: d('ob-cga-days-b'), edd: d('p-edd'), twinAEfwGms: d('ob-efw-a'), twinBEfwGms: d('ob-efw-b'), twinAPlacentaPosition: d('ob-placenta-pos-a'), twinAPlacentaGrade: d('ob-placenta-grade-a'), twinBPlacentaPosition: d('ob-placenta-pos-b'), twinBPlacentaGrade: d('ob-placenta-grade-b'), twinAAmnioticFluid: d('ob-liquor-a'), twinBAmnioticFluid: d('ob-liquor-b'), twinAAfiCm: d('ob-afi-a'), twinBAfiCm: d('ob-afi-b'), twinAImpression: d('ob-impression-val-a'), twinBImpression: d('ob-impression-val-b') }; try { const res = await fetch(GAS_API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(payload) }); const json = JSON.parse(await res.text()); if (json.status === 'success') { document.getElementById('ob-report-id').value = json.reportId; const p = document.getElementById('btn-print'); p.disabled = false; btn.innerHTML = `<span class="text-[#ea580c] font-black uppercase tracking-widest text-[10px]">SAVED</span>`; setTimeout(() => { btn.disabled = false; btn.innerHTML = originalHTML; }, 3000); } else { btn.innerHTML = `<span class="text-[#ea580c] font-black uppercase tracking-widest text-[10px]">FAILED</span>`; setTimeout(() => { btn.disabled = false; btn.innerHTML = originalHTML; }, 3000); } } catch (err) { btn.innerHTML = `<span class="text-[#ea580c] font-black uppercase tracking-widest text-[10px]">ERROR</span>`; setTimeout(() => { btn.disabled = false; btn.innerHTML = originalHTML; }, 3000); } }
+
+/* CM021 - Verify Data (Fully mapped to 57 distinct columns) */
+async function verifyAndSearchReport() { const sid = document.getElementById('search-id-input').value.trim(); if (!sid) return showToast('Enter OB ID.', 'error'); showToast(`Verifying Twin ID ${sid}...`, 'info'); try { const res = await fetch(GAS_API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ action: 'verify', reportId: sid }) }); const json = JSON.parse(await res.text()); if (json.status === 'success' && json.data) { const data = json.data; const s = (id, val) => document.getElementById(id).value = val || ''; s('ob-report-id', data.reportId); s('p-name', data.patientName); s('p-exam-date', data.examDate); s('p-age', data.age); s('p-sex', data.sex || 'Female'); s('p-village', data.village); s('ob-presentation-a', data.twinAPresentation || 'CEPHALIC'); s('ob-fhr-bpm-a', data.twinAFhrBpm); s('ob-fhr-rhythm-a', data.twinAFhrRhythm || 'REGULAR'); s('ob-fetal-movements-a', data.twinAFetalMovements || 'PRESENT'); s('ob-presentation-b', data.twinBPresentation || 'BREECH'); s('ob-fhr-bpm-b', data.twinBFhrBpm); s('ob-fhr-rhythm-b', data.twinBFhrRhythm || 'REGULAR'); s('ob-fetal-movements-b', data.twinBFetalMovements || 'PRESENT'); s('ob-bpd-val-a', data.twinABpdCm); s('ob-bpd-wks-a', data.twinABpdWeeks); s('ob-bpd-days-a', data.twinABpdDays); s('ob-hc-val-a', data.twinAHcCm); s('ob-hc-wks-a', data.twinAHcWeeks); s('ob-hc-days-a', data.twinAHcDays); s('ob-ac-val-a', data.twinAAcCm); s('ob-ac-wks-a', data.twinAAcWeeks); s('ob-ac-days-a', data.twinAAcDays); s('ob-fl-val-a', data.twinAFlCm); s('ob-fl-wks-a', data.twinAFlWeeks); s('ob-fl-days-a', data.twinAFlDays); s('ob-bpd-val-b', data.twinBBpdCm); s('ob-bpd-wks-b', data.twinBBpdWeeks); s('ob-bpd-days-b', data.twinBBpdDays); s('ob-hc-val-b', data.twinBHcCm); s('ob-hc-wks-b', data.twinBHcWeeks); s('ob-hc-days-b', data.twinBHcDays); s('ob-ac-val-b', data.twinBAcCm); s('ob-ac-wks-b', data.twinBAcWeeks); s('ob-ac-days-b', data.twinBAcDays); s('ob-fl-val-b', data.twinBFlCm); s('ob-fl-wks-b', data.twinBFlWeeks); s('ob-fl-days-b', data.twinBFlDays); s('ob-cga-wks-a', data.twinACgaWeeks); s('ob-cga-days-a', data.twinACgaDays); s('ob-cga-wks-b', data.twinBCgaWeeks); s('ob-cga-days-b', data.twinBCgaDays); s('p-edd', data.edd); s('ob-efw-a', data.twinAEfwGms); s('ob-efw-b', data.twinBEfwGms); s('ob-placenta-pos-a', data.twinAPlacentaPosition || 'ANTERIOR'); s('ob-placenta-grade-a', data.twinAPlacentaGrade || 'I'); s('ob-placenta-pos-b', data.twinBPlacentaPosition || 'POSTERIOR'); s('ob-placenta-grade-b', data.twinBPlacentaGrade || 'II'); s('ob-liquor-a', data.twinAAmnioticFluid || 'ADEQUATE'); s('ob-liquor-b', data.twinBAmnioticFluid || 'ADEQUATE'); s('ob-afi-a', data.twinAAfiCm); s('ob-afi-b', data.twinBAfiCm); s('ob-impression-val-a', data.twinAImpression); s('ob-impression-val-b', data.twinBImpression); const pr = document.getElementById('btn-print'); pr.disabled = false; showToast('Verified!', 'success'); } else { showToast(json.message || 'Not found.', 'error'); } } catch (err) { showToast('Error.', 'info'); } }
+
+/* CM022 - Print Action */
+function triggerPrint() { window.print(); }
+
+</script>
+</body>
+</html>

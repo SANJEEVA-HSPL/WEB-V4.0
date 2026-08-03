@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sanjeevani Medical - Billing & Receipts</title>
+<link rel="icon" type="image/png" href="https://sanjeeva-hspl.github.io/SM-IMG/01-SMH-FEVICON_ICON.png">
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+/* CM001 - Base Body Styles */
+body { font-family: 'Roboto Slab', serif !important; background-color: #cbd5e1; padding: 10px; margin: 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; min-height: 100vh; }
+
+/* CM002 - Controls Wrapper Styles */
+.controls-wrapper { display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; z-index: 1000; width: 100%; max-width: 900px; margin: 2px auto 8px auto; background: transparent; padding: 0; border-radius: 0; box-shadow: none; }
+
+/* CM003 - Button Styles */
+.btn-3d { padding: 4px 10px; color: white; border-radius: 4px; font-weight: 800; cursor: pointer; border: none; display: inline-flex; align-items: center; gap: 4px; font-size: 0.65rem; transition: all 0.1s ease; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); position: relative; }
+.btn-3d:active { transform: translateY(2px); box-shadow: 0 1px 1px rgba(0,0,0,0.2) !important; margin-bottom: 0; }
+.btn-reset { background: linear-gradient(to bottom, #f43f5e, #be123c); border-bottom: 2px solid #881337; box-shadow: 0 2px 4px -1px rgba(0,0,0,0.3); }
+.btn-reset:active { border-bottom-width: 0px; margin-bottom: 2px; }
+.btn-save { background: linear-gradient(to bottom, #10b981, #047857); border-bottom: 2px solid #064e3b; box-shadow: 0 2px 4px -1px rgba(0,0,0,0.3); }
+.btn-save:active { border-bottom-width: 0px; margin-bottom: 2px; }
+.btn-print { background: linear-gradient(to bottom, #3b82f6, #1d4ed8); border-bottom: 2px solid #1e3a8a; box-shadow: 0 2px 4px -1px rgba(0,0,0,0.3); }
+.btn-print:active { border-bottom-width: 0px; margin-bottom: 2px; }
+.btn-verify { background: linear-gradient(to bottom, #8b5cf6, #6d28d9); border-bottom: 2px solid #4c1d95; box-shadow: 0 2px 4px -1px rgba(0,0,0,0.3); padding: 3px 8px; font-size: 0.65rem; }
+.btn-verify:active { border-bottom-width: 0px; margin-bottom: 2px; transform: translateY(2px); box-shadow: 0 1px 1px rgba(0,0,0,0.2) !important; }
+
+/* CM004 - Search Box Styles */
+.search-box { background: transparent; border: none; padding: 0; border-radius: 0; display: flex; align-items: center; gap: 4px; font-weight: 800; color: #334155; height: 26px; font-size: 11px; }
+.search-box input { border: 1px solid #94a3b8; outline: none; padding: 2px 4px; height: 22px; border-radius: 3px; font-weight: 700; background: #ffffff; width: 120px; font-size: 11px; color: #0f172a; }
+.search-box input:focus { border-color: #6d28d9; box-shadow: 0 0 0 2px rgba(139,92,246,0.2); }
+
+/* CM005 - Receipt Segment Styles */
+.receipt-slip-segment { width: 210mm; min-height: 297mm; border: 1px solid #000000; padding: 10mm 12mm; position: relative; box-sizing: border-box; display: flex; flex-direction: column; background-color: #ffffff; box-shadow: 0 10px 30px rgba(0,0,0,0.15); margin-top: 2px; overflow: hidden; }
+.watermark-bg { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 250px; height: 250px; object-fit: contain; opacity: .03; z-index: 0; pointer-events: none; }
+.document-content-wrapper { flex-grow: 1; display: flex; flex-direction: column; z-index: 10; position: relative; }
+
+/* CM006 - Slip Header & Logo Styles */
+.slip-header { display: flex; align-items: flex-start; border-bottom: 2px solid #065f46; padding-bottom: 8px; margin-bottom: 15px; z-index: 10; }
+.slip-logo { height: 65px; width: auto; object-fit: contain; margin-right: 15px; }
+.slip-title-container { display: flex; flex-direction: column; flex-grow: 1; }
+.slip-hospital-name { font-size: 1.55rem; font-weight: 850; color: #065f46; text-transform: uppercase; line-height: 1; letter-spacing: 0.01em; white-space: nowrap; margin-bottom: 4px; }
+
+/* CM007 - Typography & Form Fields Styles */
+.receipt-headline { font-size: 0.85rem; font-weight: 800; color: #065f46; text-decoration: underline; text-transform: uppercase; letter-spacing: 0.08em; text-align: center; margin-top: 5px; margin-bottom: 10px; z-index: 10; }
+.line-input { border: none; border-bottom: 1.5px dotted #065f46; outline: none; padding: 0 2px; font-weight: 800; color: #b91c1c; text-align: left; background: transparent; font-size: 0.85rem; display: inline-block; vertical-align: bottom; min-width: 60px; }
+.line-input:focus { border-bottom: 1.5px solid #b91c1c; background: #f0fdf4; }
+.line-input:empty:before { content: "\200b"; }
+.date-picker-wrapper { position: relative; display: inline-flex; align-items: center; cursor: pointer; }
+.date-picker-hidden { position: absolute; opacity: 0; width: 100%; height: 100%; top: 0; left: 0; cursor: pointer; }
+.date-display-field { border-bottom: 1.5px dotted #065f46; padding: 0 2px; font-weight: 800; color: #b91c1c; font-size: 0.85rem; text-align: center; min-width: 90px; }
+.calendar-icon-btn { color: #065f46; margin-left: 4px; font-size: 0.85rem; cursor: pointer; }
+.referred-select { border-bottom: 1.5px dotted #065f46; background: transparent; color: #b91c1c; font-weight: 800; font-size: 0.85rem; outline: none; cursor: pointer; max-width: 100%; }
+
+/* CM008 - Investigation Table Styles */
+.investigation-table { width: 100%; border-collapse: collapse; margin-top: 5px; margin-bottom: 15px; font-size: 0.75rem; z-index: 10; }
+.investigation-table th { background-color: #065f46; color: white; font-weight: 700; text-transform: uppercase; padding: 4px 2px; border: 1px solid #065f46; font-size: 0.65rem; text-align: center; }
+.investigation-table td { padding: 1px 2px; border: 1px solid #cbd5e1; font-weight: 700; color: #1e293b; height: 18px; }
+.investigation-table input { width: 100%; border: none; outline: none; background: transparent; font-weight: 800; color: #1e293b; font-family: inherit; font-size: 0.7rem; }
+.investigation-table input.amt-col { color: #b91c1c; }
+
+/* CM009 - Popup Modals Styles */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(2px); }
+.modal-content { background: #ffffff; padding: 25px; border-radius: 12px; text-align: center; min-width: 320px; box-shadow: 0 12px 30px rgba(0,0,0,0.25); }
+
+/* CM010 - Print Media Overrides */
+@page { size: A4 portrait; margin: 0; }
+@media print { body { margin: 0 !important; padding: 0 !important; background: #ffffff !important; align-items: flex-start; justify-content: flex-start; width: 210mm; height: 297mm; } .controls-wrapper, .calendar-icon-btn, .date-picker-hidden, .referred-select { display: none !important; } .referred-print-text { display: inline-block !important; } .receipt-slip-segment { width: 198mm !important; min-height: 285mm !important; border: 1px solid #000000 !important; box-shadow: none !important; margin: 6mm !important; padding: 10mm 12mm !important; box-sizing: border-box !important; }.investigation-table th { border: 1px solid #000 !important; } .investigation-table td { border: 1px solid #ccc !important; } .empty-row { display: none !important; } }
+</style>
+</head>
+<body>
+
+<!-- CM011 - Main Controls Block -->
+<div class="controls-wrapper">
+<button class="btn-3d btn-reset" onclick="confirmReset()"><i class="fa-solid fa-trash-can"></i> RESET</button>
+<button class="btn-3d btn-save" id="commitBtn_9381" onclick="handleSaveOrUpdate_7182()"><i class="fa-solid fa-cloud-arrow-up" id="saveIcon"></i> <span id="btnText_992">SAVE</span></button>
+<button class="btn-3d btn-print" onclick="window.print()"><i class="fa-solid fa-print"></i> PRINT</button>
+<div class="search-box">
+Bill ID:
+<input type="text" id="searchInput_8822" oninput="this.value=this.value.toUpperCase()" onkeydown="handleSearchEnter(event)">
+<button id="verifyBtn_7722" class="btn-3d btn-verify" onclick="performSearch_9281()"><i id="verifyIcon_7722" class="fa-solid fa-check"></i> VERIFY</button>
+</div>
+</div>
+
+<!-- CM012 - Receipt Slip Document Wrapper -->
+<div class="receipt-slip-segment" id="receiptSegment">
+<svg class="watermark-bg" viewBox="0 0 24 24" fill="#065f46" xmlns="http://www.w3.org/2000/svg">
+<path d="M19 10.5H13.5V5C13.5 4.17 12.83 3.5 12 3.5C11.17 3.5 10.5 4.17 10.5 5V10.5H5C4.17 10.5 3.5 11.17 3.5 12C3.5 12.83 4.17 13.5 5 13.5H10.5V19C10.5 19.83 11.17 20.5 12 20.5C12.83 20.5 13.5 19.83 13.5 19V13.5H19C19.83 13.5 20.5 12.83 20.5 12C20.5 11.17 19.83 10.5 19 10.5Z"/>
+</svg>
+<div class="document-content-wrapper">
+
+<!-- CM013 - Slip Header Section -->
+<div class="slip-header">
+<img class="slip-logo" src="https://sanjeeva-hspl.github.io/SM-IMG/02-SMH-HOSPITAL%20LOGO.png" alt="Sanjeevani Logo">
+<div class="slip-title-container">
+<h1 class="slip-hospital-name">SANJEEVANI MEDICAL & GENERAL STORES</h1>
+<div class="text-[0.7rem] text-slate-700 font-bold flex gap-4 uppercase mt-1">
+<span><strong>GSTIN:</strong> 37AWDPR6048NIZU</span>
+<span><strong>D.L. No:</strong> APY13/02/2018-143796</span>
+</div>
+<div class="text-[0.75rem] text-emerald-800 font-bold flex gap-4 mt-1">
+<span><i class="fas fa-phone-alt"></i> +91 9100349825</span>
+<span><i class="fas fa-globe text-emerald-600"></i> www.sanjeevahospital.in</span>
+</div>
+</div>
+</div>
+
+<!-- CM014 - Patient & Bill Information Section -->
+<div class="flex flex-col gap-2 border-b-2 border-emerald-900/10 pb-2 mb-2 z-10 text-[0.85rem] font-bold text-emerald-900">
+<div class="flex w-full items-center justify-between gap-4">
+<div class="flex items-center whitespace-nowrap">
+Bill Number :&nbsp;
+<span contenteditable="plaintext-only" id="receiptNo_val" class="line-input w-28 text-left uppercase text-rose-600 font-extrabold" oninput="saveFormData()"></span>
+</div>
+<div class="flex items-center flex-grow">
+Patient Name :&nbsp;
+<span contenteditable="plaintext-only" id="patientName" class="line-input flex-grow text-left" oninput="saveFormData()"></span>
+</div>
+<div class="flex items-center justify-end whitespace-nowrap">
+Date :&nbsp;
+<div class="date-picker-wrapper">
+<span id="receiptDate_display" class="date-display-field"></span>
+<i class="far fa-calendar-alt calendar-icon-btn"></i>
+<input type="date" class="date-picker-hidden" onchange="handleDateSelection(this, 'receiptDate_display')">
+</div>
+</div>
+</div>
+<div class="flex items-center w-full mt-1">
+Referred Doctor :&nbsp;
+<select id="referredBySelect" class="referred-select mr-2 flex-grow" onchange="handleReferredByChange()">
+<option value="DR. R. ANJANEYULU M.B.B.S., M.D.">DR. R. ANJANEYULU M.B.B.S., M.D.</option>
+<option value="DR. E. SUJATHA ANJANEYULU M.B.B.S., M.S.">DR. E. SUJATHA ANJANEYULU M.B.B.S., M.S.</option>
+<option value="CUSTOM">OTHERS (TYPE CUSTOM NAME BELOW)</option>
+</select>
+<span contenteditable="plaintext-only" id="referredByCustom" class="line-input flex-grow text-left hidden" oninput="saveFormData()"></span>
+<span id="referredByPrint" class="referred-print-text hidden font-extrabold text-rose-600 text-[0.85rem] border-b border-dotted border-emerald-900"></span>
+</div>
+</div>
+
+<!-- CM015 - Medicine Table Section -->
+<div class="receipt-headline">MEDICINES INVOICE</div>
+<table class="investigation-table">
+<thead>
+<tr>
+<th style="width: 4%;">S.No</th>
+<th style="width: 39%; text-align: left;">Medicine</th>
+<th style="width: 14%;">MFRS</th>
+<th style="width: 12%;">Batch</th>
+<th style="width: 9%;">Exp</th>
+<th style="width: 5%;">Qty</th>
+<th style="width: 8%;">Rate</th>
+<th style="width: 9%; text-align: right;">Amount </th>
+</tr>
+</thead>
+<tbody id="investigationTableBody">
+<tr id="tableRow_1"><td class="text-center">1</td><td><input type="text" id="p_name_1" oninput="handleRowInput(1)" onkeydown="handleTableEnter(event, 1, 'p_name')"></td><td><input type="text" id="p_mfr_1" oninput="saveFormData()" onkeydown="handleTableEnter(event, 1, 'p_mfr')"></td><td><input type="text" id="p_bat_1" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 1, 'p_bat')"></td><td><input type="text" id="p_exp_1" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 1, 'p_exp')"></td><td><input type="number" id="p_qty_1" class="text-center" oninput="calculateRowAmount(1)" onkeydown="handleTableEnter(event, 1, 'p_qty')"></td><td><input type="text" id="p_rate_1" class="text-right" oninput="calculateRowAmount(1)" onkeydown="handleTableEnter(event, 1, 'p_rate')"></td><td><input type="text" id="p_amt_1" class="text-right font-extrabold amt-col" readonly></td></tr>
+<tr id="tableRow_2"><td class="text-center">2</td><td><input type="text" id="p_name_2" oninput="handleRowInput(2)" onkeydown="handleTableEnter(event, 2, 'p_name')"></td><td><input type="text" id="p_mfr_2" oninput="saveFormData()" onkeydown="handleTableEnter(event, 2, 'p_mfr')"></td><td><input type="text" id="p_bat_2" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 2, 'p_bat')"></td><td><input type="text" id="p_exp_2" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 2, 'p_exp')"></td><td><input type="number" id="p_qty_2" class="text-center" oninput="calculateRowAmount(2)" onkeydown="handleTableEnter(event, 2, 'p_qty')"></td><td><input type="text" id="p_rate_2" class="text-right" oninput="calculateRowAmount(2)" onkeydown="handleTableEnter(event, 2, 'p_rate')"></td><td><input type="text" id="p_amt_2" class="text-right font-extrabold amt-col" readonly></td></tr>
+<tr id="tableRow_3"><td class="text-center">3</td><td><input type="text" id="p_name_3" oninput="handleRowInput(3)" onkeydown="handleTableEnter(event, 3, 'p_name')"></td><td><input type="text" id="p_mfr_3" oninput="saveFormData()" onkeydown="handleTableEnter(event, 3, 'p_mfr')"></td><td><input type="text" id="p_bat_3" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 3, 'p_bat')"></td><td><input type="text" id="p_exp_3" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 3, 'p_exp')"></td><td><input type="number" id="p_qty_3" class="text-center" oninput="calculateRowAmount(3)" onkeydown="handleTableEnter(event, 3, 'p_qty')"></td><td><input type="text" id="p_rate_3" class="text-right" oninput="calculateRowAmount(3)" onkeydown="handleTableEnter(event, 3, 'p_rate')"></td><td><input type="text" id="p_amt_3" class="text-right font-extrabold amt-col" readonly></td></tr>
+<tr id="tableRow_4"><td class="text-center">4</td><td><input type="text" id="p_name_4" oninput="handleRowInput(4)" onkeydown="handleTableEnter(event, 4, 'p_name')"></td><td><input type="text" id="p_mfr_4" oninput="saveFormData()" onkeydown="handleTableEnter(event, 4, 'p_mfr')"></td><td><input type="text" id="p_bat_4" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 4, 'p_bat')"></td><td><input type="text" id="p_exp_4" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 4, 'p_exp')"></td><td><input type="number" id="p_qty_4" class="text-center" oninput="calculateRowAmount(4)" onkeydown="handleTableEnter(event, 4, 'p_qty')"></td><td><input type="text" id="p_rate_4" class="text-right" oninput="calculateRowAmount(4)" onkeydown="handleTableEnter(event, 4, 'p_rate')"></td><td><input type="text" id="p_amt_4" class="text-right font-extrabold amt-col" readonly></td></tr>
+<tr id="tableRow_5"><td class="text-center">5</td><td><input type="text" id="p_name_5" oninput="handleRowInput(5)" onkeydown="handleTableEnter(event, 5, 'p_name')"></td><td><input type="text" id="p_mfr_5" oninput="saveFormData()" onkeydown="handleTableEnter(event, 5, 'p_mfr')"></td><td><input type="text" id="p_bat_5" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 5, 'p_bat')"></td><td><input type="text" id="p_exp_5" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 5, 'p_exp')"></td><td><input type="number" id="p_qty_5" class="text-center" oninput="calculateRowAmount(5)" onkeydown="handleTableEnter(event, 5, 'p_qty')"></td><td><input type="text" id="p_rate_5" class="text-right" oninput="calculateRowAmount(5)" onkeydown="handleTableEnter(event, 5, 'p_rate')"></td><td><input type="text" id="p_amt_5" class="text-right font-extrabold amt-col" readonly></td></tr>
+<tr id="tableRow_6"><td class="text-center">6</td><td><input type="text" id="p_name_6" oninput="handleRowInput(6)" onkeydown="handleTableEnter(event, 6, 'p_name')"></td><td><input type="text" id="p_mfr_6" oninput="saveFormData()" onkeydown="handleTableEnter(event, 6, 'p_mfr')"></td><td><input type="text" id="p_bat_6" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 6, 'p_bat')"></td><td><input type="text" id="p_exp_6" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 6, 'p_exp')"></td><td><input type="number" id="p_qty_6" class="text-center" oninput="calculateRowAmount(6)" onkeydown="handleTableEnter(event, 6, 'p_qty')"></td><td><input type="text" id="p_rate_6" class="text-right" oninput="calculateRowAmount(6)" onkeydown="handleTableEnter(event, 6, 'p_rate')"></td><td><input type="text" id="p_amt_6" class="text-right font-extrabold amt-col" readonly></td></tr>
+<tr id="tableRow_7"><td class="text-center">7</td><td><input type="text" id="p_name_7" oninput="handleRowInput(7)" onkeydown="handleTableEnter(event, 7, 'p_name')"></td><td><input type="text" id="p_mfr_7" oninput="saveFormData()" onkeydown="handleTableEnter(event, 7, 'p_mfr')"></td><td><input type="text" id="p_bat_7" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 7, 'p_bat')"></td><td><input type="text" id="p_exp_7" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 7, 'p_exp')"></td><td><input type="number" id="p_qty_7" class="text-center" oninput="calculateRowAmount(7)" onkeydown="handleTableEnter(event, 7, 'p_qty')"></td><td><input type="text" id="p_rate_7" class="text-right" oninput="calculateRowAmount(7)" onkeydown="handleTableEnter(event, 7, 'p_rate')"></td><td><input type="text" id="p_amt_7" class="text-right font-extrabold amt-col" readonly></td></tr>
+<tr id="tableRow_8"><td class="text-center">8</td><td><input type="text" id="p_name_8" oninput="handleRowInput(8)" onkeydown="handleTableEnter(event, 8, 'p_name')"></td><td><input type="text" id="p_mfr_8" oninput="saveFormData()" onkeydown="handleTableEnter(event, 8, 'p_mfr')"></td><td><input type="text" id="p_bat_8" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 8, 'p_bat')"></td><td><input type="text" id="p_exp_8" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 8, 'p_exp')"></td><td><input type="number" id="p_qty_8" class="text-center" oninput="calculateRowAmount(8)" onkeydown="handleTableEnter(event, 8, 'p_qty')"></td><td><input type="text" id="p_rate_8" class="text-right" oninput="calculateRowAmount(8)" onkeydown="handleTableEnter(event, 8, 'p_rate')"></td><td><input type="text" id="p_amt_8" class="text-right font-extrabold amt-col" readonly></td></tr>
+<tr id="tableRow_9"><td class="text-center">9</td><td><input type="text" id="p_name_9" oninput="handleRowInput(9)" onkeydown="handleTableEnter(event, 9, 'p_name')"></td><td><input type="text" id="p_mfr_9" oninput="saveFormData()" onkeydown="handleTableEnter(event, 9, 'p_mfr')"></td><td><input type="text" id="p_bat_9" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 9, 'p_bat')"></td><td><input type="text" id="p_exp_9" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 9, 'p_exp')"></td><td><input type="number" id="p_qty_9" class="text-center" oninput="calculateRowAmount(9)" onkeydown="handleTableEnter(event, 9, 'p_qty')"></td><td><input type="text" id="p_rate_9" class="text-right" oninput="calculateRowAmount(9)" onkeydown="handleTableEnter(event, 9, 'p_rate')"></td><td><input type="text" id="p_amt_9" class="text-right font-extrabold amt-col" readonly></td></tr>
+<tr id="tableRow_10"><td class="text-center">10</td><td><input type="text" id="p_name_10" oninput="handleRowInput(10)" onkeydown="handleTableEnter(event, 10, 'p_name')"></td><td><input type="text" id="p_mfr_10" oninput="saveFormData()" onkeydown="handleTableEnter(event, 10, 'p_mfr')"></td><td><input type="text" id="p_bat_10" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 10, 'p_bat')"></td><td><input type="text" id="p_exp_10" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 10, 'p_exp')"></td><td><input type="number" id="p_qty_10" class="text-center" oninput="calculateRowAmount(10)" onkeydown="handleTableEnter(event, 10, 'p_qty')"></td><td><input type="text" id="p_rate_10" class="text-right" oninput="calculateRowAmount(10)" onkeydown="handleTableEnter(event, 10, 'p_rate')"></td><td><input type="text" id="p_amt_10" class="text-right font-extrabold amt-col" readonly></td></tr>
+<tr id="tableRow_11"><td class="text-center">11</td><td><input type="text" id="p_name_11" oninput="handleRowInput(11)" onkeydown="handleTableEnter(event, 11, 'p_name')"></td><td><input type="text" id="p_mfr_11" oninput="saveFormData()" onkeydown="handleTableEnter(event, 11, 'p_mfr')"></td><td><input type="text" id="p_bat_11" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 11, 'p_bat')"></td><td><input type="text" id="p_exp_11" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 11, 'p_exp')"></td><td><input type="number" id="p_qty_11" class="text-center" oninput="calculateRowAmount(11)" onkeydown="handleTableEnter(event, 11, 'p_qty')"></td><td><input type="text" id="p_rate_11" class="text-right" oninput="calculateRowAmount(11)" onkeydown="handleTableEnter(event, 11, 'p_rate')"></td><td><input type="text" id="p_amt_11" class="text-right font-extrabold amt-col" readonly></td></tr>
+<tr id="tableRow_12"><td class="text-center">12</td><td><input type="text" id="p_name_12" oninput="handleRowInput(12)" onkeydown="handleTableEnter(event, 12, 'p_name')"></td><td><input type="text" id="p_mfr_12" oninput="saveFormData()" onkeydown="handleTableEnter(event, 12, 'p_mfr')"></td><td><input type="text" id="p_bat_12" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 12, 'p_bat')"></td><td><input type="text" id="p_exp_12" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 12, 'p_exp')"></td><td><input type="number" id="p_qty_12" class="text-center" oninput="calculateRowAmount(12)" onkeydown="handleTableEnter(event, 12, 'p_qty')"></td><td><input type="text" id="p_rate_12" class="text-right" oninput="calculateRowAmount(12)" onkeydown="handleTableEnter(event, 12, 'p_rate')"></td><td><input type="text" id="p_amt_12" class="text-right font-extrabold amt-col" readonly></td></tr>
+<tr id="tableRow_13"><td class="text-center">13</td><td><input type="text" id="p_name_13" oninput="handleRowInput(13)" onkeydown="handleTableEnter(event, 13, 'p_name')"></td><td><input type="text" id="p_mfr_13" oninput="saveFormData()" onkeydown="handleTableEnter(event, 13, 'p_mfr')"></td><td><input type="text" id="p_bat_13" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 13, 'p_bat')"></td><td><input type="text" id="p_exp_13" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 13, 'p_exp')"></td><td><input type="number" id="p_qty_13" class="text-center" oninput="calculateRowAmount(13)" onkeydown="handleTableEnter(event, 13, 'p_qty')"></td><td><input type="text" id="p_rate_13" class="text-right" oninput="calculateRowAmount(13)" onkeydown="handleTableEnter(event, 13, 'p_rate')"></td><td><input type="text" id="p_amt_13" class="text-right font-extrabold amt-col" readonly></td></tr>
+<tr id="tableRow_14"><td class="text-center">14</td><td><input type="text" id="p_name_14" oninput="handleRowInput(14)" onkeydown="handleTableEnter(event, 14, 'p_name')"></td><td><input type="text" id="p_mfr_14" oninput="saveFormData()" onkeydown="handleTableEnter(event, 14, 'p_mfr')"></td><td><input type="text" id="p_bat_14" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 14, 'p_bat')"></td><td><input type="text" id="p_exp_14" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 14, 'p_exp')"></td><td><input type="number" id="p_qty_14" class="text-center" oninput="calculateRowAmount(14)" onkeydown="handleTableEnter(event, 14, 'p_qty')"></td><td><input type="text" id="p_rate_14" class="text-right" oninput="calculateRowAmount(14)" onkeydown="handleTableEnter(event, 14, 'p_rate')"></td><td><input type="text" id="p_amt_14" class="text-right font-extrabold amt-col" readonly></td></tr>
+<tr id="tableRow_15"><td class="text-center">15</td><td><input type="text" id="p_name_15" oninput="handleRowInput(15)" onkeydown="handleTableEnter(event, 15, 'p_name')"></td><td><input type="text" id="p_mfr_15" oninput="saveFormData()" onkeydown="handleTableEnter(event, 15, 'p_mfr')"></td><td><input type="text" id="p_bat_15" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 15, 'p_bat')"></td><td><input type="text" id="p_exp_15" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 15, 'p_exp')"></td><td><input type="number" id="p_qty_15" class="text-center" oninput="calculateRowAmount(15)" onkeydown="handleTableEnter(event, 15, 'p_qty')"></td><td><input type="text" id="p_rate_15" class="text-right" oninput="calculateRowAmount(15)" onkeydown="handleTableEnter(event, 15, 'p_rate')"></td><td><input type="text" id="p_amt_15" class="text-right font-extrabold amt-col" readonly></td></tr>
+<tr id="tableRow_16"><td class="text-center">16</td><td><input type="text" id="p_name_16" oninput="handleRowInput(16)" onkeydown="handleTableEnter(event, 16, 'p_name')"></td><td><input type="text" id="p_mfr_16" oninput="saveFormData()" onkeydown="handleTableEnter(event, 16, 'p_mfr')"></td><td><input type="text" id="p_bat_16" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 16, 'p_bat')"></td><td><input type="text" id="p_exp_16" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 16, 'p_exp')"></td><td><input type="number" id="p_qty_16" class="text-center" oninput="calculateRowAmount(16)" onkeydown="handleTableEnter(event, 16, 'p_qty')"></td><td><input type="text" id="p_rate_16" class="text-right" oninput="calculateRowAmount(16)" onkeydown="handleTableEnter(event, 16, 'p_rate')"></td><td><input type="text" id="p_amt_16" class="text-right font-extrabold amt-col" readonly></td></tr>
+<tr id="tableRow_17"><td class="text-center">17</td><td><input type="text" id="p_name_17" oninput="handleRowInput(17)" onkeydown="handleTableEnter(event, 17, 'p_name')"></td><td><input type="text" id="p_mfr_17" oninput="saveFormData()" onkeydown="handleTableEnter(event, 17, 'p_mfr')"></td><td><input type="text" id="p_bat_17" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 17, 'p_bat')"></td><td><input type="text" id="p_exp_17" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 17, 'p_exp')"></td><td><input type="number" id="p_qty_17" class="text-center" oninput="calculateRowAmount(17)" onkeydown="handleTableEnter(event, 17, 'p_qty')"></td><td><input type="text" id="p_rate_17" class="text-right" oninput="calculateRowAmount(17)" onkeydown="handleTableEnter(event, 17, 'p_rate')"></td><td><input type="text" id="p_amt_17" class="text-right font-extrabold amt-col" readonly></td></tr>
+<tr id="tableRow_18"><td class="text-center">18</td><td><input type="text" id="p_name_18" oninput="handleRowInput(18)" onkeydown="handleTableEnter(event, 18, 'p_name')"></td><td><input type="text" id="p_mfr_18" oninput="saveFormData()" onkeydown="handleTableEnter(event, 18, 'p_mfr')"></td><td><input type="text" id="p_bat_18" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 18, 'p_bat')"></td><td><input type="text" id="p_exp_18" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 18, 'p_exp')"></td><td><input type="number" id="p_qty_18" class="text-center" oninput="calculateRowAmount(18)" onkeydown="handleTableEnter(event, 18, 'p_qty')"></td><td><input type="text" id="p_rate_18" class="text-right" oninput="calculateRowAmount(18)" onkeydown="handleTableEnter(event, 18, 'p_rate')"></td><td><input type="text" id="p_amt_18" class="text-right font-extrabold amt-col" readonly></td></tr>
+<tr id="tableRow_19"><td class="text-center">19</td><td><input type="text" id="p_name_19" oninput="handleRowInput(19)" onkeydown="handleTableEnter(event, 19, 'p_name')"></td><td><input type="text" id="p_mfr_19" oninput="saveFormData()" onkeydown="handleTableEnter(event, 19, 'p_mfr')"></td><td><input type="text" id="p_bat_19" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 19, 'p_bat')"></td><td><input type="text" id="p_exp_19" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 19, 'p_exp')"></td><td><input type="number" id="p_qty_19" class="text-center" oninput="calculateRowAmount(19)" onkeydown="handleTableEnter(event, 19, 'p_qty')"></td><td><input type="text" id="p_rate_19" class="text-right" oninput="calculateRowAmount(19)" onkeydown="handleTableEnter(event, 19, 'p_rate')"></td><td><input type="text" id="p_amt_19" class="text-right font-extrabold amt-col" readonly></td></tr>
+<tr id="tableRow_20"><td class="text-center">20</td><td><input type="text" id="p_name_20" oninput="handleRowInput(20)" onkeydown="handleTableEnter(event, 20, 'p_name')"></td><td><input type="text" id="p_mfr_20" oninput="saveFormData()" onkeydown="handleTableEnter(event, 20, 'p_mfr')"></td><td><input type="text" id="p_bat_20" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 20, 'p_bat')"></td><td><input type="text" id="p_exp_20" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 20, 'p_exp')"></td><td><input type="number" id="p_qty_20" class="text-center" oninput="calculateRowAmount(20)" onkeydown="handleTableEnter(event, 20, 'p_qty')"></td><td><input type="text" id="p_rate_20" class="text-right" oninput="calculateRowAmount(20)" onkeydown="handleTableEnter(event, 20, 'p_rate')"></td><td><input type="text" id="p_amt_20" class="text-right font-extrabold amt-col" readonly></td></tr>
+<tr id="tableRow_21"><td class="text-center">21</td><td><input type="text" id="p_name_21" oninput="handleRowInput(21)" onkeydown="handleTableEnter(event, 21, 'p_name')"></td><td><input type="text" id="p_mfr_21" oninput="saveFormData()" onkeydown="handleTableEnter(event, 21, 'p_mfr')"></td><td><input type="text" id="p_bat_21" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 21, 'p_bat')"></td><td><input type="text" id="p_exp_21" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 21, 'p_exp')"></td><td><input type="number" id="p_qty_21" class="text-center" oninput="calculateRowAmount(21)" onkeydown="handleTableEnter(event, 21, 'p_qty')"></td><td><input type="text" id="p_rate_21" class="text-right" oninput="calculateRowAmount(21)" onkeydown="handleTableEnter(event, 21, 'p_rate')"></td><td><input type="text" id="p_amt_21" class="text-right font-extrabold amt-col" readonly></td></tr>
+<tr id="tableRow_22"><td class="text-center">22</td><td><input type="text" id="p_name_22" oninput="handleRowInput(22)" onkeydown="handleTableEnter(event, 22, 'p_name')"></td><td><input type="text" id="p_mfr_22" oninput="saveFormData()" onkeydown="handleTableEnter(event, 22, 'p_mfr')"></td><td><input type="text" id="p_bat_22" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 22, 'p_bat')"></td><td><input type="text" id="p_exp_22" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 22, 'p_exp')"></td><td><input type="number" id="p_qty_22" class="text-center" oninput="calculateRowAmount(22)" onkeydown="handleTableEnter(event, 22, 'p_qty')"></td><td><input type="text" id="p_rate_22" class="text-right" oninput="calculateRowAmount(22)" onkeydown="handleTableEnter(event, 22, 'p_rate')"></td><td><input type="text" id="p_amt_22" class="text-right font-extrabold amt-col" readonly></td></tr>
+<tr id="tableRow_23"><td class="text-center">23</td><td><input type="text" id="p_name_23" oninput="handleRowInput(23)" onkeydown="handleTableEnter(event, 23, 'p_name')"></td><td><input type="text" id="p_mfr_23" oninput="saveFormData()" onkeydown="handleTableEnter(event, 23, 'p_mfr')"></td><td><input type="text" id="p_bat_23" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 23, 'p_bat')"></td><td><input type="text" id="p_exp_23" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 23, 'p_exp')"></td><td><input type="number" id="p_qty_23" class="text-center" oninput="calculateRowAmount(23)" onkeydown="handleTableEnter(event, 23, 'p_qty')"></td><td><input type="text" id="p_rate_23" class="text-right" oninput="calculateRowAmount(23)" onkeydown="handleTableEnter(event, 23, 'p_rate')"></td><td><input type="text" id="p_amt_23" class="text-right font-extrabold amt-col" readonly></td></tr>
+<tr id="tableRow_24"><td class="text-center">24</td><td><input type="text" id="p_name_24" oninput="handleRowInput(24)" onkeydown="handleTableEnter(event, 24, 'p_name')"></td><td><input type="text" id="p_mfr_24" oninput="saveFormData()" onkeydown="handleTableEnter(event, 24, 'p_mfr')"></td><td><input type="text" id="p_bat_24" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 24, 'p_bat')"></td><td><input type="text" id="p_exp_24" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 24, 'p_exp')"></td><td><input type="number" id="p_qty_24" class="text-center" oninput="calculateRowAmount(24)" onkeydown="handleTableEnter(event, 24, 'p_qty')"></td><td><input type="text" id="p_rate_24" class="text-right" oninput="calculateRowAmount(24)" onkeydown="handleTableEnter(event, 24, 'p_rate')"></td><td><input type="text" id="p_amt_24" class="text-right font-extrabold amt-col" readonly></td></tr>
+<tr id="tableRow_25"><td class="text-center">25</td><td><input type="text" id="p_name_25" oninput="handleRowInput(25)" onkeydown="handleTableEnter(event, 25, 'p_name')"></td><td><input type="text" id="p_mfr_25" oninput="saveFormData()" onkeydown="handleTableEnter(event, 25, 'p_mfr')"></td><td><input type="text" id="p_bat_25" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 25, 'p_bat')"></td><td><input type="text" id="p_exp_25" class="text-center" oninput="saveFormData()" onkeydown="handleTableEnter(event, 25, 'p_exp')"></td><td><input type="number" id="p_qty_25" class="text-center" oninput="calculateRowAmount(25)" onkeydown="handleTableEnter(event, 25, 'p_qty')"></td><td><input type="text" id="p_rate_25" class="text-right" oninput="calculateRowAmount(25)" onkeydown="handleTableEnter(event, 25, 'p_rate')"></td><td><input type="text" id="p_amt_25" class="text-right font-extrabold amt-col" readonly></td></tr>
+</tbody>
+<tfoot>
+<tr class="font-extrabold bg-slate-100 border-t-2 border-emerald-900 text-[0.8rem]">
+<td colspan="7" class="text-right text-emerald-900 py-1">Grand Total Amount:</td>
+<td id="totalAmountDisplay" class="text-right text-rose-600 font-extrabold py-1 text-lg pr-2">0.00</td>
+</tr>
+</tfoot>
+</table>
+
+<!-- CM016 - Grand Total & Footer Section -->
+<div class="mt-auto">
+<div class="text-[0.7rem] font-bold text-emerald-900 uppercase flex items-baseline gap-2 z-10 mb-2">
+<span>Rupees in words :</span>
+<span id="rupeesInWords" class="line-input-words text-rose-700 lowercase first-letter:uppercase text-[0.8rem]">Zero Rupees Only</span>
+</div>
+<div class="flex justify-between items-end text-[0.7rem] font-bold text-emerald-900 mt-1 z-10">
+<div class="max-w-[70%] text-left">
+<div class="bg-emerald-50/50 border-l-4 border-emerald-700 p-1.5 rounded-r-md mb-1 inline-block">
+<span class="text-[0.6rem] text-rose-600 inline-block uppercase font-extrabold mr-1">Notice:</span>
+<span class="text-[0.6rem] text-emerald-950 font-semibold leading-tight lowercase first-letter:uppercase">Item cannot be taken back after 72 hours, bill is mandatory.</span>
+</div>
+<div class="text-[0.65rem] text-slate-700 font-bold leading-tight">
+<i class="fas fa-map-marker-alt text-rose-500 mr-1"></i> D NO:1-7-26, PEDDANNA STREET, OPPO RAMANA FUNCTION HALL, G V TEXSTILES BACKSIDE, ALLAGADDA, NANDYALA DIS, AP-518543
+</div>
+</div>
+<div class="text-center mr-4">
+<div class="w-40 border-b border-emerald-900/60" style="margin-top: 14mm; margin-bottom: 6px;"></div>
+<p class="text-[0.65rem] font-bold uppercase tracking-wider text-emerald-900">Authorized Signature</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- CM017 - System Popup Modals -->
+<div id="resetPopup" class="modal-overlay">
+<div class="modal-content border-t-4 border-rose-500">
+<h3 class="font-extrabold text-emerald-900 text-xl">Are You Sure To Reset?</h3>
+<p class="text-sm text-slate-500 mt-2">This will clear all edited fields and entire medicine table.</p>
+<div class="mt-6 flex justify-center gap-4">
+<button class="btn-3d btn-reset" onclick="doReset()">YES</button>
+<button class="btn-3d" style="background: linear-gradient(to bottom, #94a3b8, #64748b); border-bottom: 2px solid #475569;" onclick="closeResetPopup()">NO</button>
+</div>
+</div>
+</div>
+<div id="successPopup" class="modal-overlay">
+<div class="modal-content border-t-4 border-emerald-500">
+<i class="fa-solid fa-circle-check text-6xl text-emerald-500"></i>
+<h2 class="text-xl font-extrabold text-emerald-500 mt-4">SAVED SUCCESSFULLY</h2>
+<p id="successText" class="text-slate-700 text-sm font-bold mt-2"></p>
+<button class="btn-3d btn-save mt-6 mx-auto" onclick="closeSuccessPopup()">OK</button>
+</div>
+</div>
+<div id="errorPopup" class="modal-overlay">
+<div class="modal-content border-t-4 border-rose-500">
+<i class="fa-solid fa-circle-exclamation text-6xl text-rose-500"></i>
+<h2 class="text-xl font-extrabold text-rose-500 mt-4">SYSTEM EXCEPTION</h2>
+<p id="errorText" class="text-slate-700 text-sm font-bold mt-2"></p>
+<button class="btn-3d btn-reset mt-6 mx-auto" onclick="closeErrorPopup()">OK</button>
+</div>
+</div>
+
+<script>
+
+/* CM018 - Application State & Config Constants */
+const URL = "https://script.google.com/macros/s/AKfycbweVsP9c9KhDDP1a_LvsGmzxrbksipU3hAmDELTCjbIDExw9I_Ca-56sjJ-cBMNQNSeZA/exec";
+
+/* CM019 - Format & Conversion Helper Functions */
+const getFormattedTodayDate = () => { const d = new Date(); const m = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"]; return `${("0"+d.getDate()).slice(-2)} ${m[d.getMonth()]} ${d.getFullYear()}`.toUpperCase(); };
+const numToWords = (num) => { if (num == 0) return 'Zero Rupees Only'; const a = ['','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen']; const b = ['','','Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety']; const format = (n, suffix) => n > 0 ? (n < 20 ? a[n] : b[Math.floor(n/10)] + (n%10 ? ' ' + a[n%10] : '')) + ' ' + suffix + ' ' : ''; let str = ''; str += format(Math.floor(num/10000000), 'Crore'); str += format(Math.floor((num%10000000)/100000), 'Lakh'); str += format(Math.floor((num%100000)/1000), 'Thousand'); str += format(Math.floor((num%1000)/100), 'Hundred'); const rem = num % 100; if (rem > 0) { str += (str != '' ? 'and ' : '') + (rem < 20 ? a[rem] : b[Math.floor(rem/10)] + (rem%10 ? ' ' + a[rem%10] : '')); } return str.trim() + ' Rupees Only'; };
+
+/* CM020 - UI Update & Rendering Event Handlers */
+const handleTableEnter = (e, currentRow, fieldPrefix) => { if (e.key === 'Enter') { e.preventDefault(); const nextRow = currentRow + 1; if (nextRow <= 25) { const nextEl = document.getElementById(`${fieldPrefix}_${nextRow}`); if (nextEl) nextEl.focus(); } } };
+const handleReferredByChange = () => { const select = document.getElementById('referredBySelect'); const customSpan = document.getElementById('referredByCustom'); const printText = document.getElementById('referredByPrint'); if (select.value === 'CUSTOM') { customSpan.classList.remove('hidden'); customSpan.focus(); printText.innerText = customSpan.innerText; } else { customSpan.classList.add('hidden'); printText.innerText = select.value; } saveFormData(); };
+const handleRowInput = (rowNum) => { const value = document.getElementById(`p_name_${rowNum}`).value.trim(); const rowElement = document.getElementById(`tableRow_${rowNum}`); if (value === "") { rowElement.classList.add('empty-row'); } else { rowElement.classList.remove('empty-row'); } saveFormData(); };
+const calculateRowAmount = (rowNum) => { const qty = parseFloat(document.getElementById(`p_qty_${rowNum}`).value) || 0; const rate = parseFloat(document.getElementById(`p_rate_${rowNum}`).value) || 0; const rowTotal = qty * rate; document.getElementById(`p_amt_${rowNum}`).value = rowTotal > 0 ? rowTotal.toFixed(2) : ''; handleTableAmountChange(); };
+const initializePrintRows = () => { for (let i = 1; i <= 25; i++) { handleRowInput(i); } };
+const handleTableAmountChange = () => { let sum = 0; for (let i = 1; i <= 25; i++) { const rawVal = document.getElementById(`p_amt_${i}`).value; const numericVal = parseFloat(rawVal) || 0; sum += numericVal; } document.getElementById('totalAmountDisplay').innerText = sum.toFixed(2); document.getElementById('rupeesInWords').innerText = numToWords(Math.round(sum)); saveFormData(); };
+const handleDateSelection = (inputEl, displayId) => { if (!inputEl.value) return; const d = new Date(inputEl.value); const m = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"]; document.getElementById(displayId).innerText = `${("0"+d.getDate()).slice(-2)} ${m[d.getMonth()]} ${d.getFullYear()}`.toUpperCase(); saveFormData(); };
+
+/* CM021 - Local Storage Data Sync Handlers */
+const saveFormData = () => { const tableData = []; for (let i = 1; i <= 25; i++) { tableData.push({ name: document.getElementById(`p_name_${i}`).value, mfr: document.getElementById(`p_mfr_${i}`).value, bat: document.getElementById(`p_bat_${i}`).value, exp: document.getElementById(`p_exp_${i}`).value, qty: document.getElementById(`p_qty_${i}`).value, rate: document.getElementById(`p_rate_${i}`).value, amt: document.getElementById(`p_amt_${i}`).value }); } const selectVal = document.getElementById('referredBySelect').value; const customVal = document.getElementById('referredByCustom').innerText; const finalReferred = (selectVal === 'CUSTOM') ? customVal : selectVal; document.getElementById('referredByPrint').innerText = finalReferred; const receiptData = { certNo: document.getElementById('searchInput_8822').value, receiptNo: document.getElementById('receiptNo_val').innerText, receiptDate: document.getElementById('receiptDate_display').innerText, patientName: document.getElementById('patientName').innerText, referredBySelect: selectVal, referredByCustom: customVal, totalAmount: document.getElementById('totalAmountDisplay').innerText, words: document.getElementById('rupeesInWords').innerText, medicines: tableData }; localStorage.setItem('sanjeevani_billing_data_v4', JSON.stringify(receiptData)); };
+const loadFormData = () => { const dataString = localStorage.getItem('sanjeevani_billing_data_v4'); if (!dataString) { const today = getFormattedTodayDate(); document.getElementById('receiptDate_display').innerText = today; initializePrintRows(); handleReferredByChange(); return; } try { const d = JSON.parse(dataString); document.getElementById('searchInput_8822').value = d.certNo || ''; document.getElementById('receiptNo_val').innerText = d.receiptNo || ''; document.getElementById('receiptDate_display').innerText = d.receiptDate || getFormattedTodayDate(); document.getElementById('patientName').innerText = d.patientName || ''; const select = document.getElementById('referredBySelect'); select.value = d.referredBySelect || "DR. R. ANJANEYULU M.B.B.S., M.D."; document.getElementById('referredByCustom').innerText = d.referredByCustom || ""; handleReferredByChange(); if (d.medicines && Array.isArray(d.medicines)) { d.medicines.forEach((m, index) => { const i = index + 1; if (i <= 25) { document.getElementById(`p_name_${i}`).value = m.name || ''; document.getElementById(`p_mfr_${i}`).value = m.mfr || ''; document.getElementById(`p_bat_${i}`).value = m.bat || ''; document.getElementById(`p_exp_${i}`).value = m.exp || ''; document.getElementById(`p_qty_${i}`).value = m.qty || ''; document.getElementById(`p_rate_${i}`).value = m.rate || ''; document.getElementById(`p_amt_${i}`).value = m.amt || ''; } }); } handleTableAmountChange(); initializePrintRows(); } catch (e) { console.error("Restore failed", e); } };
+
+/* CM022 - Google Sheets Integration / API Database Calls */
+const performSearch_9281 = () => { const q = document.getElementById('searchInput_8822').value.trim(); if (!q) return; document.getElementById('verifyBtn_7722').disabled = true; document.getElementById('verifyIcon_7722').className = 'fa-solid fa-spinner fa-spin'; fetch(`${URL}?certNo=${encodeURIComponent(q)}`).then(r => r.json()).then(d => { if (d.status === "success") { const patName = d.data['patientName'] || d.data['Patient Name'] || ''; const recNo = d.data['receiptNo'] || d.data['Receipt ID'] || q; const recDate = d.data['receiptDate'] || d.data['Receipt Date'] || getFormattedTodayDate(); document.getElementById('receiptNo_val').innerText = recNo; document.getElementById('receiptDate_display').innerText = recDate; document.getElementById('patientName').innerText = patName; if (d.data['words'] && d.data['words'].startsWith('{')) { try { const parsedMeta = JSON.parse(d.data['words']); const select = document.getElementById('referredBySelect'); if (parsedMeta.referredBySelect) { select.value = parsedMeta.referredBySelect; } else { select.value = "CUSTOM"; document.getElementById('referredByCustom').innerText = parsedMeta.referredBy || "DR. SELF"; } if (parsedMeta.referredByCustom) { document.getElementById('referredByCustom').innerText = parsedMeta.referredByCustom; } handleReferredByChange(); if (parsedMeta.medicines && Array.isArray(parsedMeta.medicines)) { parsedMeta.medicines.forEach((m, index) => { const i = index + 1; if (i <= 25) { document.getElementById(`p_name_${i}`).value = m.name || ''; document.getElementById(`p_mfr_${i}`).value = m.mfr || ''; document.getElementById(`p_bat_${i}`).value = m.bat || ''; document.getElementById(`p_exp_${i}`).value = m.exp || ''; document.getElementById(`p_qty_${i}`).value = m.qty || ''; document.getElementById(`p_rate_${i}`).value = m.rate || ''; document.getElementById(`p_amt_${i}`).value = m.amt || ''; } }); } } catch(e) { document.getElementById('rupeesInWords').innerText = d.data['words']; } } else { document.getElementById('rupeesInWords').innerText = d.data['words'] || 'Zero Rupees Only'; } handleTableAmountChange(); initializePrintRows(); showSuccess('Data loaded.'); } else { showError('No record found.'); } }).catch(err => { console.error(err); showError('Network offline.'); }).finally(() => { document.getElementById('verifyBtn_7722').disabled = false; document.getElementById('verifyIcon_7722').className = 'fa-solid fa-check'; }); };
+const handleSearchEnter = (event) => { if (event.key === 'Enter') { event.preventDefault(); performSearch_9281(); } };
+const handleSaveOrUpdate_7182 = () => { document.getElementById('saveIcon').className = 'fa-solid fa-spinner fa-spin'; document.getElementById('btnText_992').innerText = 'SAVING...'; const tableData = []; for (let i = 1; i <= 25; i++) { tableData.push({ name: document.getElementById(`p_name_${i}`).value.trim(), mfr: document.getElementById(`p_mfr_${i}`).value.trim(), bat: document.getElementById(`p_bat_${i}`).value.trim(), exp: document.getElementById(`p_exp_${i}`).value.trim(), qty: document.getElementById(`p_qty_${i}`).value.trim(), rate: document.getElementById(`p_rate_${i}`).value.trim(), amt: document.getElementById(`p_amt_${i}`).value.trim() }); } const selectVal = document.getElementById('referredBySelect').value; const customVal = document.getElementById('referredByCustom').innerText; const finalReferred = (selectVal === 'CUSTOM') ? customVal : selectVal; const wordsPayload = { referredBy: finalReferred, referredBySelect: selectVal, referredByCustom: customVal, medicines: tableData, plainWords: document.getElementById('rupeesInWords').innerText.trim() }; const data = { certNo: document.getElementById('searchInput_8822').value.trim(), receiptNo: document.getElementById('receiptNo_val').innerText.trim(), receiptDate: document.getElementById('receiptDate_display').innerText.trim(), amount: document.getElementById('totalAmountDisplay').innerText.trim(), patientName: document.getElementById('patientName').innerText.trim(), onDate: document.getElementById('receiptDate_display').innerText.trim(), words: JSON.stringify(wordsPayload) }; fetch(URL, { method: 'POST', body: JSON.stringify(data) }).then(res => res.json()).then(resData => { if (resData.status === 'success') { document.getElementById('receiptNo_val').innerText = resData.receiptNo; document.getElementById('searchInput_8822').value = resData.receiptNo; saveFormData(); showSuccess('Saved ID: ' + resData.receiptNo); } else { showError('Error: ' + resData.message); } }).catch(err => { console.error(err); showError('Offline mode active.'); }).finally(() => { document.getElementById('saveIcon').className = 'fa-solid fa-cloud-arrow-up'; document.getElementById('btnText_992').innerText = 'SAVE'; }); };
+
+/* CM023 - System Popup Modals Event Triggers */
+const confirmReset = () => { document.getElementById('resetPopup').style.display = 'flex'; };
+const closeResetPopup = () => { document.getElementById('resetPopup').style.display = 'none'; };
+const doReset = () => { localStorage.removeItem('sanjeevani_billing_data_v4'); const today = getFormattedTodayDate(); document.getElementById('searchInput_8822').value = ''; document.getElementById('receiptNo_val').innerText = ''; document.getElementById('receiptDate_display').innerText = today; document.getElementById('patientName').innerText = ''; document.getElementById('referredBySelect').value = "DR. R. ANJANEYULU M.B.B.S., M.D."; document.getElementById('referredByCustom').innerText = ""; handleReferredByChange(); for (let i = 1; i <= 25; i++) { document.getElementById(`p_name_${i}`).value = ''; document.getElementById(`p_mfr_${i}`).value = ''; document.getElementById(`p_bat_${i}`).value = ''; document.getElementById(`p_exp_${i}`).value = ''; document.getElementById(`p_qty_${i}`).value = ''; document.getElementById(`p_rate_${i}`).value = ''; document.getElementById(`p_amt_${i}`).value = ''; } handleTableAmountChange(); initializePrintRows(); closeResetPopup(); showSuccess('Cleared.'); };
+const showSuccess = (msg) => { document.getElementById('successText').innerHTML = msg; document.getElementById('successPopup').style.display = 'flex'; };
+const showError = (msg) => { document.getElementById('errorText').innerHTML = msg; document.getElementById('errorPopup').style.display = 'flex'; };
+const closeSuccessPopup = () => { document.getElementById('successPopup').style.display = 'none'; };
+const closeErrorPopup = () => { document.getElementById('errorPopup').style.display = 'none'; };
+
+/* CM024 - Application Initialization */
+window.addEventListener('load', loadFormData);
+
+</script>
+</body>
+</html>

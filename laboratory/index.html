@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sanjeeva Lab Report Terminal</title>
+<link rel="icon" type="image/png" href="https://sanjeeva-hspl.github.io/SM-IMG/01-SMH-FEVICON_ICON.png">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;700&family=Roboto+Slab:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+* { font-family: 'Roboto Slab', 'Noto Sans Telugu', serif; box-sizing: border-box; scrollbar-width: none; -ms-overflow-style: none; }
+*::-webkit-scrollbar { display: none; }
+body { margin: 0; padding: 0; background-color: #f1f5f9; min-height: 100vh; display: flex; flex-direction: column; color: #1e293b; overflow-x: hidden; overflow-y: auto; }
+
+.a4-page { width: 210mm; min-height: 297mm; background: #fff; padding: 6mm; position: relative; box-sizing: border-box; overflow: hidden; margin: 10px auto; box-shadow: 0 10px 25px rgba(0,0,0,.12); }
+.page-border { position: absolute !important; top: 6mm; left: 6mm; right: 6mm; bottom: 6mm; border: 1.5px solid #115e59; display: block !important; pointer-events: none; z-index: 50; }
+
+.btn-3d { display: inline-flex; align-items: center; justify-content: center; gap: 4px; padding: 2px 10px; border-radius: 6px; font-weight: 800; font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.05em; color: white; text-shadow: 0 -1px 1px rgba(0,0,0,0.3); box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), 0 4px 6px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.2); border: 1px solid rgba(0,0,0,0.2); transition: all 0.1s ease; cursor: pointer; white-space: nowrap; height: 22px; }
+.btn-3d:active { box-shadow: inset 0 2px 4px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.1); transform: translateY(2px); text-shadow: none; }
+.btn-blue { background: linear-gradient(180deg, #3b82f6 0%, #2563eb 100%); border-color: #1d4ed8; }
+.btn-teal { background: linear-gradient(180deg, #14b8a6 0%, #0d9488 100%); border-color: #0f766e; }
+.btn-emerald { background: linear-gradient(180deg, #10b981 0%, #059669 100%); border-color: #047857; }
+.btn-rose { background: linear-gradient(180deg, #f43f5e 0%, #e11d48 100%); border-color: #be123c; }
+.btn-indigo { background: linear-gradient(180deg, #6366f1 0%, #4f46e5 100%); border-color: #4338ca; }
+.input-3d { background: #ffffff; border: 1px solid #cbd5e1; box-shadow: inset 0 2px 4px rgba(0,0,0,0.06); padding: 2px 6px; border-radius: 4px; font-size: 9.5px; font-weight: 800; color: #1e293b; outline: none; height: 22px; transition: all 0.2s; }
+.input-3d:focus { border-color: #0d9488; box-shadow: inset 0 2px 4px rgba(13,148,136,0.1), 0 0 0 2px rgba(13,148,136,0.2); }
+
+.print-hidden { display: block; }
+.direct-input { border: none; border-bottom: 1px dashed #cbd5e1; background: transparent; padding: 2px 4px; outline: none; transition: all 0.2s; font-size: inherit; font-weight: inherit; font-family: inherit; width: 100%; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
+.direct-input:focus { border-bottom: 2px solid #0d9488; background: #f0fdfa; }
+
+.receipt-slip-segment { width: 200mm; height: 124mm; border: 2.5px solid #1e3a8a; border-radius: 8px; padding: 4mm 6mm; position: relative; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; background-color: #ffffff; overflow: hidden; margin: 0 auto; }
+.watermark-bg { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 180px; height: 180px; object-fit: contain; opacity: .03; z-index: 0; pointer-events: none; }
+.slip-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 2.5px solid #1e3a8a; padding-bottom: 4px; margin-bottom: 6px; z-index: 10; }
+.slip-logo { height: 48px; width: 56px; object-fit: contain; }
+.slip-title-container { display: flex; align-items: center; gap: 12px; flex-grow: 1; }
+.slip-hospital-name { font-size: 1.6rem; font-weight: 800; color: #1e3a8a; text-transform: uppercase; line-height: 1; letter-spacing: 0.03em; white-space: nowrap; }
+
+.receipt-headline { font-size: 0.85rem; font-weight: 800; color: #1e3a8a; text-decoration: underline; text-transform: uppercase; letter-spacing: 0.12em; text-align: center; margin-top: 2px; margin-bottom: 6px; z-index: 10; }
+.line-input { border: none; border-bottom: 1.5px dotted #1e3a8a; outline: none; padding: 0 4px; font-weight: 800; color: #b91c1c; text-align: center; background: transparent; font-size: 0.75rem; display: inline-block; vertical-align: bottom; }
+.line-input:focus { border-bottom: 1.5px solid #b91c1c; background: #fffbeb; }
+.date-picker-wrapper { position: relative; display: inline-flex; align-items: center; cursor: pointer; }
+.date-picker-hidden { position: absolute; opacity: 0; width: 100%; height: 100%; top: 0; left: 0; cursor: pointer; }
+.date-display-field { border-bottom: 1.5px dotted #1e3a8a; padding: 0 4px; font-weight: 800; color: #b91c1c; font-size: 0.75rem; text-align: center; min-width: 90px; }
+.calendar-icon-btn { color: #1e3a8a; margin-left: 3px; font-size: 0.75rem; cursor: pointer; }
+.gender-select { border-bottom: 1.5px dotted #1e3a8a; background: transparent; color: #b91c1c; font-weight: 800; font-size: 0.75rem; outline: none; cursor: pointer; text-align-last: center; padding-right: 5px; }
+.referred-select { border-bottom: 1.5px dotted #1e3a8a; background: transparent; color: #b91c1c; font-weight: 800; font-size: 0.75rem; outline: none; cursor: pointer; max-width: 100%; }
+
+.investigation-table { width: 100%; border-collapse: collapse; margin-top: 2px; margin-bottom: 6px; font-size: 0.72rem; z-index: 10; }
+.investigation-table th { background-color: #1e3a8a; color: white; font-weight: 700; text-transform: uppercase; padding: 4px; border: 1.5px solid #1e3a8a; font-size: 0.7rem; }
+.investigation-table td { padding: 4px 6px; border: 1px solid #cbd5e1; font-weight: 700; color: #1e293b; }
+.investigation-table input { width: 100%; border: none; outline: none; background: transparent; font-weight: 800; color: #b91c1c; font-family: inherit; font-size: 0.72rem; }
+.investigation-table input::placeholder { color: #94a3b8; font-weight: 500; font-style: italic; }
+
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.8); z-index: 100000; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+.modal-content { background: #ffffff; padding: 24px; border-radius: 12px; text-align: center; min-width: 320px; box-shadow: 0 25px 50px rgba(0,0,0,0.3); border: 1px solid #e2e8f0; }
+body:not(.authenticated) > section, body:not(.authenticated) > main, body:not(.authenticated) > #toastNotification, body:not(.authenticated) > .modal-overlay { display: none !important; }
+body.authenticated > #loginContainer { display: none !important; }
+
+@media print { 
+    .print-hidden { display: none !important; } 
+    @page { size: A4 portrait; margin: 0 !important; } 
+    html, body { background: #fff !important; margin: 0 !important; padding: 0 !important; height: auto !important; overflow: visible !important; } 
+    
+    .a4-page { width: 210mm !important; min-height: auto !important; height: auto !important; margin: 0 !important; padding: 0 !important; border: none !important; box-shadow: none !important; overflow: visible !important; box-sizing: border-box !important; } 
+    
+    /* Fixed repeating border */
+    .page-border { position: fixed !important; top: 6mm; left: 6mm; right: 6mm; bottom: 6mm; border: 1.5px solid #115e59 !important; display: block !important; z-index: 9999 !important; pointer-events: none; } 
+    
+    .print-layout-table { width: 100%; border-collapse: collapse; z-index: 20; position: relative; } 
+    .test-card { page-break-inside: avoid; break-inside: avoid; } 
+    .direct-input { border-bottom: none !important; background: transparent !important; } 
+    .row-unchecked-print { display: none !important; } 
+    
+    .receipt-slip-segment { width: 202mm !important; height: 124mm !important; min-height: 124mm !important; max-height: 124mm !important; border: 2.5px solid #1e3a8a !important; box-shadow: none !important; margin: 4mm auto !important; padding: 4mm 6mm !important; box-sizing: border-box !important; } 
+    
+    .calendar-icon-btn, .date-picker-hidden, .gender-select, .referred-select, #referredCustomWrapper, #p_referredBySelect, #p_refCustomWrapper { display: none !important; } 
+    .gender-print-text, .referred-print-text, #p_refPrintText { display: inline-block !important; } 
+    .investigation-table td { border-color: #64748b !important; } 
+    .empty-row { display: none !important; } 
+    
+    body > section, body > header, body > #loginContainer { display: none !important; } 
+    body.print-bill-mode > #reportViewWrapper { display: none !important; } 
+    body.print-bill-mode > #billingViewWrapper { display: flex !important; margin: 0 !important; padding: 0 !important; } 
+    body:not(.print-bill-mode) > #billingViewWrapper { display: none !important; } 
+    body:not(.print-bill-mode) > #reportViewWrapper { display: flex !important; } 
+}
+</style>
+</head>
+<body class="print:bg-white print:text-black">
+
+<div id="loginContainer" class="flex-1 flex flex-col items-center justify-center min-h-screen z-50 fixed inset-0 bg-white/95 backdrop-blur-md">
+<div class="bg-white p-6 rounded-xl shadow-2xl max-w-[300px] w-full mx-4 border border-teal-100 border-t-4 border-t-teal-600">
+<div class="text-center mb-5"><img src="https://sanjeeva-hspl.github.io/SM-IMG/02-SMH-HOSPITAL%20LOGO.png" class="h-16 mx-auto mb-2 object-contain" alt="Logo" onerror="this.style.display='none'"><h2 class="text-sm font-extrabold text-teal-900 uppercase tracking-widest mt-2">Laboratory Staff Login</h2></div>
+<div class="space-y-4">
+<div class="relative"><i class="fa-solid fa-user absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i><input type="text" id="loginUsername" class="w-full pl-8 pr-3 py-2 border border-slate-300 rounded focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 font-bold text-xs bg-slate-50 uppercase" placeholder="Username" oninput="this.value=this.value.toUpperCase()"></div>
+<div class="relative"><i class="fa-solid fa-lock absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i><input type="password" id="loginPassword" class="w-full pl-8 pr-3 py-2 border border-slate-300 rounded focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 font-bold text-xs bg-slate-50 uppercase" placeholder="Password" oninput="this.value=this.value.toUpperCase()"></div>
+<div id="loginError" class="text-rose-500 text-[10px] font-bold hidden text-center bg-rose-50 py-1.5 rounded border border-rose-100"><i class="fa-solid fa-circle-xmark"></i> Invalid credentials!</div>
+<button id="loginBtn" onclick="attemptLogin()" class="w-full py-2 px-4 bg-teal-600 hover:bg-teal-700 text-white font-extrabold rounded shadow-md transition-all text-xs uppercase tracking-wider mt-1"><i class="fa-solid fa-right-to-bracket mr-1"></i> ACCESS SYSTEM</button>
+</div>
+</div>
+</div>
+
+<section class="bg-gradient-to-r from-teal-700 to-teal-900 border-b border-teal-800 px-2 py-0.5 print-hidden w-full shadow-md z-40 relative">
+<div class="w-full mx-auto flex flex-col gap-0.5">
+<div class="flex flex-wrap items-center justify-between gap-1 w-full">
+<h2 class="text-[11px] font-extrabold text-teal-100 uppercase tracking-widest flex items-center gap-1 whitespace-nowrap"><i class="fa-solid fa-microscope text-sm"></i><span>Lab Profiles</span></h2>
+<div class="flex flex-wrap items-center gap-1 ml-auto">
+<div class="flex items-center gap-0.5 bg-teal-950/40 p-0.5 rounded border border-teal-700 shadow-inner">
+<div class="relative flex items-center"><i class="fa-solid fa-id-card absolute left-1.5 text-teal-600/70 text-[9px] z-10"></i><input type="text" id="ppIdInput" placeholder="PP ID..." class="input-3d w-20 pl-5 uppercase relative z-0" oninput="this.value=this.value.toUpperCase()"></div>
+<div class="relative flex items-center"><i class="fa-solid fa-mobile-screen absolute left-1.5 text-teal-600/70 text-[9px] z-10"></i><input type="tel" id="mobileInput" placeholder="Mobile Number..." class="input-3d w-[110px] pl-4 relative z-0"></div>
+<button id="globalVerifyBtn" onclick="performSearch_9281()" class="btn-3d btn-indigo"><i class="fa-solid fa-check" id="globalVerifyIcon"></i> VERIFY</button>
+</div>
+<div class="w-px h-4 bg-teal-700 mx-0.5 hidden sm:block"></div>
+<button id="toggleViewBtn" onclick="toggleMainView()" class="btn-3d btn-teal"><i class="fa-solid fa-receipt"></i><span id="toggleViewText">Laboratory Bill</span></button>
+<button onclick="triggerResetConfirm()" class="btn-3d btn-rose"><i class="fa-solid fa-rotate-left"></i><span>Reset</span></button>
+<!-- Hidden by default in Lab Report mode per request -->
+<button id="commitBtn_9381" onclick="handleSaveOrUpdate_7182()" class="btn-3d btn-emerald hidden"><i class="fa-solid fa-cloud-arrow-up" id="saveIcon"></i><span id="btnText_992">Save</span></button>
+<button id="reportPrintBtn" onclick="triggerReportPrint()" class="btn-3d btn-blue"><i class="fa-solid fa-print"></i><span>Print</span></button>
+<button id="billPrintBtn" onclick="handleBillPrintClick()" class="btn-3d btn-blue hidden opacity-50"><i class="fa-solid fa-print"></i><span>Print</span></button>
+</div>
+</div>
+<div id="selectionGrid" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 lg:grid-cols-10 gap-0.5 w-full bg-teal-950/30 p-0.5 rounded border border-teal-800 transition-all duration-300 transform origin-top"></div>
+</div>
+</section>
+
+<div id="toastNotification" class="fixed bottom-4 right-4 z-50 shadow-xl rounded p-2.5 border bg-white border-teal-500 hidden items-center space-x-2 print-hidden"><i class="fa-solid fa-circle-check text-teal-600"></i><span id="toastText" class="text-[11px] font-extrabold text-slate-800 uppercase tracking-wide"></span></div>
+<div id="confirmModal" class="modal-overlay print-hidden">
+<div class="modal-content border-t-4 border-rose-500">
+<i class="fa-solid fa-triangle-exclamation text-4xl text-rose-500 mb-2"></i><h3 class="text-sm font-extrabold text-slate-900 uppercase tracking-wider">Confirm Reset</h3><p class="text-[11px] text-slate-500 mt-1 font-bold">This will permanently clear all patient details and active tests.</p>
+<div class="mt-4 flex justify-center space-x-3"><button onclick="dismissResetConfirm()" class="btn-3d bg-slate-500 border-slate-600">Cancel</button><button onClick="executeReset()" class="btn-3d btn-rose">Yes, Reset All</button></div>
+</div>
+</div>
+
+<main id="reportViewWrapper" class="w-full flex justify-center items-start overflow-visible p-1 md:p-2">
+<div id="printSheet" class="a4-page">
+<div class="page-border"></div>
+<table class="print-layout-table w-full relative z-20">
+<thead>
+<!-- IMPORTANT Spacer: pushes the repeating header down so it never hits the fixed top border on page breaks -->
+<tr><td style="height: 12mm; padding: 0; border: none;"></td></tr>
+<tr>
+<td class="bg-white pb-2 px-6 relative z-30">
+<div class="flex justify-between items-center border-b-[2.5px] border-teal-800 pb-2 mb-3">
+<div class="flex items-center space-x-2">
+<img src="https://sanjeeva-hspl.github.io/SM-IMG/02-SMH-HOSPITAL%20LOGO.png" alt="Sanjeeva Hospital Logo" class="w-[20mm] h-[20mm] object-contain" onerror="this.style.display='none'">
+<div class="pt-0">
+<h1 class="text-[19px] font-extrabold text-teal-900 tracking-wider uppercase leading-none mb-1">Sanjeeva Multispeciality Hospital</h1>
+<p class="text-[10px] font-bold text-emerald-700 tracking-widest uppercase mb-0.5 leading-none">"Health Care with Ethics"</p>
+<p class="text-[8.5px] text-slate-600 max-w-[420px] leading-tight">Diagnostic Laboratory Division - Allagadda Clinical Services</p>
+</div>
+</div>
+<div class="text-right pl-4 mt-2">
+<span class="inline-block bg-teal-800 text-white text-[7.5px] font-bold px-2 py-0.5 rounded uppercase tracking-wider mb-1">Diagnostic Lab Report</span>
+<div class="text-teal-900 font-extrabold text-[11px]">PH: +91 9100349825</div>
+<p class="text-[7.5px] text-slate-500">www.sanjeevahospital.in</p>
+</div>
+</div>
+</td>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="px-6 relative z-20">
+<div class="absolute inset-0 pointer-events-none flex items-center justify-center opacity-[0.03] select-none z-10"><img src="https://sanjeeva-hspl.github.io/SM-IMG/02-SMH-HOSPITAL%20LOGO.png" alt="Emblem Watermark" class="w-[110mm] h-[110mm] object-contain" onerror="this.style.display='none'"></div>
+<div class="bg-slate-50 border border-slate-200 rounded p-2 mb-2 grid grid-cols-12 gap-x-3 gap-y-1 text-[11px] font-bold relative z-20">
+<div class="col-span-6 flex items-center space-x-1"><span class="text-slate-500 font-bold uppercase tracking-wider text-[9px] w-20">Patient Name:</span><input type="text" id="p_name" oninput="updatePatientField('name', this.value)" placeholder="Type Name here..." class="direct-input text-slate-900 font-extrabold"></div>
+<div class="col-span-3 flex items-center space-x-1"><span class="text-slate-500 font-bold uppercase tracking-wider text-[9px] w-12">Age/Sex:</span><input type="text" id="p_age" oninput="updatePatientField('age', this.value)" placeholder="Age..." class="direct-input text-slate-900 font-extrabold w-full"></div>
+<div class="col-span-3 flex items-center space-x-1"><select id="p_gender" onchange="updatePatientField('gender', this.value)" class="direct-input text-slate-900 font-extrabold w-full"><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select></div>
+<div class="col-span-6 flex items-center space-x-1"><span class="text-slate-500 font-bold uppercase tracking-wider text-[9px] w-20 shrink-0">Referred By:</span><select id="p_referredBySelect" class="direct-input text-slate-900 font-extrabold w-full cursor-pointer" onchange="handleReportRefChange()"><option value="DR. R. ANJANEYULU M.B.B.S., M.D. (PAED) BCH.">DR. R. ANJANEYULU M.B.B.S., M.D. (PAED) BCH.</option><option value="DR. E SUJATHA ANJANEYULU M.B.B.S., M.S. (OBG)">DR. E SUJATHA ANJANEYULU M.B.B.S., M.S. (OBG)</option><option value="CUSTOM">OTHERS (TYPE DOCTOR NAME)</option></select><div id="p_refCustomWrapper" class="hidden flex-grow items-center w-full relative"><input type="text" id="p_referredByCustom" class="direct-input text-slate-900 font-extrabold w-full pr-4 text-rose-700" placeholder="Type doctor name..." oninput="updatePatientField('referredBy', this.value)"><i class="fa-solid fa-rotate-left text-slate-400 hover:text-rose-600 cursor-pointer text-[10px] absolute right-1" onclick="revertReportRef()" title="Reset to dropdown"></i></div><span id="p_refPrintText" class="hidden text-slate-900 font-extrabold w-full border-b-[1px] border-dashed border-cbd5e1"></span></div>
+<div class="col-span-3 flex items-center space-x-1"><span class="text-slate-500 font-bold uppercase tracking-wider text-[9px] w-12">PP ID:</span><input type="text" id="p_id" oninput="updatePatientField('patientId', this.value)" placeholder="ID..." class="direct-input text-slate-900 font-extrabold uppercase w-full"></div>
+<div class="col-span-3 flex items-center space-x-1"><span class="text-slate-500 font-bold uppercase tracking-wider text-[9px] w-12">Date:</span><input type="date" id="p_date" onchange="updatePatientField('date', this.value)" class="direct-input text-slate-900 font-extrabold w-full"></div>
+<div class="col-span-6 flex items-center space-x-1"></div>
+</div>
+<div id="selectedTestsGrid" class="space-y-2 relative z-20"></div>
+<div id="emptyStatePlaceholder" class="text-center py-20 border border-dashed border-slate-300 rounded-lg flex flex-col items-center justify-center hidden relative z-20 bg-white/50"><i class="fa-solid fa-file-medical text-teal-300 text-4xl mb-2"></i><h4 class="text-xs font-extrabold text-slate-500 uppercase tracking-widest">A4 Document Canvas Empty</h4><p class="text-[10px] text-slate-400 mt-1 max-w-[280px] font-bold">Select lab profiles from the top navigation to populate this report.</p></div>
+</td>
+</tr>
+</tbody>
+<tfoot>
+<!-- IMPORTANT Spacer: pushes the repeating footer up so it never hits the fixed bottom border -->
+<tr><td style="height: 12mm; padding: 0; border: none;"></td></tr>
+</tfoot>
+</table>
+</div>
+</main>
+
+<datalist id="suggest_pos_neg"><option value="Negative"></option><option value="Positive"></option><option value="Nil"></option><option value="Trace"></option><option value="+"></option><option value="++"></option><option value="+++"></option></datalist>
+<datalist id="suggest_reactive"><option value="Non - Reactive"></option><option value="Reactive"></option></datalist>
+<datalist id="suggest_urine_alb"><option value="Nil"></option><option value="Trace"></option><option value="Normal"></option><option value="Present"></option></datalist>
+<datalist id="suggest_blood_grp"><option value="O Positive"></option><option value="O Negative"></option><option value="A Positive"></option><option value="B Positive"></option><option value="AB Positive"></option></datalist>
+
+<main id="billingViewWrapper" class="w-full flex justify-center items-start overflow-visible p-1 md:p-2 hidden">
+<div class="a4-page flex flex-col items-center pt-[15px]">
+<div class="receipt-slip-segment" id="receiptSegment">
+<img src="https://sanjeeva-hspl.github.io/SM-IMG/02-SMH-HOSPITAL%20LOGO.png" class="watermark-bg" alt="watermark" onerror="this.style.display='none'">
+<div class="slip-header">
+<div class="slip-title-container"><img src="https://sanjeeva-hspl.github.io/SM-IMG/02-SMH-HOSPITAL%20LOGO.png" class="slip-logo" id="headerLogo" alt="logo" onerror="this.style.display='none'"><h1 class="slip-hospital-name" id="clinicHeaderName">Sanjeeva Multispeciality Hospital</h1></div>
+<div class="text-right text-blue-900 font-bold text-[0.65rem]"><div><i class="fas fa-phone-alt"></i> +91 9100349825</div><div class="text-[0.55rem] mt-0.5 text-slate-500">www.sanjeevahospital.in</div></div>
+</div>
+<div class="grid grid-cols-2 gap-y-1.5 border-b border-blue-900/10 pb-2 mb-1.5 z-10 text-[0.75rem] font-bold text-blue-900">
+<div class="flex items-center">PP ID :&nbsp;<span contenteditable="plaintext-only" id="billPpId_val" class="line-input w-24 text-left uppercase text-rose-600 font-extrabold" oninput="saveBillData()">NEW</span></div>
+<div class="flex items-center justify-end">Date :&nbsp;<div class="date-picker-wrapper"><span id="receiptDate_display" class="date-display-field"></span><i class="far fa-calendar-alt calendar-icon-btn"></i><input type="date" class="date-picker-hidden" onchange="handleDateSelection(this, 'receiptDate_display')"></div></div>
+<div class="flex items-center">Patient Name :&nbsp;<span contenteditable="plaintext-only" id="billPatientName" class="line-input flex-grow text-left text-slate-900" oninput="saveBillData()"></span></div>
+<div class="flex items-center justify-end gap-2">Age :&nbsp;<span contenteditable="plaintext-only" id="billPatientAge" class="line-input w-10 text-center" oninput="saveBillData()"></span>Yrs&nbsp;&nbsp;|&nbsp;&nbsp;Sex :<select id="billGenderSelect" class="gender-select mr-1" onchange="handleGenderChange()"><option value="Male">Male</option><option value="Female">Female</option></select><span id="genderPrint" class="gender-print-text hidden font-extrabold text-rose-600 text-[0.75rem] border-b border-dotted border-blue-900"></span></div>
+<div class="flex items-center col-span-2">Referred By :&nbsp;<select id="referredBySelect" class="referred-select flex-grow text-left cursor-pointer" onchange="handleReferredByChange()"><option value="DR. R. ANJANEYULU M.B.B.S., M.D. (PAED) BCH.">DR. R. ANJANEYULU M.B.B.S., M.D. (PAED) BCH.</option><option value="DR. E SUJATHA ANJANEYULU M.B.B.S., M.S. (OBG)">DR. E SUJATHA ANJANEYULU M.B.B.S., M.S. (OBG)</option><option value="CUSTOM">OTHERS (TYPE DOCTOR NAME)</option></select><div id="referredCustomWrapper" class="hidden flex-grow flex items-center relative"><input type="text" id="referredByCustom" class="line-input flex-grow text-left text-rose-600 pr-4" placeholder="Type doctor name here..." oninput="saveBillData()"><i class="fa-solid fa-rotate-left text-slate-400 hover:text-rose-600 cursor-pointer absolute right-1 text-[10px]" onclick="revertReferredBy()" title="Reset to list"></i></div><span id="referredByPrint" class="referred-print-text hidden font-extrabold text-rose-600 text-[0.75rem] border-b border-dotted border-blue-900"></span></div>
+</div>
+<div class="receipt-headline">DIAGNOSTIC TEST REPORT BILL & RECEIPT</div>
+<table class="investigation-table">
+<thead><tr><th style="width: 8%;">S.No</th><th style="width: 72%;">Investigation Description</th><th style="width: 20%; text-align: right;">Amount (₹)</th></tr></thead>
+<tbody id="investigationTableBody">
+<tr id="tableRow_1"><td class="text-center">1</td><td><input type="text" id="inv_name_1" placeholder="Enter test details" oninput="handleRowInput(1)"></td><td><input type="text" id="inv_amt_1" class="text-right" placeholder="0.00" oninput="handleTableAmountChange()"></td></tr>
+<tr id="tableRow_2"><td class="text-center">2</td><td><input type="text" id="inv_name_2" placeholder="Enter test details" oninput="handleRowInput(2)"></td><td><input type="text" id="inv_amt_2" class="text-right" placeholder="0.00" oninput="handleTableAmountChange()"></td></tr>
+<tr id="tableRow_3"><td class="text-center">3</td><td><input type="text" id="inv_name_3" placeholder="Enter test details" oninput="handleRowInput(3)"></td><td><input type="text" id="inv_amt_3" class="text-right" placeholder="0.00" oninput="handleTableAmountChange()"></td></tr>
+<tr id="tableRow_4"><td class="text-center">4</td><td><input type="text" id="inv_name_4" placeholder="Enter test details" oninput="handleRowInput(4)"></td><td><input type="text" id="inv_amt_4" class="text-right" placeholder="0.00" oninput="handleTableAmountChange()"></td></tr>
+<tr id="tableRow_5"><td class="text-center">5</td><td><input type="text" id="inv_name_5" placeholder="Enter test details" oninput="handleRowInput(5)"></td><td><input type="text" id="inv_amt_5" class="text-right" placeholder="0.00" oninput="handleTableAmountChange()"></td></tr>
+<tr id="tableRow_6"><td class="text-center">6</td><td><input type="text" id="inv_name_6" placeholder="Enter test details" oninput="handleRowInput(6)"></td><td><input type="text" id="inv_amt_6" class="text-right" placeholder="0.00" oninput="handleTableAmountChange()"></td></tr>
+</tbody>
+<tfoot><tr class="font-extrabold bg-slate-50"><td colspan="2" class="text-right text-blue-900 border border-slate-300 py-1">Total Amount Received:</td><td id="totalAmountDisplay" class="text-right text-rose-600 font-extrabold border border-slate-300 py-1 px-2">0.00</td></tr></tfoot>
+</table>
+<div class="text-[0.62rem] font-bold text-indigo-900 uppercase flex items-baseline gap-1 z-10 mb-1"><span>Rupees in words :</span><span id="rupeesInWords" class="line-input-words text-rose-700 lowercase first-letter:uppercase">Zero Rupees Only</span></div>
+<div class="flex justify-between items-end text-[0.6rem] font-bold text-blue-900 mt-2 z-10"><div class="text-[0.48rem] text-slate-500 italic flex items-center gap-1 pb-1"></div><div class="text-center mr-2"><div class="w-36 border-b border-blue-900/40 mb-1"></div><p class="text-[0.52rem] font-bold uppercase tracking-wider text-blue-900">Authorized Signature</p></div></div>
+</div>
+</div>
+</main>
+
+<div id="billSuccessPopup" class="modal-overlay"><div class="modal-content border-t-4 border-emerald-500"><i class="fa-solid fa-circle-check text-4xl text-emerald-500 mb-2"></i><h2 class="text-sm font-extrabold text-slate-900 uppercase tracking-wider">SUCCESS</h2><p id="billSuccessText" class="text-slate-700 text-[11px] font-bold mt-1"></p><button class="btn-3d btn-emerald mt-4 mx-auto" onclick="closeBillSuccessPopup()">OK, Close</button></div></div>
+<div id="billErrorPopup" class="modal-overlay"><div class="modal-content border-t-4 border-rose-500"><i class="fa-solid fa-circle-exclamation text-4xl text-rose-500 mb-2"></i><h2 class="text-sm font-extrabold text-slate-900 uppercase tracking-wider">ATTENTION</h2><p id="billErrorText" class="text-slate-700 text-[11px] font-bold mt-1"></p><button class="btn-3d btn-rose mt-4 mx-auto" onclick="closeBillErrorPopup()">OK, Close</button></div></div>
+<div id="printWarningPopup" class="modal-overlay"><div class="modal-content border-t-4 border-indigo-500"><i class="fa-solid fa-floppy-disk text-4xl text-indigo-500 mb-2"></i><h2 class="text-sm font-extrabold text-slate-900 uppercase tracking-wider">SAVE REQUIRED</h2><p class="text-slate-700 text-[11px] font-bold mt-1">Please click the <b>SAVE</b> button to sync data before printing the bill.</p><button class="btn-3d btn-indigo mt-4 mx-auto" onclick="document.getElementById('printWarningPopup').style.display='none'">Got it</button></div></div>
+
+<script>
+const TEMPLATE_TESTS = [{id:"serology",name:"Serology Report",category:"Serology",parameters:[{name:"C.R.P (C-Reactive Protein)",value:"",unit:"mg/l",normalRange:"00 - 06 mg/l",suggest:"suggest_pos_neg"},{name:"Salmonella Typhi 'O'",value:"",unit:"Titre",normalRange:"Negative (< 1:80)",suggest:"suggest_pos_neg"},{name:"Salmonella Typhi 'H'",value:"",unit:"Titre",normalRange:"Negative (< 1:80)",suggest:"suggest_pos_neg"},{name:"Salmonella Paratyphi 'AH'",value:"",unit:"Titre",normalRange:"Negative (< 1:80)",suggest:"suggest_pos_neg"},{name:"Salmonella Paratyphi 'BH'",value:"",unit:"Titre",normalRange:"Negative (< 1:80)",suggest:"suggest_pos_neg"},{name:"Dengue NS1 Antigen",value:"",unit:"-",normalRange:"Negative",suggest:"suggest_pos_neg"},{name:"Dengue IgM Antibody",value:"",unit:"-",normalRange:"Negative",suggest:"suggest_pos_neg"},{name:"Dengue IgG Antibody",value:"",unit:"-",normalRange:"Negative",suggest:"suggest_pos_neg"},{name:"Ra Factor Test",value:"",unit:"-",normalRange:"Negative",suggest:"suggest_pos_neg"},{name:"HIV Test (Method I/II)",value:"",unit:"-",normalRange:"Non - Reactive",suggest:"suggest_reactive"},{name:"H.BsAg",value:"",unit:"-",normalRange:"Non - Reactive",suggest:"suggest_reactive"},{name:"H.C.V",value:"",unit:"-",normalRange:"Non - Reactive",suggest:"suggest_reactive"},{name:"V.D.R.L",value:"",unit:"-",normalRange:"Negative",suggest:"suggest_pos_neg"}]},{id:"sugar",name:"Blood Sugar Profile",category:"Biochemistry",parameters:[{name:"Random Blood Sugar",value:"",unit:"mg/dl",normalRange:"70 - 160 mg/dl"},{name:"Fasting Blood Sugar",value:"",unit:"mg/dl",normalRange:"70 - 110 mg/dl"},{name:"Post Prandial Blood Sugar",value:"",unit:"mg/dl",normalRange:"110 - 160 mg/dl"}]},{id:"hematology",name:"Hematology & Hemoglobin",category:"Hematology",parameters:[{name:"Haemoglobin (Male)",value:"",unit:"gm%",normalRange:"Male: 14 - 18 gm%"},{name:"Haemoglobin (Female)",value:"",unit:"gm%",normalRange:"Female: 12 - 18 gm%"},{name:"Blood Grouping (ABO/Rh)",value:"",unit:"-",normalRange:"A / B / O / AB Group",suggest:"suggest_blood_grp"},{name:"M.P KIT (Malaria Antigen)",value:"",unit:"-",normalRange:"Negative",suggest:"suggest_pos_neg"},{name:"Bleeding Time",value:"",unit:"Min/Sec",normalRange:"2 - 5 min"},{name:"Clotting Time",value:"",unit:"Min/Sec",normalRange:"3 - 6 min"},{name:"E.S.R (Westergren Method)",value:"",unit:"mm/hr",normalRange:"10 - 20 mm/hr"}]},{id:"hepatitis",name:"Hepatitis (HAV / IgM / IgG)",category:"Serology",parameters:[{name:"HAV Antibody",value:"",unit:"-",normalRange:"Negative",suggest:"suggest_pos_neg"},{name:"IgM Antibody",value:"",unit:"-",normalRange:"Negative",suggest:"suggest_pos_neg"},{name:"IgG Antibody",value:"",unit:"-",normalRange:"Negative",suggest:"suggest_pos_neg"}]},{id:"urine_chem",name:"Urine Chemical Examination",category:"Urine Analysis",parameters:[{name:"Urine Albumin (Protein)",value:"",unit:"-",normalRange:"Nil",suggest:"suggest_urine_alb"},{name:"Urine Sugar (Glucose)",value:"",unit:"-",normalRange:"Nil",suggest:"suggest_urine_alb"},{name:"Bile Salts",value:"",unit:"-",normalRange:"Negative",suggest:"suggest_pos_neg"},{name:"Bile Pigments",value:"",unit:"-",normalRange:"Negative",suggest:"suggest_pos_neg"},{name:"Urine Ketone bodies",value:"",unit:"-",normalRange:"Negative",suggest:"suggest_pos_neg"},{name:"Urine Pregnancy (UPT)",value:"",unit:"-",normalRange:"Negative",suggest:"suggest_pos_neg"}]},{id:"urine_micro",name:"Urine Microscopic Deposits",category:"Urine Analysis",parameters:[{name:"Pus Cells",value:"",unit:"/hpf",normalRange:"0 - 5 /hpf"},{name:"R.B Cells (Red Blood Cells)",value:"",unit:"/hpf",normalRange:"Nil"},{name:"E.P.Cells (Epithelial)",value:"",unit:"/hpf",normalRange:"1 - 5 /hpf"},{name:"Urine Casts",value:"",unit:"-",normalRange:"Nil"},{name:"Urine Crystals",value:"",unit:"-",normalRange:"Nil"},{name:"Others / Yeast / Organisms",value:"",unit:"-",normalRange:"Nil"}]},{id:"bilirubin",name:"Bilirubin Panel",category:"Biochemistry",parameters:[{name:"Total Bilirubin",value:"",unit:"mg/dl",normalRange:"0.2 - 1.0 mg/dl"},{name:"Direct Bilirubin",value:"",unit:"mg/dl",normalRange:"0.0 - 0.4 mg/dl"},{name:"Indirect Bilirubin",value:"",unit:"mg/dl",normalRange:"0.2 - 0.8 mg/dl"}]},{id:"lft",name:"Liver Function Test (LFT)",category:"Biochemistry",parameters:[{name:"Total Bilirubin",value:"",unit:"mg/dl",normalRange:"0.2 - 1.0 mg/dl"},{name:"Direct Bilirubin",value:"",unit:"mg/dl",normalRange:"0.0 - 0.4 mg/dl"},{name:"Indirect Bilirubin",value:"",unit:"mg/dl",normalRange:"0.2 - 0.8 mg/dl"},{name:"Alkaline Phosphatase (ALP)",value:"",unit:"U/L",normalRange:"25 - 360 U/L"},{name:"SGOT (AST)",value:"",unit:"IU/ml",normalRange:"8 - 40 IU/ml"},{name:"SGPT (ALT)",value:"",unit:"IU/ml",normalRange:"5 - 40 IU/ml"},{name:"Total Proteins",value:"",unit:"gm/dl",normalRange:"6.4 - 8.4 gm/dl"},{name:"Albumin",value:"",unit:"mg/dl",normalRange:"3.2 - 5.5 mg/dl"}]},{id:"rft",name:"Renal Profile / Kidney Test",category:"Biochemistry",parameters:[{name:"Blood Urea",value:"",unit:"mg/dl",normalRange:"20 - 40 mg/dl"},{name:"Serum Creatinine",value:"",unit:"mg/dl",normalRange:"0.7 - 1.4 mg/dl"},{name:"Serum Uric Acid (Male)",value:"",unit:"mg/dl",normalRange:"4.0 - 8.5 mg/dl"},{name:"Serum Uric Acid (Female)",value:"",unit:"mg/dl",normalRange:"2.5 - 6.8 mg/dl"},{name:"Serum Calcium",value:"",unit:"mg/dl",normalRange:"8.5 - 10.0 mg/dl"}]},{id:"electrolytes",name:"Serum Electrolytes",category:"Biochemistry",parameters:[{name:"Sodium (Na+)",value:"",unit:"m.mole/lit",normalRange:"135 - 155 m.mole/lit"},{name:"Potassium (K+)",value:"",unit:"m.moles/lit",normalRange:"3.5 - 5.5 m.moles/lit"},{name:"Chloride (Cl-)",value:"",unit:"m.moles/lit",normalRange:"90 - 110 m.moles/lit"}]},{id:"troponin",name:"Troponin - I Card Test",category:"Biochemistry",parameters:[{name:"Troponin - I",value:"",unit:"-",normalRange:"Negative",suggest:"suggest_pos_neg"}]},{id:"thyroid",name:"Thyroid Profile (T3, T4, TSH)",category:"Hormones",parameters:[{name:"T3 (Method: FIA)",value:"",unit:"mg/ML",normalRange:"0.5 - 1.8 mg/ML"},{name:"T4 (Method: FIA) Male",value:"",unit:"mg/DL",normalRange:"4.4 - 10.8 mg/DL"},{name:"T4 (Method: FIA) Female",value:"",unit:"mg/DL",normalRange:"4.8 - 11.6 mg/DL"},{name:"TSH (Method: FIA)",value:"",unit:"MIU/ML",normalRange:"0.5 - 5.5 MIU/ML"}]},{id:"hba1c",name:"HbA1c Test (Glycated)",category:"Biochemistry",parameters:[{name:"HbA1c Value",value:"",unit:"%",normalRange:"Normal: 4.5-6.5% | Good: <7%"}]},{id:"custom",name:"Custom General Profile",category:"General",parameters:[{name:"Custom Parameter",value:"",unit:"-",normalRange:"Normal",suggest:"suggest_pos_neg"}]}];
+TEMPLATE_TESTS.unshift({id:"cbp",name:"Complete Blood Picture (CBP)",category:"Hematology",parameters:[{name:"Haemoglobin (Male)",value:"",unit:"gm%",normalRange:"14 - 18 gm%"},{name:"Haemoglobin (Female)",value:"",unit:"gm%",normalRange:"12 - 16 gm%"},{name:"Total W.B.C Count",value:"",unit:"cells/cumm",normalRange:"4000 - 11000 cells/cumm"},{name:"Total R.B.C Count",value:"",unit:"mill/cumm",normalRange:"4.5 - 5.5 mill/cumm"},{name:"Platelet Count",value:"",unit:"lakhs/cumm",normalRange:"1.5 - 4.5 lakhs/cumm"},{name:"Neutrophils",value:"",unit:"%",normalRange:"40 - 80%"},{name:"Lymphocytes",value:"",unit:"%",normalRange:"20 - 40%"},{name:"Monocytes",value:"",unit:"%",normalRange:"2 - 10%"},{name:"Eosinophils",value:"",unit:"%",normalRange:"1 - 6%"},{name:"Basophils",value:"",unit:"%",normalRange:"0 - 2%"},{name:"Haematocrit (PCV)",value:"",unit:"%",normalRange:"37.0 - 45.0%"},{name:"MCV",value:"",unit:"fl",normalRange:"77 - 91 fl"},{name:"BCH",value:"",unit:"pg",normalRange:"24 - 30 pg"},{name:"BCHC",value:"",unit:"%",normalRange:"30 - 35%"}]});
+let defaultDoctor = 'DR. R. ANJANEYULU M.B.B.S., M.D. (PAED) BCH.';
+let patientDetails = JSON.parse(localStorage.getItem('sanjeeva_patient_details')) || { patientId: '', name: '', age: '', gender: 'Male', referredBy: defaultDoctor, date: new Date().toISOString().split('T')[0], phone: '' };
+let activeTests = JSON.parse(localStorage.getItem('sanjeeva_active_tests')) || [];
+const BILL_URL = "https://script.google.com/macros/s/AKfycbypi8BzigPqeY07fJ5mOtQsqgRAmLt_Cbhgj1BY1St3ngPhsEzmVrlIMXoAleoNnIcO/exec";
+let currentMainView = 'report';
+let isBillSaved = false;
+
+const persistState = () => { localStorage.setItem('sanjeeva_patient_details', JSON.stringify(patientDetails)); localStorage.setItem('sanjeeva_active_tests', JSON.stringify(activeTests)); };
+const notify = (msg) => { const t = document.getElementById('toastNotification'); document.getElementById('toastText').innerText = msg; t.classList.remove('hidden'); t.classList.add('flex'); setTimeout(() => { t.classList.remove('flex'); t.classList.add('hidden'); }, 3000); };
+const getFormattedTodayDate = () => { const d = new Date(); const m = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"]; return `${("0"+d.getDate()).slice(-2)} ${m[d.getMonth()]} ${d.getFullYear()}`.toUpperCase(); };
+const parseDBDate = (str) => { if(!str) return new Date().toISOString().split('T')[0]; const p = str.split(' '); if(p.length===3) { const m = {"JAN":"01","FEB":"02","MAR":"03","APR":"04","MAY":"05","JUN":"06","JUL":"07","AUG":"08","SEP":"09","OCT":"10","NOV":"11","DEC":"12"}; return p[2]+'-'+m[p[1]]+'-'+("0"+p[0]).slice(-2); } return new Date().toISOString().split('T')[0]; };
+const numToWords = (num) => { if (num == 0) return 'Zero Rupees Only'; const a = ['','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen']; const b = ['','','Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety']; const format = (n, s) => n > 0 ? (n < 20 ? a[n] : b[Math.floor(n/10)] + (n%10 ? ' ' + a[n%10] : '')) + ' ' + s + ' ' : ''; let str = ''; str += format(Math.floor(num/10000000), 'Crore'); str += format(Math.floor((num%10000000)/100000), 'Lakh'); str += format(Math.floor((num%100000)/1000), 'Thousand'); str += format(Math.floor((num%1000)/100), 'Hundred'); const rem = num % 100; if (rem > 0) { str += (str != '' ? 'and ' : '') + (rem < 20 ? a[rem] : b[Math.floor(rem/10)] + (rem%10 ? ' ' + a[rem%10] : '')); } return str.trim() + ' Rupees Only'; };
+
+const toggleMainView = () => { 
+    currentMainView = currentMainView === 'report' ? 'bill' : 'report'; 
+    const sg = document.getElementById('selectionGrid'); 
+    const rv = document.getElementById('reportViewWrapper'); 
+    const bv = document.getElementById('billingViewWrapper'); 
+    const rpBtn = document.getElementById('reportPrintBtn'); 
+    const bpBtn = document.getElementById('billPrintBtn'); 
+    const tvt = document.getElementById('toggleViewText'); 
+    const saveBtn = document.getElementById('commitBtn_9381');
+    
+    if (currentMainView === 'bill') { 
+        sg.classList.add('hidden'); 
+        rv.classList.add('hidden'); rv.classList.remove('flex'); 
+        bv.classList.remove('hidden'); bv.classList.add('flex'); 
+        rpBtn.classList.add('hidden'); 
+        bpBtn.classList.remove('hidden'); 
+        saveBtn.classList.remove('hidden'); // Show Save btn in bill mode
+        tvt.innerText = 'Lab Report'; 
+        syncToBillModal(); syncTestsToBill(); updatePrintBtnState(); 
+    } else { 
+        sg.classList.remove('hidden'); 
+        rv.classList.remove('hidden'); rv.classList.add('flex'); 
+        bv.classList.add('hidden'); bv.classList.remove('flex'); 
+        rpBtn.classList.remove('hidden'); 
+        bpBtn.classList.add('hidden'); 
+        saveBtn.classList.add('hidden'); // Hide Save btn in lab report mode
+        tvt.innerText = 'Laboratory Bill'; 
+    } 
+};
+const attemptLogin = () => { const u = document.getElementById('loginUsername').value; const p = document.getElementById('loginPassword').value; const e = document.getElementById('loginError'); if (u === 'LABORATORY' && p === 'LAB') { sessionStorage.setItem('sanjeeva_auth', 'true'); e.classList.add('hidden'); checkAuth(); } else { e.classList.remove('hidden'); } };
+const checkAuth = () => { if (sessionStorage.getItem('sanjeeva_auth') === 'true') { document.body.classList.add('authenticated'); loadBillFormData(); } else { document.body.classList.remove('authenticated'); } };
+const triggerResetConfirm = () => { document.getElementById('confirmModal').classList.remove('hidden'); document.getElementById('confirmModal').classList.add('flex'); };
+const dismissResetConfirm = () => { document.getElementById('confirmModal').classList.remove('flex'); document.getElementById('confirmModal').classList.add('hidden'); };
+const executeReset = () => { patientDetails = { patientId: '', name: '', age: '', gender: 'Male', referredBy: defaultDoctor, date: new Date().toISOString().split('T')[0], phone: '' }; activeTests = []; document.getElementById('ppIdInput').value = ''; document.getElementById('mobileInput').value = ''; persistState(); drawAll(); dismissResetConfirm(); doBillResetSync(); notify("All data completely reset."); };
+const triggerReportPrint = () => { document.body.classList.remove('print-bill-mode'); document.getElementById('p_refPrintText').innerText = patientDetails.referredBy; window.print(); };
+const triggerBillPrint = () => { document.body.classList.add('print-bill-mode'); window.print(); setTimeout(() => document.body.classList.remove('print-bill-mode'), 1000); };
+const handleBillPrintClick = () => { if (!isBillSaved) { document.getElementById('printWarningPopup').style.display='flex'; return; } triggerBillPrint(); };
+const updatePrintBtnState = () => { const b = document.getElementById('billPrintBtn'); if(isBillSaved){ b.classList.remove('opacity-50'); } else { b.classList.add('opacity-50'); } };
+
+const updatePatientField = (f, v) => { patientDetails[f] = v; persistState(); if(currentMainView === 'report') syncToBillModal(); };
+const toggleProfile = (id, cb) => { if (cb.checked) { if (activeTests.some(t => t.id === id)) return; const tpl = TEMPLATE_TESTS.find(t => t.id === id); activeTests.push({ ...tpl, uniqueId: tpl.id + '-' + Date.now(), parameters: tpl.parameters.map(p => ({ ...p, printEnabled: true, comment: '' })) }); persistState(); drawActiveTests(); drawSelectionGrid(); notify("Added " + tpl.name); syncTestsToBill(); } else { activeTests = activeTests.filter(t => t.id !== id); persistState(); drawActiveTests(); drawSelectionGrid(); notify("Removed profile."); syncTestsToBill(); } };
+const updateParameterValue = (uid, pidx, f, v) => { activeTests = activeTests.map(t => { if (t.uniqueId === uid) { t.parameters[pidx][f] = v; } return t; }); persistState(); };
+const toggleParamRowPrint = (uid, pidx, chk) => { activeTests = activeTests.map(t => { if (t.uniqueId === uid) { t.parameters[pidx].printEnabled = chk; } return t; }); persistState(); const r = document.getElementById(`row-${uid}-${pidx}`); if (chk) { r.classList.remove('row-unchecked', 'row-unchecked-print'); } else { r.classList.add('row-unchecked', 'row-unchecked-print'); } };
+const drawSelectionGrid = () => { const g = document.getElementById('selectionGrid'); g.innerHTML = ''; TEMPLATE_TESTS.forEach(t => { const a = activeTests.some(x => x.id === t.id); const c = document.createElement('label'); c.className = 'flex flex-col items-start justify-center px-1.5 py-0.5 rounded border border-teal-700 cursor-pointer transition-all h-full ' + (a ? 'bg-teal-700/80 border-teal-400 shadow-inner' : 'bg-teal-800/50 hover:bg-teal-700/60'); c.innerHTML = `<div class="w-full flex items-center justify-between"><input type="checkbox" class="w-3 h-3 accent-teal-500 pointer-events-none" ${a ? 'checked' : ''} onchange="toggleProfile('${t.id}', this)"><span class="text-[6px] font-bold block ${a ? 'text-teal-300' : 'text-teal-100/50'}">${t.category}</span></div><p class="text-[7.5px] font-extrabold uppercase leading-tight mt-0.5 ${a ? 'text-white' : 'text-teal-50'}">${t.name}</p>`; g.appendChild(c); }); };
+const drawActiveTests = () => { const g = document.getElementById('selectedTestsGrid'); const e = document.getElementById('emptyStatePlaceholder'); g.innerHTML = ''; if (activeTests.length === 0) { e.classList.remove('hidden'); return; } e.classList.add('hidden'); activeTests.forEach(t => { const c = document.createElement('div'); c.className = 'test-card border border-slate-100 rounded p-1 relative shadow-sm'; let rws = ''; t.parameters.forEach((p, pidx) => { const chk = p.printEnabled !== false; const sc = chk ? '' : 'row-unchecked row-unchecked-print opacity-40'; const dl = p.suggest ? `list="${p.suggest}"` : ''; rws += `<tr id="row-${t.uniqueId}-${pidx}" class="border-b border-slate-50 ${sc}"><td class="py-0.5 px-0.5 text-center print-hidden w-5"><input type="checkbox" class="w-3 h-3 accent-teal-600 cursor-pointer" ${chk ? 'checked' : ''} onchange="toggleParamRowPrint('${t.uniqueId}', ${pidx}, this.checked)"></td><td class="py-0.5 font-bold text-slate-800"><input type="text" value="${p.name}" oninput="updateParameterValue('${t.uniqueId}', ${pidx}, 'name', this.value)" class="direct-input font-bold text-[10.5px]"></td><td class="py-0.5 text-center font-extrabold text-teal-950"><input type="text" value="${p.value}" placeholder="Enter..." ${dl} oninput="updateParameterValue('${t.uniqueId}', ${pidx}, 'value', this.value)" class="direct-input text-center text-teal-900 font-extrabold text-[12px]"></td><td class="py-0.5 text-center text-slate-700"><input type="text" value="${p.unit}" oninput="updateParameterValue('${t.uniqueId}', ${pidx}, 'unit', this.value)" class="direct-input text-center font-bold text-[10.5px]"></td><td class="py-0.5 text-center text-slate-700"><input type="text" value="${p.normalRange}" oninput="updateParameterValue('${t.uniqueId}', ${pidx}, 'normalRange', this.value)" class="direct-input text-center font-bold text-[10px]"></td><td class="py-0.5 text-right text-slate-500 italic"><input type="text" value="${p.comment || ''}" placeholder="Comment..." oninput="updateParameterValue('${t.uniqueId}', ${pidx}, 'comment', this.value)" class="direct-input text-right font-bold text-[10px]"></td></tr>`; }); c.innerHTML = `<div class="flex justify-between items-center border-b-[1.5px] border-teal-800 pb-0.5 mb-1 bg-teal-50/50 px-1 rounded"><span class="text-[11px] font-extrabold text-teal-900 uppercase tracking-wider truncate">${t.name}</span><button onclick="activeTests = activeTests.filter(x => x.uniqueId !== '${t.uniqueId}'); persistState(); drawActiveTests(); drawSelectionGrid(); syncTestsToBill();" class="p-0.5 text-slate-400 hover:text-red-600 print-hidden transition-colors"><i class="fa-solid fa-xmark text-sm"></i></button></div><table class="w-full text-left text-[11px]"><thead><tr class="border-b border-slate-200 text-slate-500 font-extrabold uppercase text-[9px] tracking-wider"><th class="py-0.5 w-5 print-hidden"></th><th class="py-0.5 w-4/12">Parameter</th><th class="py-0.5 w-2/12 text-center">Result</th><th class="py-0.5 w-2/12 text-center">Unit</th><th class="py-0.5 w-2/12 text-center">Reference Range</th><th class="py-0.5 w-2/12 text-right">Comment</th></tr></thead><tbody>${rws}</tbody></table>`; g.appendChild(c); }); if(window.lucide) lucide.createIcons(); };
+const updatePatientFormUI = () => { document.getElementById('p_name').value = patientDetails.name || ''; document.getElementById('p_age').value = patientDetails.age || ''; document.getElementById('p_gender').value = patientDetails.gender || 'Male'; document.getElementById('p_id').value = patientDetails.patientId || ''; document.getElementById('p_date').value = patientDetails.date || new Date().toISOString().split('T')[0]; document.getElementById('mobileInput').value = patientDetails.phone || ''; const rb = patientDetails.referredBy; const sel = document.getElementById('p_referredBySelect'); const wrp = document.getElementById('p_refCustomWrapper'); const isDef = Array.from(sel.options).some(o => o.value === rb && o.value !== 'CUSTOM'); if (isDef) { sel.value = rb; sel.classList.remove('hidden'); wrp.classList.add('hidden'); wrp.classList.remove('flex'); } else if (rb) { sel.value = 'CUSTOM'; sel.classList.add('hidden'); wrp.classList.remove('hidden'); wrp.classList.add('flex'); document.getElementById('p_referredByCustom').value = rb; } document.getElementById('p_refPrintText').innerText = rb; };
+const drawAll = () => { drawSelectionGrid(); drawActiveTests(); updatePatientFormUI(); };
+
+const handleReportRefChange = () => { const sel = document.getElementById('p_referredBySelect'); const wrp = document.getElementById('p_refCustomWrapper'); const cst = document.getElementById('p_referredByCustom'); if(sel.value === 'CUSTOM') { sel.classList.add('hidden'); wrp.classList.remove('hidden'); wrp.classList.add('flex'); cst.focus(); updatePatientField('referredBy', ''); } else { updatePatientField('referredBy', sel.value); } document.getElementById('p_refPrintText').innerText = patientDetails.referredBy; };
+const revertReportRef = () => { const sel = document.getElementById('p_referredBySelect'); const wrp = document.getElementById('p_refCustomWrapper'); sel.value = 'DR. R. ANJANEYULU M.B.B.S., M.D. (PAED) BCH.'; sel.classList.remove('hidden'); wrp.classList.add('hidden'); wrp.classList.remove('flex'); updatePatientField('referredBy', sel.value); document.getElementById('p_refPrintText').innerText = patientDetails.referredBy; };
+
+const syncToBillModal = () => { document.getElementById('billPatientName').innerText = patientDetails.name || ''; document.getElementById('billPatientAge').innerText = patientDetails.age || ''; document.getElementById('billGenderSelect').value = patientDetails.gender || 'Male'; document.getElementById('genderPrint').innerText = patientDetails.gender || 'Male'; document.getElementById('billPpId_val').innerText = patientDetails.patientId || 'NEW'; handleGenderChange(); const rb = patientDetails.referredBy; const bs = document.getElementById('referredBySelect'); const bw = document.getElementById('referredCustomWrapper'); const isDef = Array.from(bs.options).some(o => o.value === rb && o.value !== 'CUSTOM'); if(isDef) { bs.value = rb; bs.classList.remove('hidden'); bw.classList.add('hidden'); bw.classList.remove('flex'); } else if (rb) { bs.value = 'CUSTOM'; bs.classList.add('hidden'); bw.classList.remove('hidden'); bw.classList.add('flex'); document.getElementById('referredByCustom').value = rb; } handleReferredByChange(); saveBillData(); };
+const syncTestsToBill = () => { for (let i = 1; i <= 6; i++) { document.getElementById(`inv_name_${i}`).value = ''; } activeTests.forEach((t, i) => { let mod = i % 6; let r = mod + 1; const el = document.getElementById(`inv_name_${r}`); el.value = el.value === '' ? t.name : el.value + ', ' + t.name; }); for (let i = 1; i <= 6; i++) { handleRowInput(i); } saveBillData(); };
+const handleGenderChange = () => { document.getElementById('genderPrint').innerText = document.getElementById('billGenderSelect').value; saveBillData(); };
+const handleReferredByChange = () => { const sel = document.getElementById('referredBySelect'); const wrp = document.getElementById('referredCustomWrapper'); const cust = document.getElementById('referredByCustom'); const prnt = document.getElementById('referredByPrint'); if (sel.value === 'CUSTOM') { sel.classList.add('hidden'); wrp.classList.remove('hidden'); wrp.classList.add('flex'); cust.focus(); prnt.innerText = cust.value; } else { sel.classList.remove('hidden'); wrp.classList.add('hidden'); wrp.classList.remove('flex'); prnt.innerText = sel.value; } saveBillData(); };
+const revertReferredBy = () => { document.getElementById('referredBySelect').value = 'DR. R. ANJANEYULU M.B.B.S., M.D. (PAED) BCH.'; document.getElementById('referredByCustom').value = ''; handleReferredByChange(); };
+const handleRowInput = (r) => { const v = document.getElementById(`inv_name_${r}`).value.trim(); const el = document.getElementById(`tableRow_${r}`); if (v === "") el.classList.add('empty-row'); else el.classList.remove('empty-row'); saveBillData(); };
+const initializePrintRows = () => { for (let i = 1; i <= 6; i++) handleRowInput(i); };
+const handleTableAmountChange = () => { let s = 0; for (let i = 1; i <= 6; i++) { s += parseFloat(document.getElementById(`inv_amt_${i}`).value) || 0; } document.getElementById('totalAmountDisplay').innerText = s.toFixed(2); document.getElementById('rupeesInWords').innerText = numToWords(Math.round(s)); saveBillData(); };
+const handleDateSelection = (el, id) => { if (!el.value) return; const d = new Date(el.value); const m = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"]; document.getElementById(id).innerText = `${("0"+d.getDate()).slice(-2)} ${m[d.getMonth()]} ${d.getFullYear()}`.toUpperCase(); saveBillData(); };
+
+const saveBillData = () => { isBillSaved = false; updatePrintBtnState(); const td = []; for (let i = 1; i <= 6; i++) td.push({ name: document.getElementById(`inv_name_${i}`).value, amt: document.getElementById(`inv_amt_${i}`).value }); const sel = document.getElementById('referredBySelect').value; const cust = document.getElementById('referredByCustom').value; document.getElementById('referredByPrint').innerText = (sel === 'CUSTOM') ? cust : sel; document.getElementById('genderPrint').innerText = document.getElementById('billGenderSelect').value; const d = { ppIdSearch: document.getElementById('ppIdInput').value, mobileSearch: document.getElementById('mobileInput').value, receiptNo: document.getElementById('billPpId_val').innerText, receiptDate: document.getElementById('receiptDate_display').innerText, patientName: document.getElementById('billPatientName').innerText, patientAge: document.getElementById('billPatientAge').innerText, patientSex: document.getElementById('billGenderSelect').value, referredBySelect: sel, referredByCustom: cust, totalAmount: document.getElementById('totalAmountDisplay').innerText, words: document.getElementById('rupeesInWords').innerText, tests: td }; localStorage.setItem('sanjeeva_billing_data_v3', JSON.stringify(d)); };
+const loadBillFormData = () => { const ds = localStorage.getItem('sanjeeva_billing_data_v3'); if (!ds) { document.getElementById('receiptDate_display').innerText = getFormattedTodayDate(); initializePrintRows(); handleReferredByChange(); handleGenderChange(); return; } try { const d = JSON.parse(ds); document.getElementById('ppIdInput').value = d.ppIdSearch || ''; document.getElementById('mobileInput').value = d.mobileSearch || ''; document.getElementById('billPpId_val').innerText = d.receiptNo || 'NEW'; document.getElementById('receiptDate_display').innerText = d.receiptDate || getFormattedTodayDate(); document.getElementById('billPatientName').innerText = d.patientName || ''; document.getElementById('billPatientAge').innerText = d.patientAge || ''; document.getElementById('billGenderSelect').value = d.patientSex || 'Male'; document.getElementById('genderPrint').innerText = d.patientSex || 'Male'; document.getElementById('referredBySelect').value = d.referredBySelect || "DR. R. ANJANEYULU M.B.B.S., M.D. (PAED) BCH."; document.getElementById('referredByCustom').value = d.referredByCustom || ""; handleReferredByChange(); if (d.tests && Array.isArray(d.tests)) { d.tests.forEach((t, i) => { if (i < 6) { document.getElementById(`inv_name_${i+1}`).value = t.name || ''; document.getElementById(`inv_amt_${i+1}`).value = t.amt || ''; } }); } handleTableAmountChange(); initializePrintRows(); } catch (e) { console.error(e); } };
+
+const performSearch_9281 = () => { 
+    const ppid = document.getElementById('ppIdInput').value.trim(); 
+    const mob = document.getElementById('mobileInput').value.trim(); 
+    const q = ppid || mob; 
+    
+    if (!q) { notify("Please enter PP ID or Mobile!"); return; } 
+    
+    document.getElementById('globalVerifyBtn').disabled = true; 
+    document.getElementById('globalVerifyIcon').className = 'fa-solid fa-spinner fa-spin'; 
+    
+    fetch(`${BILL_URL}?certNo=${encodeURIComponent(q)}`).then(r => r.json()).then(d => { 
+        if (d.status === "success") { 
+            isBillSaved = true; 
+            updatePrintBtnState(); 
+            const recNo = d.data['receiptNo'] || d.data['Receipt ID'] || ppid; 
+            const rDate = d.data['receiptDate'] || d.data['Receipt Date'] || getFormattedTodayDate(); 
+            const pName = d.data['patientName'] || d.data['Patient Name'] || ''; 
+            
+            document.getElementById('billPpId_val').innerText = recNo; 
+            document.getElementById('receiptDate_display').innerText = rDate; 
+            document.getElementById('billPatientName').innerText = pName; 
+            
+            patientDetails.patientId = recNo; 
+            patientDetails.name = pName; 
+            patientDetails.date = parseDBDate(rDate); 
+            
+            let finalMobile = mob || d.data['mobile'] || d.data['Mobile'] || d.data['phone'] || d.data['Contact'] || '';
+            
+            if (d.data['words'] && d.data['words'].startsWith('{')) { 
+                try { 
+                    const m = JSON.parse(d.data['words']); 
+                    document.getElementById('billPatientAge').innerText = m.age || ''; 
+                    document.getElementById('billGenderSelect').value = m.sex || 'Male'; 
+                    document.getElementById('genderPrint').innerText = m.sex || 'Male'; 
+                    document.getElementById('referredBySelect').value = m.referredBySelect || "CUSTOM"; 
+                    document.getElementById('referredByCustom').value = m.referredByCustom || m.referredBy || "DR. SELF"; 
+                    
+                    patientDetails.age = m.age || ''; 
+                    patientDetails.gender = m.sex || 'Male'; 
+                    patientDetails.referredBy = m.referredByCustom || m.referredBy || "DR. SELF"; 
+                    
+                    if(m.mobile) finalMobile = m.mobile; // Retrieve mobile from JSON payload
+                    
+                    handleReferredByChange(); 
+                    if (m.tests && Array.isArray(m.tests)) { 
+                        m.tests.forEach((t, i) => { 
+                            if (i < 6) { 
+                                document.getElementById(`inv_name_${i+1}`).value = t.name || ''; 
+                                document.getElementById(`inv_amt_${i+1}`).value = t.amt || ''; 
+                            } 
+                        }); 
+                    } 
+                    document.getElementById('rupeesInWords').innerText = m.plainWords || numToWords(Math.round(parseFloat(document.getElementById('totalAmountDisplay').innerText))); 
+                } catch(e) { 
+                    document.getElementById('rupeesInWords').innerText = d.data['words']; 
+                } 
+            } else { 
+                document.getElementById('rupeesInWords').innerText = d.data['words'] || 'Zero Rupees Only'; 
+            } 
+            
+            patientDetails.phone = finalMobile;
+            document.getElementById('mobileInput').value = finalMobile;
+            
+            handleTableAmountChange(); 
+            initializePrintRows(); 
+            persistState(); 
+            updatePatientFormUI(); 
+            syncToBillModal(); 
+            notify('Patient details loaded on both pages!'); 
+        } else { 
+            notify('No record found.'); 
+        } 
+    }).catch(e => notify('Database offline.')).finally(() => { 
+        document.getElementById('globalVerifyBtn').disabled = false; 
+        document.getElementById('globalVerifyIcon').className = 'fa-solid fa-check'; 
+    }); 
+};
+
+const handleSaveOrUpdate_7182 = () => { 
+    document.getElementById('saveIcon').className = 'fa-solid fa-spinner fa-spin'; 
+    document.getElementById('btnText_992').innerText = 'Saving...'; 
+    const td = []; 
+    for (let i = 1; i <= 6; i++) td.push({ name: document.getElementById(`inv_name_${i}`).value.trim(), amt: document.getElementById(`inv_amt_${i}`).value.trim() }); 
+    const sel = document.getElementById('referredBySelect').value; 
+    const cst = document.getElementById('referredByCustom').value; 
+    
+    // Package all extra metadata including the Mobile Number for future retrieval
+    const wp = { 
+        age: document.getElementById('billPatientAge').innerText.trim(), 
+        sex: document.getElementById('billGenderSelect').value, 
+        referredBy: (sel === 'CUSTOM') ? cst : sel, 
+        referredBySelect: sel, 
+        referredByCustom: cst, 
+        mobile: document.getElementById('mobileInput').value.trim(),
+        tests: td, 
+        plainWords: document.getElementById('rupeesInWords').innerText.trim() 
+    }; 
+    
+    const data = { 
+        certNo: document.getElementById('ppIdInput').value.trim() || document.getElementById('mobileInput').value.trim() || document.getElementById('billPpId_val').innerText.trim(), 
+        receiptNo: document.getElementById('billPpId_val').innerText.trim(), 
+        receiptDate: document.getElementById('receiptDate_display').innerText.trim(), 
+        amount: document.getElementById('totalAmountDisplay').innerText.trim(), 
+        patientName: document.getElementById('billPatientName').innerText.trim(), 
+        onDate: document.getElementById('receiptDate_display').innerText.trim(), 
+        words: JSON.stringify(wp) 
+    }; 
+    
+    fetch(BILL_URL, { method: 'POST', body: JSON.stringify(data) }).then(r => r.json()).then(r => { 
+        if (r.status === 'success') { 
+            document.getElementById('billPpId_val').innerText = r.receiptNo; 
+            document.getElementById('ppIdInput').value = r.receiptNo; 
+            saveBillData(); 
+            isBillSaved = true; 
+            updatePrintBtnState(); 
+            showBillSuccess('Laboratory Bill Saved Successfully! PP ID: ' + r.receiptNo); 
+        } else { 
+            showBillError('Sync failed: ' + r.message); 
+        } 
+    }).catch(e => { 
+        isBillSaved = true; 
+        updatePrintBtnState(); 
+        showBillSuccess('Saved locally for now.'); 
+    }).finally(() => { 
+        document.getElementById('saveIcon').className = 'fa-solid fa-cloud-arrow-up'; 
+        document.getElementById('btnText_992').innerText = 'Save'; 
+    }); 
+};
+
+const doBillResetSync = () => { isBillSaved = false; updatePrintBtnState(); localStorage.removeItem('sanjeeva_billing_data_v3'); document.getElementById('ppIdInput').value = ''; document.getElementById('mobileInput').value = ''; document.getElementById('billPpId_val').innerText = 'NEW'; document.getElementById('receiptDate_display').innerText = getFormattedTodayDate(); document.getElementById('billPatientName').innerText = ''; document.getElementById('billPatientAge').innerText = ''; document.getElementById('billGenderSelect').value = 'Male'; document.getElementById('genderPrint').innerText = 'Male'; document.getElementById('referredBySelect').value = "DR. R. ANJANEYULU M.B.B.S., M.D. (PAED) BCH."; document.getElementById('referredByCustom').value = ""; handleReferredByChange(); for (let i = 1; i <= 6; i++) { document.getElementById(`inv_name_${i}`).value = ''; document.getElementById(`inv_amt_${i}`).value = ''; } handleTableAmountChange(); initializePrintRows(); syncToBillModal(); };
+const showBillSuccess = (m) => { document.getElementById('billSuccessText').innerHTML = m; document.getElementById('billSuccessPopup').style.display = 'flex'; };
+const showBillError = (m) => { document.getElementById('billErrorText').innerHTML = m; document.getElementById('billErrorPopup').style.display = 'flex'; };
+const closeBillSuccessPopup = () => { document.getElementById('billSuccessPopup').style.display = 'none'; };
+const closeBillErrorPopup = () => { document.getElementById('billErrorPopup').style.display = 'none'; };
+
+document.addEventListener('keydown', function(e) { if (e.key === 'Enter') { if (e.target.id === 'loginUsername') { e.preventDefault(); document.getElementById('loginPassword').focus(); return; } if (e.target.id === 'loginPassword') { e.preventDefault(); document.getElementById('loginBtn').click(); return; } if (e.target.id === 'ppIdInput') { e.preventDefault(); document.getElementById('mobileInput').focus(); return; } if (e.target.id === 'mobileInput') { e.preventDefault(); document.getElementById('globalVerifyBtn').click(); return; } if ((e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') && e.target.type !== 'button') { e.preventDefault(); const formArea = document.querySelector('body.authenticated main:not(.hidden)'); if (!formArea) return; const inputs = Array.from(formArea.querySelectorAll('input:not([type="hidden"]):not([disabled]), select:not([disabled])')).filter(i => i.offsetParent !== null && i.style.display !== 'none'); const index = inputs.indexOf(e.target); if (index > -1 && index + 1 < inputs.length) { inputs[index + 1].focus(); if (typeof inputs[index + 1].select === 'function') { inputs[index + 1].select(); } } } } });
+window.onload = function() { checkAuth(); drawAll(); if(window.lucide) lucide.createIcons(); updatePrintBtnState(); };
+</script>
+</body>
+</html>
