@@ -55,7 +55,7 @@ body { font-family: 'Roboto Slab', serif !important; margin: 0; padding: 0; } in
 <button onclick="resetForm()" class="btn-3d btn-reset"><svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>Reset</button>
 <button id="btn-save" onclick="saveReport()" class="btn-3d btn-save"><svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Save</button>
 <button id="btn-print" onclick="triggerPrint()" disabled class="btn-3d btn-print"><svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>Print</button>
-<input type="text" id="search-id-input" placeholder="OB ID (e.g. SMOB2001)" class="search-input-3d w-full md:w-32 placeholder-slate-400" />
+<input type="text" id="search-id-input" placeholder="OB ID (e.g. SMOB2001)" class="search-input-3d w-full md:w-32 placeholder-slate-400" onkeydown="handleSearchEnter(event)" />
 <button onclick="verifyAndSearchReport()" class="btn-3d btn-verify"><svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>Verify</button>
 </div>
 </div>
@@ -374,26 +374,303 @@ D NO:1-7-26, PEDDANNA STREET, OPPO RAMANA FUNCTION HALL, G V TEXSTILES BACKSIDE,
 
 <script>
 
-/* CM015 - Global Setup */
-const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbxyPe-O6ISxZBTDk1b08rofan_0sU0GWoPYrL9mmfQVHRXceFcRlNcH4QE8cHr6xrW_mg/exec'; window.addEventListener('DOMContentLoaded', () => { document.getElementById('p-exam-date').value = todayDMY(); setupTwinMirroring(); });
+/* CM015 - Global Setup (Cloudflare Workers URL) */
+const GAS_API_URL = 'https://ob2-report.contact-sanjeevahospital.workers.dev/'; 
+
+window.addEventListener('DOMContentLoaded', () => { 
+  document.getElementById('p-exam-date').value = todayDMY(); 
+  setupTwinMirroring(); 
+});
 
 /* CM016 - Twin Data Mirroring Helper */
-function setupTwinMirroring() { const pairs = [['ob-presentation-a', 'ob-presentation-b'], ['ob-fhr-bpm-a', 'ob-fhr-bpm-b'], ['ob-fhr-rhythm-a', 'ob-fhr-rhythm-b'], ['ob-fetal-movements-a', 'ob-fetal-movements-b'], ['ob-bpd-val-a', 'ob-bpd-val-b'], ['ob-bpd-wks-a', 'ob-bpd-wks-b'], ['ob-bpd-days-a', 'ob-bpd-days-b'], ['ob-hc-val-a', 'ob-hc-val-b'], ['ob-hc-wks-a', 'ob-hc-wks-b'], ['ob-hc-days-a', 'ob-hc-days-b'], ['ob-ac-val-a', 'ob-ac-val-b'], ['ob-ac-wks-a', 'ob-ac-wks-b'], ['ob-ac-days-a', 'ob-ac-days-b'], ['ob-fl-val-a', 'ob-fl-val-b'], ['ob-fl-wks-a', 'ob-fl-wks-b'], ['ob-fl-days-a', 'ob-fl-days-b'], ['ob-cga-wks-a', 'ob-cga-wks-b'], ['ob-cga-days-a', 'ob-cga-days-b'], ['ob-efw-a', 'ob-efw-b'], ['ob-placenta-pos-a', 'ob-placenta-pos-b'], ['ob-placenta-grade-a', 'ob-placenta-grade-b'], ['ob-liquor-a', 'ob-liquor-b'], ['ob-afi-a', 'ob-afi-b'], ['ob-impression-val-a', 'ob-impression-val-b']]; pairs.forEach(([aId, bId]) => { const aEl = document.getElementById(aId); const bEl = document.getElementById(bId); aEl.addEventListener('input', () => { bEl.value = aEl.value; }); aEl.addEventListener('change', () => { bEl.value = aEl.value; }); }); }
+function setupTwinMirroring() { 
+  const pairs = [
+    ['ob-presentation-a', 'ob-presentation-b'], 
+    ['ob-fhr-bpm-a', 'ob-fhr-bpm-b'], 
+    ['ob-fhr-rhythm-a', 'ob-fhr-rhythm-b'], 
+    ['ob-fetal-movements-a', 'ob-fetal-movements-b'], 
+    ['ob-bpd-val-a', 'ob-bpd-val-b'], 
+    ['ob-bpd-wks-a', 'ob-bpd-wks-b'], 
+    ['ob-bpd-days-a', 'ob-bpd-days-b'], 
+    ['ob-hc-val-a', 'ob-hc-val-b'], 
+    ['ob-hc-wks-a', 'ob-hc-wks-b'], 
+    ['ob-hc-days-a', 'ob-hc-days-b'], 
+    ['ob-ac-val-a', 'ob-ac-val-b'], 
+    ['ob-ac-wks-a', 'ob-ac-wks-b'], 
+    ['ob-ac-days-a', 'ob-ac-days-b'], 
+    ['ob-fl-val-a', 'ob-fl-val-b'], 
+    ['ob-fl-wks-a', 'ob-fl-wks-b'], 
+    ['ob-fl-days-a', 'ob-fl-days-b'], 
+    ['ob-cga-wks-a', 'ob-cga-wks-b'], 
+    ['ob-cga-days-a', 'ob-cga-days-b'], 
+    ['ob-efw-a', 'ob-efw-b'], 
+    ['ob-placenta-pos-a', 'ob-placenta-pos-b'], 
+    ['ob-placenta-grade-a', 'ob-placenta-grade-b'], 
+    ['ob-liquor-a', 'ob-liquor-b'], 
+    ['ob-afi-a', 'ob-afi-b'], 
+    ['ob-impression-val-a', 'ob-impression-val-b']
+  ]; 
+  pairs.forEach(([aId, bId]) => { 
+    const aEl = document.getElementById(aId); 
+    const bEl = document.getElementById(bId); 
+    aEl.addEventListener('input', () => { bEl.value = aEl.value; }); 
+    aEl.addEventListener('change', () => { bEl.value = aEl.value; }); 
+  }); 
+}
 
 /* CM017 - Date Format Helpers */
-const pad2 = (n) => String(n).padStart(2,'0'); const todayDMY = () => { const d = new Date(); return `${pad2(d.getDate())}-${pad2(d.getMonth()+1)}-${d.getFullYear()}`; }; const ymd2dmy = (s) => { if(!s) return ''; const p = s.split('-'); return p.length===3 ? `${p[2]}-${p[1]}-${p[0]}` : s; };
+const pad2 = (n) => String(n).padStart(2,'0'); 
+const todayDMY = () => { const d = new Date(); return `${pad2(d.getDate())}-${pad2(d.getMonth()+1)}-${d.getFullYear()}`; }; 
+const ymd2dmy = (s) => { if(!s) return ''; const p = s.split('-'); return p.length===3 ? `${p[2]}-${p[1]}-${p[0]}` : s; };
 
 /* CM018 - Toast Notifications */
-function showToast(msg, type = 'success') { const c = document.getElementById('toast-container'); const t = document.createElement('div'); const cols = { success: 'bg-emerald-600 border-emerald-700 text-white', error: 'bg-rose-600 border-rose-700 text-white', info: 'bg-slate-800 border-slate-900 text-white' }; t.className = `flex items-center gap-2 px-3 py-2 rounded-none shadow-xl border text-[10px] font-semibold ${cols[type]} transition-all duration-300 transform translate-x-12 opacity-0 pointer-events-auto max-w-sm`; t.innerHTML = `<svg class="h-3 w-3 text-white shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg><span>${msg}</span>`; c.appendChild(t); requestAnimationFrame(() => t.classList.remove('translate-x-12', 'opacity-0')); setTimeout(() => { t.classList.add('translate-x-12', 'opacity-0'); setTimeout(() => t.remove(), 300); }, 4500); }
+function showToast(msg, type = 'success') { 
+  const c = document.getElementById('toast-container'); 
+  const t = document.createElement('div'); 
+  const cols = { success: 'bg-emerald-600 border-emerald-700 text-white', error: 'bg-rose-600 border-rose-700 text-white', info: 'bg-slate-800 border-slate-900 text-white' }; 
+  t.className = `flex items-center gap-2 px-3 py-2 rounded-none shadow-xl border text-[10px] font-semibold ${cols[type]} transition-all duration-300 transform translate-x-12 opacity-0 pointer-events-auto max-w-sm`; 
+  t.innerHTML = `<svg class="h-3 w-3 text-white shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg><span>${msg}</span>`; 
+  c.appendChild(t); 
+  requestAnimationFrame(() => t.classList.remove('translate-x-12', 'opacity-0')); 
+  setTimeout(() => { 
+    t.classList.add('translate-x-12', 'opacity-0'); 
+    setTimeout(() => t.remove(), 300); 
+  }, 4500); 
+}
 
 /* CM019 - Reset Actions */
-function resetForm() { document.getElementById('reset-modal').classList.remove('hidden'); } function confirmReset(conf) { document.getElementById('reset-modal').classList.add('hidden'); if (conf) { const ids = ['ob-report-id','p-name','p-age','p-edd','p-village','ob-fhr-bpm-a','ob-fhr-bpm-b','ob-bpd-val-a','ob-bpd-wks-a','ob-bpd-days-a','ob-hc-val-a','ob-hc-wks-a','ob-hc-days-a','ob-ac-val-a','ob-ac-wks-a','ob-ac-days-a','ob-fl-val-a','ob-fl-wks-a','ob-fl-days-a','ob-bpd-val-b','ob-bpd-wks-b','ob-bpd-days-b','ob-hc-val-b','ob-hc-wks-b','ob-hc-days-b','ob-ac-val-b','ob-ac-wks-b','ob-ac-days-b','ob-fl-val-b','ob-fl-wks-b','ob-fl-days-b','ob-cga-wks-a','ob-cga-days-a','ob-cga-wks-b','ob-cga-days-b','ob-efw-a','ob-efw-b','ob-afi-a','ob-afi-b','ob-impression-val-a','ob-impression-val-b']; ids.forEach(i => document.getElementById(i).value = ''); document.getElementById('ob-report-id').value = '[Auto-Generated]'; document.getElementById('p-exam-date').value = todayDMY(); document.getElementById('p-sex').value = 'Female'; document.getElementById('ob-presentation-a').value = 'CEPHALIC'; document.getElementById('ob-presentation-b').value = 'BREECH'; document.getElementById('ob-fhr-rhythm-a').value = 'REGULAR'; document.getElementById('ob-fhr-rhythm-b').value = 'REGULAR'; document.getElementById('ob-fetal-movements-a').value = 'PRESENT'; document.getElementById('ob-fetal-movements-b').value = 'PRESENT'; document.getElementById('ob-placenta-pos-a').value = 'ANTERIOR'; document.getElementById('ob-placenta-pos-b').value = 'POSTERIOR'; document.getElementById('ob-placenta-grade-a').value = 'I'; document.getElementById('ob-placenta-grade-b').value = 'II'; document.getElementById('ob-liquor-a').value = 'ADEQUATE'; document.getElementById('ob-liquor-b').value = 'ADEQUATE'; const p = document.getElementById('btn-print'); p.disabled = true; showToast('Twin report reset. Ready for new row!', 'info'); } }
+function resetForm() { 
+  document.getElementById('reset-modal').classList.remove('hidden'); 
+} 
 
-/* CM020 - Save Data (Fully mapped to 57 distinct columns) */
-async function saveReport() { const btn = document.getElementById('btn-save'); btn.disabled = true; const originalHTML = btn.innerHTML; btn.innerHTML = `<span class="text-[#ea580c] font-black uppercase tracking-widest text-[10px]">SAVING...</span>`; const d = (id) => document.getElementById(id).value; const payload = { action: 'save', reportId: d('ob-report-id'), patientName: d('p-name'), examDate: d('p-exam-date'), age: d('p-age'), sex: d('p-sex'), village: d('p-village'), twinAPresentation: d('ob-presentation-a'), twinAFhrBpm: d('ob-fhr-bpm-a'), twinAFhrRhythm: d('ob-fhr-rhythm-a'), twinAFetalMovements: d('ob-fetal-movements-a'), twinBPresentation: d('ob-presentation-b'), twinBFhrBpm: d('ob-fhr-bpm-b'), twinBFhrRhythm: d('ob-fhr-rhythm-b'), twinBFetalMovements: d('ob-fetal-movements-b'), twinABpdCm: d('ob-bpd-val-a'), twinABpdWeeks: d('ob-bpd-wks-a'), twinABpdDays: d('ob-bpd-days-a'), twinAHcCm: d('ob-hc-val-a'), twinAHcWeeks: d('ob-hc-wks-a'), twinAHcDays: d('ob-hc-days-a'), twinAAcCm: d('ob-ac-val-a'), twinAAcWeeks: d('ob-ac-wks-a'), twinAAcDays: d('ob-ac-days-a'), twinAFlCm: d('ob-fl-val-a'), twinAFlWeeks: d('ob-fl-wks-a'), twinAFlDays: d('ob-fl-days-a'), twinBBpdCm: d('ob-bpd-val-b'), twinBBpdWeeks: d('ob-bpd-wks-b'), twinBBpdDays: d('ob-bpd-days-b'), twinBHcCm: d('ob-hc-val-b'), twinBHcWeeks: d('ob-hc-wks-b'), twinBHcDays: d('ob-hc-days-b'), twinBAcCm: d('ob-ac-val-b'), twinBAcWeeks: d('ob-ac-wks-b'), twinBAcDays: d('ob-ac-days-b'), twinBFlCm: d('ob-fl-val-b'), twinBFlWeeks: d('ob-fl-wks-b'), twinBFlDays: d('ob-fl-days-b'), twinACgaWeeks: d('ob-cga-wks-a'), twinACgaDays: d('ob-cga-days-a'), twinBCgaWeeks: d('ob-cga-wks-b'), twinBCgaDays: d('ob-cga-days-b'), edd: d('p-edd'), twinAEfwGms: d('ob-efw-a'), twinBEfwGms: d('ob-efw-b'), twinAPlacentaPosition: d('ob-placenta-pos-a'), twinAPlacentaGrade: d('ob-placenta-grade-a'), twinBPlacentaPosition: d('ob-placenta-pos-b'), twinBPlacentaGrade: d('ob-placenta-grade-b'), twinAAmnioticFluid: d('ob-liquor-a'), twinBAmnioticFluid: d('ob-liquor-b'), twinAAfiCm: d('ob-afi-a'), twinBAfiCm: d('ob-afi-b'), twinAImpression: d('ob-impression-val-a'), twinBImpression: d('ob-impression-val-b') }; try { const res = await fetch(GAS_API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(payload) }); const json = JSON.parse(await res.text()); if (json.status === 'success') { document.getElementById('ob-report-id').value = json.reportId; const p = document.getElementById('btn-print'); p.disabled = false; btn.innerHTML = `<span class="text-[#ea580c] font-black uppercase tracking-widest text-[10px]">SAVED</span>`; setTimeout(() => { btn.disabled = false; btn.innerHTML = originalHTML; }, 3000); } else { btn.innerHTML = `<span class="text-[#ea580c] font-black uppercase tracking-widest text-[10px]">FAILED</span>`; setTimeout(() => { btn.disabled = false; btn.innerHTML = originalHTML; }, 3000); } } catch (err) { btn.innerHTML = `<span class="text-[#ea580c] font-black uppercase tracking-widest text-[10px]">ERROR</span>`; setTimeout(() => { btn.disabled = false; btn.innerHTML = originalHTML; }, 3000); } }
+function confirmReset(conf) { 
+  document.getElementById('reset-modal').classList.add('hidden'); 
+  if (conf) { 
+    const ids = ['ob-report-id','p-name','p-age','p-edd','p-village','ob-fhr-bpm-a','ob-fhr-bpm-b','ob-bpd-val-a','ob-bpd-wks-a','ob-bpd-days-a','ob-hc-val-a','ob-hc-wks-a','ob-hc-days-a','ob-ac-val-a','ob-ac-wks-a','ob-ac-days-a','ob-fl-val-a','ob-fl-wks-a','ob-fl-days-a','ob-bpd-val-b','ob-bpd-wks-b','ob-bpd-days-b','ob-hc-val-b','ob-hc-wks-b','ob-hc-days-b','ob-ac-val-b','ob-ac-wks-b','ob-ac-days-b','ob-fl-val-b','ob-fl-wks-b','ob-fl-days-b','ob-cga-wks-a','ob-cga-days-a','ob-cga-wks-b','ob-cga-days-b','ob-efw-a','ob-efw-b','ob-afi-a','ob-afi-b','ob-impression-val-a','ob-impression-val-b']; 
+    ids.forEach(i => document.getElementById(i).value = ''); 
+    document.getElementById('ob-report-id').value = '[Auto-Generated]'; 
+    document.getElementById('p-exam-date').value = todayDMY(); 
+    document.getElementById('p-sex').value = 'Female'; 
+    document.getElementById('ob-presentation-a').value = 'CEPHALIC'; 
+    document.getElementById('ob-presentation-b').value = 'BREECH'; 
+    document.getElementById('ob-fhr-rhythm-a').value = 'REGULAR'; 
+    document.getElementById('ob-fhr-rhythm-b').value = 'REGULAR'; 
+    document.getElementById('ob-fetal-movements-a').value = 'PRESENT'; 
+    document.getElementById('ob-fetal-movements-b').value = 'PRESENT'; 
+    document.getElementById('ob-placenta-pos-a').value = 'ANTERIOR'; 
+    document.getElementById('ob-placenta-pos-b').value = 'POSTERIOR'; 
+    document.getElementById('ob-placenta-grade-a').value = 'I'; 
+    document.getElementById('ob-placenta-grade-b').value = 'II'; 
+    document.getElementById('ob-liquor-a').value = 'ADEQUATE'; 
+    document.getElementById('ob-liquor-b').value = 'ADEQUATE'; 
+    const p = document.getElementById('btn-print'); 
+    p.disabled = true; 
+    showToast('Twin report reset. Ready for new row!', 'info'); 
+  } 
+}
 
-/* CM021 - Verify Data (Fully mapped to 57 distinct columns) */
-async function verifyAndSearchReport() { const sid = document.getElementById('search-id-input').value.trim(); if (!sid) return showToast('Enter OB ID.', 'error'); showToast(`Verifying Twin ID ${sid}...`, 'info'); try { const res = await fetch(GAS_API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ action: 'verify', reportId: sid }) }); const json = JSON.parse(await res.text()); if (json.status === 'success' && json.data) { const data = json.data; const s = (id, val) => document.getElementById(id).value = val || ''; s('ob-report-id', data.reportId); s('p-name', data.patientName); s('p-exam-date', data.examDate); s('p-age', data.age); s('p-sex', data.sex || 'Female'); s('p-village', data.village); s('ob-presentation-a', data.twinAPresentation || 'CEPHALIC'); s('ob-fhr-bpm-a', data.twinAFhrBpm); s('ob-fhr-rhythm-a', data.twinAFhrRhythm || 'REGULAR'); s('ob-fetal-movements-a', data.twinAFetalMovements || 'PRESENT'); s('ob-presentation-b', data.twinBPresentation || 'BREECH'); s('ob-fhr-bpm-b', data.twinBFhrBpm); s('ob-fhr-rhythm-b', data.twinBFhrRhythm || 'REGULAR'); s('ob-fetal-movements-b', data.twinBFetalMovements || 'PRESENT'); s('ob-bpd-val-a', data.twinABpdCm); s('ob-bpd-wks-a', data.twinABpdWeeks); s('ob-bpd-days-a', data.twinABpdDays); s('ob-hc-val-a', data.twinAHcCm); s('ob-hc-wks-a', data.twinAHcWeeks); s('ob-hc-days-a', data.twinAHcDays); s('ob-ac-val-a', data.twinAAcCm); s('ob-ac-wks-a', data.twinAAcWeeks); s('ob-ac-days-a', data.twinAAcDays); s('ob-fl-val-a', data.twinAFlCm); s('ob-fl-wks-a', data.twinAFlWeeks); s('ob-fl-days-a', data.twinAFlDays); s('ob-bpd-val-b', data.twinBBpdCm); s('ob-bpd-wks-b', data.twinBBpdWeeks); s('ob-bpd-days-b', data.twinBBpdDays); s('ob-hc-val-b', data.twinBHcCm); s('ob-hc-wks-b', data.twinBHcWeeks); s('ob-hc-days-b', data.twinBHcDays); s('ob-ac-val-b', data.twinBAcCm); s('ob-ac-wks-b', data.twinBAcWeeks); s('ob-ac-days-b', data.twinBAcDays); s('ob-fl-val-b', data.twinBFlCm); s('ob-fl-wks-b', data.twinBFlWeeks); s('ob-fl-days-b', data.twinBFlDays); s('ob-cga-wks-a', data.twinACgaWeeks); s('ob-cga-days-a', data.twinACgaDays); s('ob-cga-wks-b', data.twinBCgaWeeks); s('ob-cga-days-b', data.twinBCgaDays); s('p-edd', data.edd); s('ob-efw-a', data.twinAEfwGms); s('ob-efw-b', data.twinBEfwGms); s('ob-placenta-pos-a', data.twinAPlacentaPosition || 'ANTERIOR'); s('ob-placenta-grade-a', data.twinAPlacentaGrade || 'I'); s('ob-placenta-pos-b', data.twinBPlacentaPosition || 'POSTERIOR'); s('ob-placenta-grade-b', data.twinBPlacentaGrade || 'II'); s('ob-liquor-a', data.twinAAmnioticFluid || 'ADEQUATE'); s('ob-liquor-b', data.twinBAmnioticFluid || 'ADEQUATE'); s('ob-afi-a', data.twinAAfiCm); s('ob-afi-b', data.twinBAfiCm); s('ob-impression-val-a', data.twinAImpression); s('ob-impression-val-b', data.twinBImpression); const pr = document.getElementById('btn-print'); pr.disabled = false; showToast('Verified!', 'success'); } else { showToast(json.message || 'Not found.', 'error'); } } catch (err) { showToast('Error.', 'info'); } }
+/* CM020 - Save Data (Cloudflare D1 Worker Integration) */
+async function saveReport() { 
+  const btn = document.getElementById('btn-save'); 
+  btn.disabled = true; 
+  const originalHTML = btn.innerHTML; 
+  btn.innerHTML = `<span class="text-[#ea580c] font-black uppercase tracking-widest text-[10px]">SAVING...</span>`; 
+  
+  const d = (id) => document.getElementById(id).value; 
+  const payload = { 
+    action: 'save', 
+    reportId: d('ob-report-id'), 
+    patientName: d('p-name'), 
+    examDate: d('p-exam-date'), 
+    age: d('p-age'), 
+    sex: d('p-sex'), 
+    village: d('p-village'), 
+    twinAPresentation: d('ob-presentation-a'), 
+    twinAFhrBpm: d('ob-fhr-bpm-a'), 
+    twinAFhrRhythm: d('ob-fhr-rhythm-a'), 
+    twinAFetalMovements: d('ob-fetal-movements-a'), 
+    twinBPresentation: d('ob-presentation-b'), 
+    twinBFhrBpm: d('ob-fhr-bpm-b'), 
+    twinBFhrRhythm: d('ob-fhr-rhythm-b'), 
+    twinBFetalMovements: d('ob-fetal-movements-b'), 
+    twinABpdCm: d('ob-bpd-val-a'), 
+    twinABpdWeeks: d('ob-bpd-wks-a'), 
+    twinABpdDays: d('ob-bpd-days-a'), 
+    twinAHcCm: d('ob-hc-val-a'), 
+    twinAHcWeeks: d('ob-hc-wks-a'), 
+    twinAHcDays: d('ob-hc-days-a'), 
+    twinAAcCm: d('ob-ac-val-a'), 
+    twinAAcWeeks: d('ob-ac-wks-a'), 
+    twinAAcDays: d('ob-ac-days-a'), 
+    twinAFlCm: d('ob-fl-val-a'), 
+    twinAFlWeeks: d('ob-fl-wks-a'), 
+    twinAFlDays: d('ob-fl-days-a'), 
+    twinBBpdCm: d('ob-bpd-val-b'), 
+    twinBBpdWeeks: d('ob-bpd-wks-b'), 
+    twinBBpdDays: d('ob-bpd-days-b'), 
+    twinBHcCm: d('ob-hc-val-b'), 
+    twinBHcWeeks: d('ob-hc-wks-b'), 
+    twinBHcDays: d('ob-hc-days-b'), 
+    twinBAcCm: d('ob-ac-val-b'), 
+    twinBAcWeeks: d('ob-ac-wks-b'), 
+    twinBAcDays: d('ob-ac-days-b'), 
+    twinBFlCm: d('ob-fl-val-b'), 
+    twinBFlWeeks: d('ob-fl-wks-b'), 
+    twinBFlDays: d('ob-fl-days-b'), 
+    twinACgaWeeks: d('ob-cga-wks-a'), 
+    twinACgaDays: d('ob-cga-days-a'), 
+    twinBCgaWeeks: d('ob-cga-wks-b'), 
+    twinBCgaDays: d('ob-cga-days-b'), 
+    edd: d('p-edd'), 
+    twinAEfwGms: d('ob-efw-a'), 
+    twinBEfwGms: d('ob-efw-b'), 
+    twinAPlacentaPosition: d('ob-placenta-pos-a'), 
+    twinAPlacentaGrade: d('ob-placenta-grade-a'), 
+    twinBPlacentaPosition: d('ob-placenta-pos-b'), 
+    twinBPlacentaGrade: d('ob-placenta-grade-b'), 
+    twinAAmnioticFluid: d('ob-liquor-a'), 
+    twinBAmnioticFluid: d('ob-liquor-b'), 
+    twinAAfiCm: d('ob-afi-a'), 
+    twinBAfiCm: d('ob-afi-b'), 
+    twinAImpression: d('ob-impression-val-a'), 
+    twinBImpression: d('ob-impression-val-b') 
+  }; 
+  
+  try { 
+    const res = await fetch(GAS_API_URL, { 
+      method: 'POST', 
+      headers: { 'Content-Type': 'application/json' }, 
+      body: JSON.stringify(payload) 
+    }); 
+    const json = await res.json(); 
+    
+    if (json.status === 'success') { 
+      document.getElementById('ob-report-id').value = json.reportId; 
+      const p = document.getElementById('btn-print'); 
+      p.disabled = false; 
+      btn.innerHTML = `<span class="text-[#ea580c] font-black uppercase tracking-widest text-[10px]">SAVED</span>`; 
+      showToast(json.message || 'Report saved successfully!', 'success');
+      setTimeout(() => { 
+        btn.disabled = false; 
+        btn.innerHTML = originalHTML; 
+      }, 3000); 
+    } else { 
+      btn.innerHTML = `<span class="text-[#ea580c] font-black uppercase tracking-widest text-[10px]">FAILED</span>`; 
+      showToast(json.message || 'Save failed.', 'error');
+      setTimeout(() => { 
+        btn.disabled = false; 
+        btn.innerHTML = originalHTML; 
+      }, 3000); 
+    } 
+  } catch (err) { 
+    btn.innerHTML = `<span class="text-[#ea580c] font-black uppercase tracking-widest text-[10px]">ERROR</span>`; 
+    showToast('Network error while saving.', 'error');
+    setTimeout(() => { 
+      btn.disabled = false; 
+      btn.innerHTML = originalHTML; 
+    }, 3000); 
+  } 
+}
+
+/* CM021 - Verify Data (Cloudflare D1 Worker Integration) */
+async function verifyAndSearchReport() { 
+  const sid = document.getElementById('search-id-input').value.trim(); 
+  if (!sid) return showToast('Enter OB ID.', 'error'); 
+  showToast(`Verifying Twin ID ${sid}...`, 'info'); 
+  
+  try { 
+    let res = await fetch(`${GAS_API_URL}?reportId=${encodeURIComponent(sid)}`);
+    let json;
+    
+    if (res.ok) {
+      json = await res.json();
+    }
+    
+    if (!json || json.status !== 'success' || !json.data) {
+      res = await fetch(GAS_API_URL, { 
+        method: 'POST', 
+        headers: { 'Content-Type': 'application/json' }, 
+        body: JSON.stringify({ action: 'verify', reportId: sid }) 
+      }); 
+      json = await res.json();
+    }
+
+    if (json.status === 'success' && json.data) { 
+      const data = json.data; 
+      const s = (id, val) => document.getElementById(id).value = val || ''; 
+      s('ob-report-id', data.reportId); 
+      s('p-name', data.patientName); 
+      s('p-exam-date', data.examDate); 
+      s('p-age', data.age); 
+      s('p-sex', data.sex || 'Female'); 
+      s('p-village', data.village); 
+      s('ob-presentation-a', data.twinAPresentation || 'CEPHALIC'); 
+      s('ob-fhr-bpm-a', data.twinAFhrBpm); 
+      s('ob-fhr-rhythm-a', data.twinAFhrRhythm || 'REGULAR'); 
+      s('ob-fetal-movements-a', data.twinAFetalMovements || 'PRESENT'); 
+      s('ob-presentation-b', data.twinBPresentation || 'BREECH'); 
+      s('ob-fhr-bpm-b', data.twinBFhrBpm); 
+      s('ob-fhr-rhythm-b', data.twinBFhrRhythm || 'REGULAR'); 
+      s('ob-fetal-movements-b', data.twinBFetalMovements || 'PRESENT'); 
+      s('ob-bpd-val-a', data.twinABpdCm); 
+      s('ob-bpd-wks-a', data.twinABpdWeeks); 
+      s('ob-bpd-days-a', data.twinABpdDays); 
+      s('ob-hc-val-a', data.twinAHcCm); 
+      s('ob-hc-wks-a', data.twinAHcWeeks); 
+      s('ob-hc-days-a', data.twinAHcDays); 
+      s('ob-ac-val-a', data.twinAAcCm); 
+      s('ob-ac-wks-a', data.twinAAcWeeks); 
+      s('ob-ac-days-a', data.twinAAcDays); 
+      s('ob-fl-val-a', data.twinAFlCm); 
+      s('ob-fl-wks-a', data.twinAFlWeeks); 
+      s('ob-fl-days-a', data.twinAFlDays); 
+      s('ob-bpd-val-b', data.twinBBpdCm); 
+      s('ob-bpd-wks-b', data.twinBBpdWeeks); 
+      s('ob-bpd-days-b', data.twinBBpdDays); 
+      s('ob-hc-val-b', data.twinBHcCm); 
+      s('ob-hc-wks-b', data.twinBHcWeeks); 
+      s('ob-hc-days-b', data.twinBHcDays); 
+      s('ob-ac-val-b', data.twinBAcCm); 
+      s('ob-ac-wks-b', data.twinBAcWeeks); 
+      s('ob-ac-days-b', data.twinBAcDays); 
+      s('ob-fl-val-b', data.twinBFlCm); 
+      s('ob-fl-wks-b', data.twinBFlWeeks); 
+      s('ob-fl-days-b', data.twinBFlDays); 
+      s('ob-cga-wks-a', data.twinACgaWeeks); 
+      s('ob-cga-days-a', data.twinACgaDays); 
+      s('ob-cga-wks-b', data.twinBCgaWeeks); 
+      s('ob-cga-days-b', data.twinBCgaDays); 
+      s('p-edd', data.edd); 
+      s('ob-efw-a', data.twinAEfwGms); 
+      s('ob-efw-b', data.twinBEfwGms); 
+      s('ob-placenta-pos-a', data.twinAPlacentaPosition || 'ANTERIOR'); 
+      s('ob-placenta-grade-a', data.twinAPlacentaGrade || 'I'); 
+      s('ob-placenta-pos-b', data.twinBPlacentaPosition || 'POSTERIOR'); 
+      s('ob-placenta-grade-b', data.twinBPlacentaGrade || 'II'); 
+      s('ob-liquor-a', data.twinAAmnioticFluid || 'ADEQUATE'); 
+      s('ob-liquor-b', data.twinBAmnioticFluid || 'ADEQUATE'); 
+      s('ob-afi-a', data.twinAAfiCm); 
+      s('ob-afi-b', data.twinBAfiCm); 
+      s('ob-impression-val-a', data.twinAImpression); 
+      s('ob-impression-val-b', data.twinBImpression); 
+      
+      const pr = document.getElementById('btn-print'); 
+      pr.disabled = false; 
+      showToast('Verified!', 'success'); 
+    } else { 
+      showToast(json.message || 'Not found.', 'error'); 
+    } 
+  } catch (err) { 
+    showToast('Database connection error.', 'error'); 
+  } 
+}
+
+function handleSearchEnter(event) {
+  if (event.key === 'Enter') {
+    event.preventDefault();
+    verifyAndSearchReport();
+  }
+}
 
 /* CM022 - Print Action */
 function triggerPrint() { window.print(); }
