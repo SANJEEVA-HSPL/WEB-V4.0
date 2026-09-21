@@ -55,7 +55,7 @@ body { font-family: 'Roboto Slab', serif !important; margin: 0; padding: 0; } in
 <button onclick="resetForm()" class="btn-3d btn-reset"><svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>Reset</button>
 <button id="btn-save" onclick="saveReport()" class="btn-3d btn-save"><svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Save</button>
 <button id="btn-print" onclick="triggerPrint()" disabled class="btn-3d btn-print"><svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>Print</button>
-<input type="text" id="search-id-input" placeholder="OB ID (e.g. SMOB1001)" class="search-input-3d w-full md:w-32 placeholder-slate-400" />
+<input type="text" id="search-id-input" placeholder="OB ID (e.g. SMOB1001)" class="search-input-3d w-full md:w-32 placeholder-slate-400" onkeydown="handleSearchEnter(event)" />
 <button onclick="verifyAndSearchReport()" class="btn-3d btn-verify"><svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>Verify</button>
 </div>
 </div>
@@ -291,8 +291,12 @@ D NO:1-7-26, PEDDANNA STREET, OPPO RAMANA FUNCTION HALL, <br>G V TEXSTILES BACKS
 
 <script>
 
-/* CM015 - Global Setup */
-const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbxz8GtKVfWAFbwrRKJjBgg1ICSU0rfpktq0TFUPZQFO5CTITFqQb84G1dFK6JXE0JxV/exec'; window.addEventListener('DOMContentLoaded', () => { document.getElementById('p-exam-date').value = todayDMY(); });
+/* CM015 - Global Setup (Cloudflare Workers URL) */
+const GAS_API_URL = 'https://ob1-report.contact-sanjeevahospital.workers.dev/'; 
+
+window.addEventListener('DOMContentLoaded', () => { 
+  document.getElementById('p-exam-date').value = todayDMY(); 
+});
 
 /* CM016 - Toast Notifications */
 function showToast(msg, type='success') { const c = document.getElementById('toast-container'); const t = document.createElement('div'); const cols = { success: 'bg-emerald-600 border-emerald-700 text-white', error: 'bg-rose-600 border-rose-700 text-white', info: 'bg-slate-800 border-slate-900 text-white' }; t.className = `flex items-center gap-2 px-3 py-2 rounded-none shadow-xl border text-[10px] font-semibold ${cols[type]} transition-all duration-300 transform translate-x-12 opacity-0 pointer-events-auto max-w-sm`; t.innerHTML = `<svg class="h-3 w-3 text-white shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg><span>${msg}</span>`; c.appendChild(t); requestAnimationFrame(() => t.classList.remove('translate-x-12', 'opacity-0')); setTimeout(() => { t.classList.add('translate-x-12', 'opacity-0'); setTimeout(() => t.remove(), 300); }, 4500); }
@@ -303,11 +307,161 @@ const pad2 = (n) => String(n).padStart(2,'0'); const todayDMY = () => { const d 
 /* CM018 - Reset Actions */
 function resetForm() { document.getElementById('reset-modal').classList.remove('hidden'); } function confirmReset(conf) { document.getElementById('reset-modal').classList.add('hidden'); if (conf) { const ids = ['ob-report-id','p-name','p-age','p-edd','p-village','ob-fhr-bpm','ob-bpd-val','ob-bpd-wks','ob-bpd-days','ob-hc-val','ob-hc-wks','ob-hc-days','ob-ac-val','ob-ac-wks','ob-ac-days','ob-fl-val','ob-fl-wks','ob-fl-days','ob-cga-wks','ob-cga-days','ob-efw','ob-afi','ob-impression-val']; ids.forEach(i => document.getElementById(i).value = ''); document.getElementById('ob-report-id').value = '[Auto-Generated]'; document.getElementById('p-exam-date').value = todayDMY(); document.getElementById('p-sex').value = 'Female'; document.getElementById('ob-presentation').value = 'CEPHALIC'; document.getElementById('ob-fhr-rhythm').value = 'REGULAR'; document.getElementById('ob-fetal-movements').value = 'PRESENT'; document.getElementById('ob-liquor').value = 'ADEQUATE'; document.getElementById('ob-placenta-pos').value = 'ANTERIOR'; document.getElementById('ob-placenta-grade').value = 'I'; const p = document.getElementById('btn-print'); p.disabled = true; showToast('Form reset. Ready for new row!', 'info'); } }
 
-/* CM019 - Save Data */
-async function saveReport() { const btn = document.getElementById('btn-save'); btn.disabled = true; const originalHTML = btn.innerHTML; btn.innerHTML = `<span class="text-[#ea580c] font-black uppercase tracking-widest text-[10px]">SAVING...</span>`; const d = (id) => document.getElementById(id).value; const pay = { action: 'save', reportId: d('ob-report-id'), patientName: d('p-name'),  examDate: normalizeDMY(d('p-exam-date')) , age: d('p-age'), sex: d('p-sex'), village: d('p-village'), presentation: d('ob-presentation'), fhrBpm: d('ob-fhr-bpm'), fhrRhythm: d('ob-fhr-rhythm'), fetalMovements: d('ob-fetal-movements'), bpdCm: d('ob-bpd-val'), bpdWks: d('ob-bpd-wks'), bpdDays: d('ob-bpd-days'), hcCm: d('ob-hc-val'), hcWks: d('ob-hc-wks'), hcDays: d('ob-hc-days'), acCm: d('ob-ac-val'), acWks: d('ob-ac-wks'), acDays: d('ob-ac-days'), flCm: d('ob-fl-val'), flWks: d('ob-fl-wks'), flDays: d('ob-fl-days'), cgaWks: d('ob-cga-wks'), cgaDays: d('ob-cga-days'), edd: normalizeDMY(d('p-edd')), efw: d('ob-efw'), placentaPosition: d('ob-placenta-pos'), placentaGrade: d('ob-placenta-grade'), amnioticFluid: d('ob-liquor'), afiCm: d('ob-afi'), impression: d('ob-impression-val') }; try { const res = await fetch(GAS_API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(pay) }); const json = JSON.parse(await res.text()); if (json.status === 'success') { document.getElementById('ob-report-id').value = json.reportId; const p = document.getElementById('btn-print'); p.disabled = false; btn.innerHTML = `<span class="text-[#ea580c] font-black uppercase tracking-widest text-[10px]">SAVED</span>`; setTimeout(() => { btn.disabled = false; btn.innerHTML = originalHTML; }, 3000); } else { btn.innerHTML = `<span class="text-[#ea580c] font-black uppercase tracking-widest text-[10px]">FAILED</span>`; setTimeout(() => { btn.disabled = false; btn.innerHTML = originalHTML; }, 3000); } } catch (err) { btn.innerHTML = `<span class="text-[#ea580c] font-black uppercase tracking-widest text-[10px]">ERROR</span>`; setTimeout(() => { btn.disabled = false; btn.innerHTML = originalHTML; }, 3000); } }
+/* CM019 - Save Data (Cloudflare Worker Integration) */
+async function saveReport() { 
+  const btn = document.getElementById('btn-save'); 
+  btn.disabled = true; 
+  const originalHTML = btn.innerHTML; 
+  btn.innerHTML = `<span class="text-[#ea580c] font-black uppercase tracking-widest text-[10px]">SAVING...</span>`; 
+  
+  const d = (id) => document.getElementById(id).value; 
+  const pay = { 
+    action: 'save', 
+    reportId: d('ob-report-id'), 
+    patientName: d('p-name'), 
+    examDate: normalizeDMY(d('p-exam-date')), 
+    age: d('p-age'), 
+    sex: d('p-sex'), 
+    village: d('p-village'), 
+    presentation: d('ob-presentation'), 
+    fhrBpm: d('ob-fhr-bpm'), 
+    fhrRhythm: d('ob-fhr-rhythm'), 
+    fetalMovements: d('ob-fetal-movements'), 
+    bpdCm: d('ob-bpd-val'), 
+    bpdWks: d('ob-bpd-wks'), 
+    bpdDays: d('ob-bpd-days'), 
+    hcCm: d('ob-hc-val'), 
+    hcWks: d('ob-hc-wks'), 
+    hcDays: d('ob-hc-days'), 
+    acCm: d('ob-ac-val'), 
+    acWks: d('ob-ac-wks'), 
+    acDays: d('ob-ac-days'), 
+    flCm: d('ob-fl-val'), 
+    flWks: d('ob-fl-wks'), 
+    flDays: d('ob-fl-days'), 
+    cgaWks: d('ob-cga-wks'), 
+    cgaDays: d('ob-cga-days'), 
+    edd: normalizeDMY(d('p-edd')), 
+    efw: d('ob-efw'), 
+    placentaPosition: d('ob-placenta-pos'), 
+    placentaGrade: d('ob-placenta-grade'), 
+    amnioticFluid: d('ob-liquor'), 
+    afiCm: d('ob-afi'), 
+    impression: d('ob-impression-val') 
+  }; 
+  
+  try { 
+    const res = await fetch(GAS_API_URL, { 
+      method: 'POST', 
+      headers: { 'Content-Type': 'application/json' }, 
+      body: JSON.stringify(pay) 
+    }); 
+    const json = await res.json(); 
+    
+    if (json.status === 'success') { 
+      document.getElementById('ob-report-id').value = json.reportId; 
+      const p = document.getElementById('btn-print'); 
+      p.disabled = false; 
+      btn.innerHTML = `<span class="text-[#ea580c] font-black uppercase tracking-widest text-[10px]">SAVED</span>`; 
+      showToast(json.message || 'Report saved successfully!', 'success');
+      setTimeout(() => { 
+        btn.disabled = false; 
+        btn.innerHTML = originalHTML; 
+      }, 3000); 
+    } else { 
+      btn.innerHTML = `<span class="text-[#ea580c] font-black uppercase tracking-widest text-[10px]">FAILED</span>`; 
+      showToast(json.message || 'Save failed.', 'error');
+      setTimeout(() => { 
+        btn.disabled = false; 
+        btn.innerHTML = originalHTML; 
+      }, 3000); 
+    } 
+  } catch (err) { 
+    btn.innerHTML = `<span class="text-[#ea580c] font-black uppercase tracking-widest text-[10px]">ERROR</span>`; 
+    showToast('Network error while saving.', 'error');
+    setTimeout(() => { 
+      btn.disabled = false; 
+      btn.innerHTML = originalHTML; 
+    }, 3000); 
+  } 
+}
 
-/* CM020 - Verify Data */
-async function verifyAndSearchReport() { const sid = document.getElementById('search-id-input').value.trim(); if (!sid) return showToast('Enter OB ID.', 'error'); showToast(`Verifying ${sid}...`, 'info'); try { const res = await fetch(GAS_API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ action: 'verify', reportId: sid }) }); const json = JSON.parse(await res.text()); if (json.status === 'success' && json.data) { const d = json.data; const s = (id, val) => document.getElementById(id).value = val || ''; s('ob-report-id', d.reportId); s('p-name', d.patientName); s('p-exam-date', normalizeDMY(d.examDate)); s('p-age', d.age); s('p-sex', d.sex || 'Female'); s('p-village', d.village); s('ob-presentation', d.presentation || 'CEPHALIC'); s('ob-fhr-bpm', d.fhrBpm); s('ob-fhr-rhythm', d.fhrRhythm || 'REGULAR'); s('ob-fetal-movements', d.fetalMovements || 'PRESENT'); s('ob-bpd-val', d.bpdCm); s('ob-bpd-wks', d.bpdWks); s('ob-bpd-days', d.bpdDays); s('ob-hc-val', d.hcCm); s('ob-hc-wks', d.hcWks); s('ob-hc-days', d.hcDays); s('ob-ac-val', d.acCm); s('ob-ac-wks', d.acWks); s('ob-ac-days', d.acDays); s('ob-fl-val', d.flCm); s('ob-fl-wks', d.flWks); s('ob-fl-days', d.flDays); s('ob-cga-wks', d.cgaWks); s('ob-cga-days', d.cgaDays); s('p-edd', normalizeDMY(d.edd)); s('ob-efw', d.efw); s('ob-placenta-pos', d.placentaPosition || 'ANTERIOR'); s('ob-placenta-grade', d.placentaGrade || 'I'); s('ob-liquor', d.amnioticFluid || 'ADEQUATE'); s('ob-afi', d.afiCm); s('ob-impression-val', d.impression); const p = document.getElementById('btn-print'); p.disabled = false; showToast('Verified!', 'success'); } else { showToast(json.message || 'Not found.', 'error'); } } catch (err) { showToast('Error.', 'info'); } }
+/* CM020 - Verify Data (Cloudflare Worker Integration) */
+async function verifyAndSearchReport() { 
+  const sid = document.getElementById('search-id-input').value.trim(); 
+  if (!sid) return showToast('Enter OB ID.', 'error'); 
+  showToast(`Verifying ${sid}...`, 'info'); 
+  
+  try { 
+    // Try GET request first, fallback to POST if needed
+    let res = await fetch(`${GAS_API_URL}?reportId=${encodeURIComponent(sid)}`);
+    let json;
+    
+    if (res.ok) {
+      json = await res.json();
+    }
+    
+    if (!json || json.status !== 'success' || !json.data) {
+      res = await fetch(GAS_API_URL, { 
+        method: 'POST', 
+        headers: { 'Content-Type': 'application/json' }, 
+        body: JSON.stringify({ action: 'verify', reportId: sid }) 
+      }); 
+      json = await res.json();
+    }
+
+    if (json.status === 'success' && json.data) { 
+      const d = json.data; 
+      const s = (id, val) => document.getElementById(id).value = val || ''; 
+      s('ob-report-id', d.reportId); 
+      s('p-name', d.patientName); 
+      s('p-exam-date', normalizeDMY(d.examDate)); 
+      s('p-age', d.age); 
+      s('p-sex', d.sex || 'Female'); 
+      s('p-village', d.village); 
+      s('ob-presentation', d.presentation || 'CEPHALIC'); 
+      s('ob-fhr-bpm', d.fhrBpm); 
+      s('ob-fhr-rhythm', d.fhrRhythm || 'REGULAR'); 
+      s('ob-fetal-movements', d.fetalMovements || 'PRESENT'); 
+      s('ob-bpd-val', d.bpdCm); 
+      s('ob-bpd-wks', d.bpdWks); 
+      s('ob-bpd-days', d.bpdDays); 
+      s('ob-hc-val', d.hcCm); 
+      s('ob-hc-wks', d.hcWks); 
+      s('ob-hc-days', d.hcDays); 
+      s('ob-ac-val', d.acCm); 
+      s('ob-ac-wks', d.acWks); 
+      s('ob-ac-days', d.acDays); 
+      s('ob-fl-val', d.flCm); 
+      s('ob-fl-wks', d.flWks); 
+      s('ob-fl-days', d.flDays); 
+      s('ob-cga-wks', d.cgaWks); 
+      s('ob-cga-days', d.cgaDays); 
+      s('p-edd', normalizeDMY(d.edd)); 
+      s('ob-efw', d.efw); 
+      s('ob-placenta-pos', d.placentaPosition || 'ANTERIOR'); 
+      s('ob-placenta-grade', d.placentaGrade || 'I'); 
+      s('ob-liquor', d.amnioticFluid || 'ADEQUATE'); 
+      s('ob-afi', d.afiCm); 
+      s('ob-impression-val', d.impression); 
+      
+      const p = document.getElementById('btn-print'); 
+      p.disabled = false; 
+      showToast('Verified and loaded successfully!', 'success'); 
+    } else { 
+      showToast(json.message || 'Report ID not found.', 'error'); 
+    } 
+  } catch (err) { 
+    showToast('Database connection error.', 'error'); 
+  } 
+}
+
+function handleSearchEnter(event) {
+  if (event.key === 'Enter') {
+    event.preventDefault();
+    verifyAndSearchReport();
+  }
+}
 
 /* CM021 - Print Action */
 function triggerPrint() { window.print(); }
