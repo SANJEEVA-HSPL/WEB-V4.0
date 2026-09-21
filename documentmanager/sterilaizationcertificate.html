@@ -231,8 +231,8 @@ LCB
 
 <script>
 
-/* CM036 - Backend Link Settings */
-const URL = "https://script.google.com/macros/s/AKfycbzV-8xKsaZosb4GIBmhIM4ur97hbyLeekK2fXab9wAWpzEnKtO_LGmG-L1-RyfcfwQ/exec";
+/* CM036 - Backend Link Settings (Updated for Cloudflare Workers) */
+const URL = "https://sterilaization.contact-sanjeevahospital.workers.dev";
 
 /* CM037 - Local Storage Persistence Functions */
 const saveFormData = () => { const formData = { certNo: document.getElementById('receiptNumDisplay').innerText, receiptDate: document.getElementById('receiptDate').value, deliveryDate: document.getElementById('deliveryDate').value, smtName: document.getElementById('smtName').innerText, sriName: document.getElementById('sriName').innerText, nativePlace: document.getElementById('nativePlace').innerText, mandalName: document.getElementById('mandalName').innerText, distName: document.getElementById('distName').innerText, deliveryOrder: document.getElementById('deliveryOrder').value, maleCount: document.getElementById('maleCount').innerText, femaleCount: document.getElementById('femaleCount').innerText }; localStorage.setItem('vsr_steril_data', JSON.stringify(formData)); };
@@ -254,11 +254,97 @@ const closeSuccessPopup = () => { document.getElementById('successPopup').style.
 const doReset = () => { localStorage.removeItem('vsr_steril_data'); document.getElementById('searchInput').value = ''; document.getElementById('receiptNumDisplay').innerText = ''; document.getElementById('receiptDate').value = ''; document.getElementById('deliveryDate').value = ''; document.getElementById('smtName').innerText = ''; document.getElementById('sriName').innerText = ''; document.getElementById('nativePlace').innerText = ''; document.getElementById('mandalName').innerText = ''; document.getElementById('distName').innerText = ''; document.getElementById('deliveryOrder').selectedIndex = 0; document.getElementById('maleCount').innerText = ''; document.getElementById('femaleCount').innerText = ''; closeResetPopup(); window.location.reload(); };
 
 /* CM041 - Fetch API Call */
-const performSearch = () => { const q = document.getElementById('searchInput').value.trim(); if (!q) return; document.getElementById('verifyBtn').disabled = true; document.getElementById('verifyIcon').className = 'fa-solid fa-spinner fa-spin'; fetch(`${URL}?certNo=${encodeURIComponent(q)}`).then(r => r.json()).then(d => { if (d.status === "success") { document.getElementById('smtName').innerText = d.data['Mothers Name'] || ''; document.getElementById('sriName').innerText = d.data['Father Name'] || ''; document.getElementById('nativePlace').innerText = d.data['village'] || ''; document.getElementById('mandalName').innerText = d.data['Mandal'] || ''; document.getElementById('distName').innerText = d.data['Dist'] || ''; document.getElementById('receiptDate').value = normalizeDate(d.data['Date']); document.getElementById('deliveryDate').value = normalizeDate(d.data['On Date']); document.getElementById('receiptNumDisplay').innerText = q; document.getElementById('maleCount').innerText = d.data['Male'] || ''; document.getElementById('femaleCount').innerText = d.data['Female'] || ''; saveFormData(); } else { alert('Record Not Found'); } document.getElementById('verifyBtn').disabled = false; document.getElementById('verifyIcon').className = 'fa-solid fa-check'; }).catch(err => { document.getElementById('verifyBtn').disabled = false; document.getElementById('verifyIcon').className = 'fa-solid fa-check'; alert('Search Error'); }); };
+const performSearch = () => { 
+  const q = document.getElementById('searchInput').value.trim(); 
+  if (!q) return; 
+  document.getElementById('verifyBtn').disabled = true; 
+  document.getElementById('verifyIcon').className = 'fa-solid fa-spinner fa-spin'; 
+  
+  fetch(`${URL}?certNo=${encodeURIComponent(q)}`)
+    .then(r => r.json())
+    .then(d => { 
+      if (d.status === "success") { 
+        document.getElementById('smtName').innerText = d.data['Mothers Name'] || ''; 
+        document.getElementById('sriName').innerText = d.data['Father Name'] || ''; 
+        document.getElementById('nativePlace').innerText = d.data['village'] || ''; 
+        document.getElementById('mandalName').innerText = d.data['Mandal'] || ''; 
+        document.getElementById('distName').innerText = d.data['Dist'] || ''; 
+        document.getElementById('receiptDate').value = normalizeDate(d.data['Date']); 
+        document.getElementById('deliveryDate').value = normalizeDate(d.data['On Date']); 
+        document.getElementById('receiptNumDisplay').innerText = q; 
+        document.getElementById('maleCount').innerText = d.data['Male'] || ''; 
+        document.getElementById('femaleCount').innerText = d.data['Female'] || ''; 
+        saveFormData(); 
+      } else { 
+        alert('Record Not Found'); 
+      } 
+      document.getElementById('verifyBtn').disabled = false; 
+      document.getElementById('verifyIcon').className = 'fa-solid fa-check'; 
+    })
+    .catch(err => { 
+      document.getElementById('verifyBtn').disabled = false; 
+      document.getElementById('verifyIcon').className = 'fa-solid fa-check'; 
+      alert('Search Error'); 
+    }); 
+};
+
 const handleSearchEnter = (event) => { if (event.key === 'Enter') { event.preventDefault(); performSearch(); } };
 
-/* CM042 - Insert/Update API Call */
-const handleSaveOrUpdate = () => { const rDate = document.getElementById('receiptDate').value.trim(); const dDate = document.getElementById('deliveryDate').value.trim(); const sName = document.getElementById('smtName').innerText.trim(); const fName = document.getElementById('sriName').innerText.trim(); if (!rDate || !dDate || !sName || !fName) { alert("Please complete required Name and Date fields."); return; } document.getElementById('saveIcon').className = 'fa-solid fa-spinner fa-spin'; document.getElementById('btnText').innerText = 'SAVING'; const payload = { certNo: document.getElementById('receiptNumDisplay').innerText.trim() || "NEW", date: rDate, motherName: sName, fatherName: fName, village: document.getElementById('nativePlace').innerText, mandal: document.getElementById('mandalName').innerText, dist: document.getElementById('distName').innerText, onDate: dDate, time: document.getElementById('deliveryTime').value, delivered: document.getElementById('deliveryOrder').value, gender: document.getElementById('childGender').value, male: document.getElementById('maleCount').innerText, female: document.getElementById('femaleCount').innerText }; fetch(URL, { method: "POST", body: JSON.stringify(payload) }).then(r => r.json()).then(d => { document.getElementById('receiptNumDisplay').innerText = d.certNo; document.getElementById('saveIcon').className = 'fa-solid fa-circle-check'; document.getElementById('btnText').innerText = 'UPDATED'; document.getElementById('successText').innerHTML = 'Certificate Saved Successfully<br><br>Certificate No : <b>' + d.certNo + '</b>'; document.getElementById('successPopup').style.display = 'flex'; saveFormData(); }).catch(err => { document.getElementById('saveIcon').className = 'fa-solid fa-cloud-arrow-up'; document.getElementById('btnText').innerText = 'SAVE'; alert("Save Error"); }); };
+/* CM042 - Insert/Update API Call (Updated with Headers) */
+const handleSaveOrUpdate = () => { 
+  const rDate = document.getElementById('receiptDate').value.trim(); 
+  const dDate = document.getElementById('deliveryDate').value.trim(); 
+  const sName = document.getElementById('smtName').innerText.trim(); 
+  const fName = document.getElementById('sriName').innerText.trim(); 
+  
+  if (!rDate || !dDate || !sName || !fName) { 
+    alert("Please complete required Name and Date fields."); 
+    return; 
+  } 
+  
+  document.getElementById('saveIcon').className = 'fa-solid fa-spinner fa-spin'; 
+  document.getElementById('btnText').innerText = 'SAVING'; 
+  
+  const payload = { 
+    certNo: document.getElementById('receiptNumDisplay').innerText.trim() || "NEW", 
+    date: rDate, 
+    motherName: sName, 
+    fatherName: fName, 
+    village: document.getElementById('nativePlace').innerText, 
+    mandal: document.getElementById('mandalName').innerText, 
+    dist: document.getElementById('distName').innerText, 
+    onDate: dDate, 
+    time: document.getElementById('deliveryTime').value, 
+    delivered: document.getElementById('deliveryOrder').value, 
+    gender: document.getElementById('childGender').value, 
+    male: document.getElementById('maleCount').innerText, 
+    female: document.getElementById('femaleCount').innerText 
+  }; 
+  
+  fetch(URL, { 
+    method: "POST", 
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload) 
+  })
+  .then(r => r.json())
+  .then(d => { 
+    if(d.status === "success") {
+      document.getElementById('receiptNumDisplay').innerText = d.certNo; 
+      document.getElementById('saveIcon').className = 'fa-solid fa-circle-check'; 
+      document.getElementById('btnText').innerText = 'UPDATED'; 
+      document.getElementById('successText').innerHTML = 'Certificate Saved Successfully<br><br>Certificate No : <b>' + d.certNo + '</b>'; 
+      document.getElementById('successPopup').style.display = 'flex'; 
+      saveFormData(); 
+    } else {
+      throw new Error(d.message || "Server returned an error");
+    }
+  })
+  .catch(err => { 
+    document.getElementById('saveIcon').className = 'fa-solid fa-cloud-arrow-up'; 
+    document.getElementById('btnText').innerText = 'SAVE'; 
+    alert("Save Error: " + err.message); 
+  }); 
+};
 
 </script>
 </body>
