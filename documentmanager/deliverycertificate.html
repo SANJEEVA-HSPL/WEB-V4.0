@@ -97,6 +97,7 @@ body { font-family: 'Roboto Slab', serif; background: linear-gradient(135deg, #c
 </div>
 </div>
 </div>
+
 <div class="flex-grow flex flex-col justify-between">
 <div>
 <div class="flex justify-between w-full font-bold text-blue-900 border-b-2 border-blue-900/10 pb-2 text-xs">
@@ -116,6 +117,7 @@ Date: <input type="text" id="receiptDate_8471" class="date-field" placeholder="D
 </div>
 </div>
 <hr style="border: none; border-top: 2px solid #1e3a8a; margin: 6px 0 4px 0;">
+
 <div class="footer-wrapper">
 <div class="flex justify-between items-end text-blue-900 font-bold">
 <div class="w-2/3">
@@ -144,9 +146,8 @@ Date: <input type="text" id="receiptDate_8471" class="date-field" placeholder="D
 </div>
 
 <script>
-
 /* CM015 - Global Setup */
-const URL = "https://script.google.com/macros/s/AKfycbyShx9VyMI1-y1Bh4L_ovM0qFFVOi4Yvl5ou5TQRYBMQ80QkwCi52iDEr_YryeCYk6Iiw/exec";
+const URL = "https://delivery-c.contact-sanjeevahospital.workers.dev/";
 window.addEventListener('load', loadFormData); document.addEventListener('input', saveFormData); document.addEventListener('change', saveFormData);
 function syncManualIp() { document.getElementById('manualIpInput').value = document.getElementById('searchInput_8822').value; }
 function syncSearchBox() { document.getElementById('searchInput_8822').value = document.getElementById('manualIpInput').value; }
@@ -165,7 +166,7 @@ function doReset() { localStorage.removeItem('vsr_cert'); localStorage.removeIte
 /* CM018 - API Logic */
 function performSearch_9281() { const q = document.getElementById('searchInput_8822').value.trim(); if (!q) return; document.getElementById('verifyBtn_7722').disabled = true; document.getElementById('verifyIcon_7722').className = 'fa-solid fa-spinner fa-spin'; fetch(`${URL}?certNo=${encodeURIComponent(q)}`).then(r => r.json()).then(d => { if (d.status === "success") { document.getElementById('smtName_1004').innerText = d.data['Mothers Name'] || ''; document.getElementById('sriName_1005').innerText = d.data['Father Name'] || ''; document.getElementById('nativePlace_1006').innerText = d.data['village'] || ''; document.getElementById('mandalName_1007').innerText = d.data['Mandal'] || ''; document.getElementById('distName_1008').innerText = d.data['Dist'] || ''; document.getElementById('receiptDate_8471').value = normalizeDate(d.data['Date']); document.getElementById('deliveryDate_1009').value = normalizeDate(d.data['On Date']); document.getElementById('deliveryTime').value = d.data['Time'] || ''; document.getElementById('manualIpInput').value = q; document.getElementById('verifyBtn_7722').disabled = false; document.getElementById('verifyIcon_7722').className = 'fa-solid fa-check'; } else { document.getElementById('verifyBtn_7722').disabled = false; document.getElementById('verifyIcon_7722').className = 'fa-solid fa-check'; alert('Certificate Not Found'); } }).catch(e => { document.getElementById('verifyBtn_7722').disabled = false; document.getElementById('verifyIcon_7722').className = 'fa-solid fa-check'; alert('Search Error'); }); }
 function handleSearchEnter(e) { if (e.key === "Enter") { e.preventDefault(); performSearch_9281(); } }
-function handleSaveOrUpdate_7182() { const md = document.getElementById('deliveryDate_1009').value.trim(); if (!md) { alert("Please Select Delivery Date"); return; } document.getElementById('saveIcon').className = 'fa-solid fa-spinner fa-spin'; document.getElementById('btnText_992').innerText = 'SAVING'; const p = { certNo: document.getElementById('manualIpInput').value.trim() || "NEW", date: document.getElementById('receiptDate_8471').value, motherName: document.getElementById('smtName_1004').innerText, fatherName: document.getElementById('sriName_1005').innerText, village: document.getElementById('nativePlace_1006').innerText, mandal: document.getElementById('mandalName_1007').innerText, dist: document.getElementById('distName_1008').innerText, onDate: document.getElementById('deliveryDate_1009').value, time: document.getElementById('deliveryTime').value, delivered: document.getElementById('deliveryOrder_1010').value, gender: document.getElementById('childGender_1011').value }; fetch(URL, { method: "POST", body: JSON.stringify(p) }).then(r => r.json()).then(d => { document.getElementById('manualIpInput').value = d.certNo; document.getElementById('searchInput_8822').value = d.certNo; localStorage.setItem('vsr_cert', d.certNo); document.getElementById('saveIcon').className = 'fa-solid fa-circle-check'; document.getElementById('btnText_992').innerText = 'UPDATED'; document.getElementById('successText').innerHTML = 'Certificate Saved Successfully<br><br>Certificate No : <b>' + d.certNo + '</b>'; document.getElementById('successPopup').style.display = 'flex'; }).catch(e => { document.getElementById('saveIcon').className = 'fa-solid fa-cloud-arrow-up'; document.getElementById('btnText_992').innerText = 'SAVE'; alert("Save Error"); }); }
+function handleSaveOrUpdate_7182() { const md = document.getElementById('deliveryDate_1009').value.trim(); if (!md) { alert("Please Select Delivery Date"); return; } document.getElementById('saveIcon').className = 'fa-solid fa-spinner fa-spin'; document.getElementById('btnText_992').innerText = 'SAVING'; const p = { certNo: document.getElementById('manualIpInput').value.trim() || "NEW", date: document.getElementById('receiptDate_8471').value, motherName: document.getElementById('smtName_1004').innerText, fatherName: document.getElementById('sriName_1005').innerText, village: document.getElementById('nativePlace_1006').innerText, mandal: document.getElementById('mandalName_1007').innerText, dist: document.getElementById('distName_1008').innerText, onDate: document.getElementById('deliveryDate_1009').value, time: document.getElementById('deliveryTime').value, delivered: document.getElementById('deliveryOrder_1010').value, gender: document.getElementById('childGender_1011').value }; fetch(URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(p) }).then(r => r.json()).then(d => { document.getElementById('manualIpInput').value = d.certNo; document.getElementById('searchInput_8822').value = d.certNo; localStorage.setItem('vsr_cert', d.certNo); document.getElementById('saveIcon').className = 'fa-solid fa-circle-check'; document.getElementById('btnText_992').innerText = 'UPDATED'; document.getElementById('successText').innerHTML = 'Certificate Saved Successfully<br><br>Certificate No : <b>' + d.certNo + '</b>'; document.getElementById('successPopup').style.display = 'flex'; }).catch(e => { document.getElementById('saveIcon').className = 'fa-solid fa-cloud-arrow-up'; document.getElementById('btnText_992').innerText = 'SAVE'; alert("Save Error"); }); }
 function closeSuccessPopup() { document.getElementById('successPopup').style.display = 'none'; document.getElementById('saveIcon').className = 'fa-solid fa-cloud-arrow-up'; document.getElementById('btnText_992').innerText = 'SAVE'; }
 </script>
 </body>
