@@ -45,7 +45,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover { opacity: 1; }
 <div class="flex items-center gap-2">
 <div class="relative w-48">
 <div class="absolute inset-y-0 left-0 flex items-center pl-2 pointer-events-none"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="text-gray-500"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></div>
-<input type="text" id="search-id-input" placeholder="Search OBID" class="pl-7 pr-2 py-1 h-[28px] w-full border border-gray-400 rounded focus:border-teal-600 focus:outline-none text-black text-[11px] font-bold shadow-inner" />
+<input type="text" id="search-id-input" placeholder="Search OBID" class="pl-7 pr-2 py-1 h-[28px] w-full border border-gray-400 rounded focus:border-teal-600 focus:outline-none text-black text-[11px] font-bold shadow-inner" onkeydown="handleSearchEnter(event)" />
 </div>
 <button id="btn-verify" onclick="verifyAndSearchReport()" class="bg-gradient-to-b from-emerald-500 to-emerald-600 border border-emerald-800 shadow-[0_2px_0_#065f46] active:shadow-none active:translate-y-[2px] text-white text-[10px] font-black px-3 py-1.5 h-[28px] rounded transition-all flex items-center gap-1 uppercase tracking-wide"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Verify</button>
 </div>
@@ -191,20 +191,150 @@ G V TEXSTILES BACKSIDE, ALLAGADDA, NANDYALA DIS, AP-518543. <br>
 </main>
 
 <script>
-/* CM019 - Global Initialization */
-const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbx6co6odiuuA7i1W0Qf5jFtserIoFMY9_uHRqAIIVvXfX8QgoNwiMHrRXsLi-POmqvm/exec'; window.addEventListener('DOMContentLoaded', () => { document.getElementById('p-exam-date').value = new Date().toISOString().substring(0, 10); });
+/* CM019 - Global Initialization & Cloudflare Workers URL */
+const GAS_API_URL = 'https://obreport.contact-sanjeevahospital.workers.dev/'; 
+
+window.addEventListener('DOMContentLoaded', () => { 
+  document.getElementById('p-exam-date').value = new Date().toISOString().substring(0, 10); 
+});
 
 /* CM020 - Reset Action */
-function resetForm() { const today = new Date().toISOString().substring(0, 10); document.getElementById('ob-report-id').value = '[Auto-Generated]'; document.getElementById('p-name').value = ''; document.getElementById('p-exam-date').value = today; document.getElementById('p-sex').value = 'Female'; document.getElementById('p-village').value = ''; document.getElementById('p-lmp').value = ''; document.getElementById('p-edd').value = ''; document.getElementById('p-gravida').value = ''; document.getElementById('ob-asiub').value = ''; document.getElementById('ob-crl').value = ''; document.getElementById('ob-uga').value = ''; document.getElementById('ob-cardiac').value = ''; document.getElementById('ob-edd').value = ''; document.getElementById('ob-remarks').value = ''; document.getElementById('btn-print').disabled = true; }
+function resetForm() { 
+  const today = new Date().toISOString().substring(0, 10); 
+  document.getElementById('ob-report-id').value = '[Auto-Generated]'; 
+  document.getElementById('p-name').value = ''; 
+  document.getElementById('p-exam-date').value = today; 
+  document.getElementById('p-sex').value = 'Female'; 
+  document.getElementById('p-village').value = ''; 
+  document.getElementById('p-lmp').value = ''; 
+  document.getElementById('p-edd').value = ''; 
+  document.getElementById('p-gravida').value = ''; 
+  document.getElementById('ob-asiub').value = ''; 
+  document.getElementById('ob-crl').value = ''; 
+  document.getElementById('ob-uga').value = ''; 
+  document.getElementById('ob-cardiac').value = ''; 
+  document.getElementById('ob-edd').value = ''; 
+  document.getElementById('ob-remarks').value = ''; 
+  document.getElementById('btn-print').disabled = true; 
+}
 
-/* CM021 - Save Data API */
-async function saveReport() { const saveBtn = document.getElementById('btn-save'); saveBtn.disabled = true; saveBtn.innerHTML = '<svg class="animate-spin h-3 w-3 mr-1 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Saving...'; const payload = { action: 'save', reportId: document.getElementById('ob-report-id').value, patientName: document.getElementById('p-name').value, examDate: document.getElementById('p-exam-date').value, sex: document.getElementById('p-sex').value, village: document.getElementById('p-village').value, lmp: document.getElementById('p-lmp').value, edd: document.getElementById('p-edd').value, gravida: document.getElementById('p-gravida').value, asiub: document.getElementById('ob-asiub').value, crl: document.getElementById('ob-crl').value, uga: document.getElementById('ob-uga').value, cardiac: document.getElementById('ob-cardiac').value, obEdd: document.getElementById('ob-edd').value, remarks: document.getElementById('ob-remarks').value }; try { const response = await fetch(GAS_API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(payload) }); const text = await response.text(); const result = JSON.parse(text); if (result.status === 'success') { document.getElementById('ob-report-id').value = result.reportId; document.getElementById('btn-print').disabled = false; saveBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Saved!'; setTimeout(() => { saveBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Save'; saveBtn.disabled = false; }, 2000); return; } } catch (err) { console.error(err); } saveBtn.disabled = false; saveBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Save'; }
+/* CM021 - Save Data API (Cloudflare Worker Integration) */
+async function saveReport() { 
+  const saveBtn = document.getElementById('btn-save'); 
+  saveBtn.disabled = true; 
+  saveBtn.innerHTML = '<svg class="animate-spin h-3 w-3 mr-1 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Saving...'; 
+  
+  const payload = { 
+    action: 'save', 
+    reportId: document.getElementById('ob-report-id').value, 
+    patientName: document.getElementById('p-name').value, 
+    examDate: document.getElementById('p-exam-date').value, 
+    sex: document.getElementById('p-sex').value, 
+    village: document.getElementById('p-village').value, 
+    lmp: document.getElementById('p-lmp').value, 
+    edd: document.getElementById('p-edd').value, 
+    gravida: document.getElementById('p-gravida').value, 
+    asiub: document.getElementById('ob-asiub').value, 
+    crl: document.getElementById('ob-crl').value, 
+    uga: document.getElementById('ob-uga').value, 
+    cardiac: document.getElementById('ob-cardiac').value, 
+    obEdd: document.getElementById('ob-edd').value, 
+    remarks: document.getElementById('ob-remarks').value 
+  }; 
+  
+  try { 
+    const response = await fetch(GAS_API_URL, { 
+      method: 'POST', 
+      headers: { 'Content-Type': 'application/json' }, 
+      body: JSON.stringify(payload) 
+    }); 
+    const result = await response.json(); 
+    
+    if (result.status === 'success') { 
+      document.getElementById('ob-report-id').value = result.reportId; 
+      document.getElementById('btn-print').disabled = false; 
+      saveBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Saved!'; 
+      setTimeout(() => { 
+        saveBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Save'; 
+        saveBtn.disabled = false; 
+      }, 2000); 
+      return; 
+    } 
+  } catch (err) { 
+    console.error(err); 
+  } 
+  saveBtn.disabled = false; 
+  saveBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Save'; 
+}
 
-/* CM022 - Verify Data API */
-async function verifyAndSearchReport() { const searchId = document.getElementById('search-id-input').value.trim(); if (!searchId) return; const verifyBtn = document.getElementById('btn-verify'); const originalHtml = verifyBtn.innerHTML; verifyBtn.innerHTML = '<svg class="animate-spin h-3 w-3 mr-1 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>...'; try { const response = await fetch(GAS_API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ action: 'verify', reportId: searchId }) }); const text = await response.text(); const result = JSON.parse(text); if (result.status === 'success' && result.data) { const data = result.data; document.getElementById('ob-report-id').value = data.reportId || ''; document.getElementById('p-name').value = data.patientName || ''; document.getElementById('p-exam-date').value = data.examDate || ''; document.getElementById('p-sex').value = data.sex || 'Female'; document.getElementById('p-village').value = data.village || ''; document.getElementById('p-lmp').value = data.lmp || ''; document.getElementById('p-edd').value = data.edd || ''; document.getElementById('p-gravida').value = data.gravida || ''; document.getElementById('ob-asiub').value = data.asiub || ''; document.getElementById('ob-crl').value = data.crl || ''; document.getElementById('ob-uga').value = data.uga || ''; document.getElementById('ob-cardiac').value = data.cardiac || ''; document.getElementById('ob-edd').value = data.obEdd || ''; document.getElementById('ob-remarks').value = data.remarks || ''; document.getElementById('btn-print').disabled = false; verifyBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Found!'; setTimeout(() => { verifyBtn.innerHTML = originalHtml; }, 2000); return; } } catch (err) { console.error(err); } verifyBtn.innerHTML = originalHtml; }
+/* CM022 - Verify Data API (Cloudflare Worker Integration) */
+async function verifyAndSearchReport() { 
+  const searchId = document.getElementById('search-id-input').value.trim(); 
+  if (!searchId) return; 
+  
+  const verifyBtn = document.getElementById('btn-verify'); 
+  const originalHtml = verifyBtn.innerHTML; 
+  verifyBtn.innerHTML = '<svg class="animate-spin h-3 w-3 mr-1 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>...'; 
+  
+  try { 
+    // Try GET request first, fallback to POST if needed
+    let response = await fetch(`${GAS_API_URL}?reportId=${encodeURIComponent(searchId)}`);
+    let result = await response.json();
+    
+    if (result.status !== 'success' || !result.data) {
+      // Fallback to POST verify
+      response = await fetch(GAS_API_URL, { 
+        method: 'POST', 
+        headers: { 'Content-Type': 'application/json' }, 
+        body: JSON.stringify({ action: 'verify', reportId: searchId }) 
+      }); 
+      result = await response.json();
+    }
+
+    if (result.status === 'success' && result.data) { 
+      const data = result.data; 
+      document.getElementById('ob-report-id').value = data.reportId || ''; 
+      document.getElementById('p-name').value = data.patientName || ''; 
+      document.getElementById('p-exam-date').value = data.examDate || ''; 
+      document.getElementById('p-sex').value = data.sex || 'Female'; 
+      document.getElementById('p-village').value = data.village || ''; 
+      document.getElementById('p-lmp').value = data.lmp || ''; 
+      document.getElementById('p-edd').value = data.edd || ''; 
+      document.getElementById('p-gravida').value = data.gravida || ''; 
+      document.getElementById('ob-asiub').value = data.asiub || ''; 
+      document.getElementById('ob-crl').value = data.crl || ''; 
+      document.getElementById('ob-uga').value = data.uga || ''; 
+      document.getElementById('ob-cardiac').value = data.cardiac || ''; 
+      document.getElementById('ob-edd').value = data.obEdd || ''; 
+      document.getElementById('ob-remarks').value = data.remarks || ''; 
+      document.getElementById('btn-print').disabled = false; 
+      
+      verifyBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Found!'; 
+      setTimeout(() => { 
+        verifyBtn.innerHTML = originalHtml; 
+      }, 2000); 
+      return; 
+    } else {
+      alert('Report ID not found in database.');
+    }
+  } catch (err) { 
+    console.error(err); 
+    alert('Error connecting to database.');
+  } 
+  verifyBtn.innerHTML = originalHtml; 
+}
+
+function handleSearchEnter(event) {
+  if (event.key === 'Enter') {
+    event.preventDefault();
+    verifyAndSearchReport();
+  }
+}
 
 /* CM023 - Print Action */
-function triggerPrint() { window.print(); }
+function triggerPrint() { 
+  window.print(); 
+}
 </script>
 </body>
 </html>
