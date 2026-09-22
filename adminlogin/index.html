@@ -277,8 +277,8 @@ body{font-family:'Roboto Slab','Noto Serif Telugu',serif;}
 /* CM009 - Initialization and Setup */
 const CLOUDFLARE_WORKER_URL="https://doctore-op-login.contact-sanjeevahospital.workers.dev/";let opdPatients=[];let activeDoctorSessionKey="";document.getElementById('selectedDateFilter').value=new Date().toISOString().split('T')[0];initLiveClock();initThemeToggle();initLoginFocusControl();
 
-/* CM010 - Format Date to DB Standard (e.g. 22 Sep 2026) */
-function formatToDBDate(dateString){const d=new Date(dateString);if(isNaN(d.getTime()))return"";const months=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];return d.getDate().toString().padStart(2,'0')+" "+months[d.getMonth()]+" "+d.getFullYear();}
+/* CM010 - Format Date to DB Standard (e.g. 25 Jul 2026) */
+function formatToDBDate(dateString){if(!dateString)return"";const d=new Date(dateString);if(isNaN(d.getTime()))return"";const months=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];return d.getDate().toString().padStart(2,'0')+" "+months[d.getMonth()]+" "+d.getFullYear();}
 
 /* CM011 - Login Input Focus Logic */
 function initLoginFocusControl(){const usernameInput=document.getElementById('loginUsername');const passwordInput=document.getElementById('loginPassword');if(usernameInput&&passwordInput){usernameInput.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();passwordInput.focus();}});}}
