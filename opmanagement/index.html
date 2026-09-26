@@ -21,12 +21,14 @@ header { transition: all 0.3s ease; }
 </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col text-[8.5px] sm:text-[9px]">
+
 <header class="bg-white border-b border-slate-200 z-40 relative px-2 py-1 shadow-sm w-full">
 <div class="w-full flex items-center justify-between">
 <div class="flex items-center gap-2"><img src="https://sanjeeva-hspl.github.io/SM-IMG/02-SMH-HOSPITAL%20LOGO.png" alt="Sanjeeva Hospital" class="w-9 h-9 object-contain drop-shadow-sm"><div class="flex flex-col items-start"><h1 class="text-[12px] sm:text-[13px] font-black tracking-tight text-slate-900 uppercase leading-none whitespace-nowrap">SANJEEVA MULTISPECIALTY HOSPITAL</h1><p class="text-[6.5px] font-extrabold text-slate-600 tracking-[0.16em] uppercase mt-0.5">HEALTH CARE WITH ETHICS</p><div class="bg-slate-100 border border-slate-200 text-slate-800 text-[6.5px] font-black px-1.5 py-0.5 rounded inline-block mt-0.5 uppercase tracking-widest">op system</div></div></div>
 <div class="flex flex-col items-end justify-center border-r-[3px] border-medical-500 pr-2"><span id="liveDateStr" class="text-[7.5px] sm:text-[8px] font-bold tracking-widest uppercase text-slate-500">Loading...</span><span id="liveDayStr" class="text-[8px] sm:text-[9px] font-black text-medical-700 uppercase tracking-widest mt-0.5">Syncing...</span><div class="flex items-center gap-1 mt-0.5"><span id="liveTimeStr" class="text-[9px] sm:text-[10px] font-black font-mono tracking-wider text-slate-900">--:--:-- --</span><span class="relative flex h-1.5 w-1.5"><span class="ping-fast absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span><span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-rose-600"></span></span></div></div>
 </div>
 </header>
+
 <div id="loginOverlay" class="flex-grow flex items-center justify-center p-2 relative z-10 w-full">
 <div class="bg-white rounded-2xl p-4 max-w-[240px] w-full shadow-2xl border border-slate-200 space-y-3">
 <div class="text-center space-y-1"><img src="https://sanjeeva-hspl.github.io/SM-IMG/02-SMH-HOSPITAL%20LOGO.png" alt="SMH" class="w-10 h-10 mx-auto object-contain drop-shadow-md"><h3 class="text-[12px] font-black tracking-tight text-slate-900 uppercase">Authorized Portal</h3><p class="text-slate-500 text-[7px] font-semibold">Hospital login required</p></div>
@@ -38,6 +40,7 @@ header { transition: all 0.3s ease; }
 </form>
 </div>
 </div>
+
 <div id="appContainer" class="hidden flex-grow flex flex-col w-full scale-100 origin-top transition-all duration-500 relative">
 <div class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 py-1.5 px-2 shadow-sm w-full">
 <div class="w-full flex items-center justify-between gap-2 text-[8px] font-bold">
@@ -48,6 +51,7 @@ header { transition: all 0.3s ease; }
 </div>
 </div>
 </div>
+
 <main class="w-full flex-grow py-2 px-2 sm:px-4 md:px-6 space-y-3 max-w-[1400px] mx-auto">
 <div id="toastMessage" class="fixed bottom-6 right-6 z-50 transform translate-y-10 opacity-0 pointer-events-none transition-all duration-300 bg-slate-900/90 text-white px-3 py-2 rounded-xl flex items-center gap-2 shadow-xl border border-slate-700/50 text-[7.5px] font-bold uppercase tracking-wider"><span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span><span id="toastText">Data Refreshed</span></div>
 <section id="register" class="bg-white border border-slate-200 rounded-lg shadow-sm relative z-10 w-full overflow-hidden">
@@ -75,6 +79,7 @@ header { transition: all 0.3s ease; }
 <div class="flex items-end"><button type="submit" id="submit-btn" class="w-full py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-black text-[7.5px] tracking-widest uppercase rounded-md shadow-sm flex items-center justify-center gap-1 transition-all"><svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path></svg>Confirm</button></div></div>
 </form>
 </section>
+
 <section class="bg-white border border-slate-200 rounded-lg shadow-sm relative z-10 w-full overflow-hidden">
 <div class="bg-amber-50/50 px-2 py-1.5 border-b border-slate-200 flex flex-col w-full">
 <div class="flex items-center gap-2"><div class="p-1 bg-amber-100 text-amber-700 rounded-lg"><svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg></div><div><h2 class="text-[8.5px] font-black uppercase tracking-wider text-slate-900">Today Registered OPDs (Waiting Area)</h2><p class="text-[6px] text-amber-600 font-extrabold uppercase tracking-widest mt-0.5">Awaiting consultation fees payment authorization</p></div></div>
@@ -88,6 +93,7 @@ header { transition: all 0.3s ease; }
 </table>
 </div>
 </section>
+
 <div id="shiftsContainer" class="w-full flex flex-col gap-3 relative z-10">
 <section id="morningShiftSection" class="bg-white border border-slate-200 rounded-lg shadow-sm flex flex-col w-full overflow-hidden">
 <div class="bg-emerald-50/50 px-2 py-1.5 border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between w-full">
@@ -120,6 +126,7 @@ header { transition: all 0.3s ease; }
 </div>
 </main>
 </div>
+
 <div id="vitalsModal" class="fixed inset-0 z-[60] hidden bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
 <div class="bg-white rounded-xl shadow-xl w-full max-w-[260px] border border-slate-200 overflow-hidden">
 <div class="bg-slate-50 px-3 py-2 border-b border-slate-200 flex justify-between items-center"><h3 class="text-[8.5px] font-black uppercase tracking-wider text-slate-800">Enter Patient Vitals</h3><button onclick="closeVitalsModal()" class="text-slate-400 hover:text-slate-600"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button></div>
@@ -135,33 +142,436 @@ header { transition: all 0.3s ease; }
 </div>
 <footer class="bg-white text-slate-500 border-t border-slate-200 py-2 w-full text-center text-[6.5px] font-black tracking-widest uppercase transition-all duration-300 relative z-10 shadow-sm">© 2026 ALL RIGHTS ARE RESERVED UNDER SANJEEVA MULTISPECIALTY HOSPITAL | WWW.SANJEEVAHOSPITAL.IN</footer>
 <iframe id="printFrame" style="position: absolute; width: 0; height: 0; border: 0; opacity: 0; visibility: hidden;" src="about:blank"></iframe>
+
 <script>
-const GOOGLE_APPS_SCRIPT_URL="https://op-system.contact-sanjeevahospital.workers.dev/"; let opdPatients=[]; let pendingDeletePid=null;
-document.getElementById('date_880055').value=new Date().toISOString().split('T')[0]; initLiveClock(); initLoginFocusControl();
-function initLoginFocusControl() { const u=document.getElementById('loginUsername'); const p=document.getElementById('loginPassword'); if(u&&p) { u.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();p.focus();}}); } }
-function toggleSyncState(isActive) { document.getElementById('syncSpinner').style.display=isActive?'inline-block':'none'; document.getElementById('syncIcon').style.display=isActive?'none':'inline-block'; }
-function showToastNotification(msg) { const t=document.getElementById('toastMessage'); document.getElementById('toastText').innerText=msg; t.classList.remove('translate-y-10','opacity-0','pointer-events-none'); setTimeout(()=>t.classList.add('translate-y-10','opacity-0','pointer-events-none'),3000); }
-function selectGender(g) { document.getElementById('gender_880055').value=g; const mb=document.getElementById('genderBtn_Male'); const fb=document.getElementById('genderBtn_Female'); const actClass="flex-1 py-1.5 rounded-md border text-[8px] font-bold transition-all duration-200 bg-blue-600 border-blue-600 text-white"; const inactClass="flex-1 py-1.5 rounded-md border text-[8px] font-bold transition-all duration-200 bg-slate-50 border-slate-200 text-slate-700"; if(g==='Male'){mb.className=actClass;fb.className=inactClass;}else if(g==='Female'){fb.className=actClass;mb.className=inactClass;} }
-function openVitalsModal(pid) { document.getElementById('vitalsPid').value=pid; document.getElementById('vitalTemp').value=''; document.getElementById('vitalWeight').value=''; document.getElementById('vitalSpo2').value=''; document.getElementById('vitalPr').value=''; document.getElementById('vitalBpSys').value=''; document.getElementById('vitalBpDia').value=''; document.getElementById('vitalsModal').classList.remove('hidden'); }
-function closeVitalsModal() { document.getElementById('vitalsModal').classList.add('hidden'); }
-function resetRegistrationForm() { document.getElementById('op-registration-form').reset(); document.getElementById('existingPid_880055').value=""; document.getElementById('date_880055').value=new Date().toISOString().split('T')[0]; document.getElementById('gender_880055').value=""; const inactClass="flex-1 py-1.5 rounded-md border text-[8px] font-bold transition-all duration-200 bg-slate-50 border-slate-200 text-slate-700"; document.getElementById('genderBtn_Male').className=inactClass; document.getElementById('genderBtn_Female').className=inactClass; showToastNotification("Form reset. Ready for new registration."); }
-function initLiveClock() { const dE=document.getElementById('liveDateStr'); const dyE=document.getElementById('liveDayStr'); const tE=document.getElementById('liveTimeStr'); function update(){const n=new Date();dE.innerText=n.toLocaleString('en-US',{year:'numeric',month:'short',day:'numeric'});dyE.innerText=n.toLocaleString('en-US',{weekday:'long'});tE.innerText=n.toLocaleString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true}).replace("am","AM").replace("pm","PM");evaluateShiftIndicatorsAndSorting();} update();setInterval(update,1000); }
-function normalizeTimeFormat(ts) { if(!ts) return "12:00 AM"; let c = ts.toString().trim().toUpperCase(); if(c.includes('T') && (c.endsWith('Z')||c.includes('+')||c.includes('-'))) { try { const d=new Date(c); if(!isNaN(d.getTime())) { let h=d.getHours(); let m=d.getMinutes(); let a=h>=12?'PM':'AM'; h=h%12; h=h?h:12; return `${h<10?'0'+h:h}:${m<10?'0'+m:m} ${a}`; } } catch(e){} } const m = c.match(/^(\d{1,2})[:\s](\d{2})\s*(AM|PM)$/); if(m) { let h=m[1]; return `${h.length===1?'0'+h:h}:${m[2]} ${m[3]}`; } return c.replace(/\s+/g, ' ').replace(/(\d{1,2})\s(\d{2})\s(AM|PM)/, '$1:$2 $3'); }
-function isTimeEvening(ts) { if(!ts) return false; let nTs = normalizeTimeFormat(ts); if(nTs.includes('PM')) { const p = nTs.split(':'); const h = parseInt(p[0], 10); if(h === 12 || h < 3) return false; return true; } return false; }
-function evaluateShiftIndicatorsAndSorting() { const h=new Date().getHours(); const mb=document.getElementById('morningShiftActiveBadge'); const eb=document.getElementById('eveningShiftActiveBadge'); const ms=document.getElementById('morningShiftSection'); const es=document.getElementById('eveningShiftSection'); const pc=document.getElementById('shiftsContainer'); if(h<15){mb.classList.remove('hidden');eb.classList.add('hidden');if(pc&&es&&ms&&es.nextSibling!==ms)pc.insertBefore(ms,es);}else{mb.classList.add('hidden');eb.classList.remove('hidden');if(pc&&ms&&es&&ms.nextSibling!==es)pc.insertBefore(es,ms);} }
-async function handleStaffLogin(e) { e.preventDefault(); const btn=document.getElementById('loginSubmitBtn'); const u=document.getElementById('loginUsername').value.trim(); const p=document.getElementById('loginPassword').value.trim(); const err=document.getElementById('loginErrorMessage'); btn.disabled=true; btn.innerHTML=`<svg class="animate-spin h-3 w-3 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> Authenticating...`; try { const res=await fetch(`${GOOGLE_APPS_SCRIPT_URL}?action=login&username=${encodeURIComponent(u)}&password=${encodeURIComponent(p)}`,{method:'GET',mode:'cors',redirect:'follow'}); const data=await res.json(); if(data.result==='success'){btn.innerHTML=`✓ Authorized!`;err.classList.add('hidden');setTimeout(()=>{document.getElementById('loginOverlay').classList.add('hidden');document.getElementById('appContainer').classList.remove('hidden');document.getElementById('activeOperatorBadge').innerText=`${data.username} (Authorized staff)`;fetchTodayData();},800);}else{err.innerText=data.message;err.classList.remove('hidden');btn.innerHTML=`<span>Authorize Terminal</span>`;btn.disabled=false;} } catch(errEx){err.innerText="Authentication Connection Error.";err.classList.remove('hidden');btn.innerHTML=`<span>Authorize Terminal</span>`;btn.disabled=false;} }
-function handleLogout() { document.getElementById('loginForm').reset(); document.getElementById('loginOverlay').classList.remove('hidden'); document.getElementById('appContainer').classList.add('hidden'); }
-async function verifyPatientSearch() { const pidVal=document.getElementById('verifyPidInput').value.trim(); const mobVal=document.getElementById('verifyMobileInput').value.trim(); const qVal=pidVal||mobVal; if(!qVal){showToastNotification('Please enter Patient ID or Mobile Number to verify.');return;} const btn=document.getElementById('verifySearchBtn'); btn.disabled=true; btn.innerHTML=`<svg class="animate-spin h-2.5 w-2.5 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> Searching...`; showToastNotification(`Searching for records: ${qVal}...`); try { const res=await fetch(`${GOOGLE_APPS_SCRIPT_URL}?action=verify&query=${encodeURIComponent(qVal)}`); const data=await res.json(); if(data.result==='success'){if(data.found){document.getElementById('existingPid_880055').value=data.patient.pid;document.getElementById('fullName_880055').value=data.patient.name;document.getElementById('age_880055').value=data.patient.age;document.getElementById('village_880055').value=data.patient.village;document.getElementById('phone_880055').value=data.patient.phone;selectGender(data.patient.gender);showToastNotification(`Patient found! Details autofilled. ID: ${data.patient.pid}`);}else{document.getElementById('existingPid_880055').value="";if(data.phone){document.getElementById('phone_880055').value=data.phone;showToastNotification('No previous record found. Mobile number filled.');}else{showToastNotification('No existing records found. Proceed as new.');}}}else{showToastNotification("Search error: "+data.message);} } catch(err){showToastNotification("Database search communication error.");} finally{btn.disabled=false;btn.innerHTML=`Verify`;} }
-async function handlePatientRegistration(e) { e.preventDefault(); const btn=document.getElementById('submit-btn'); const gVal=document.getElementById('gender_880055').value; if(!gVal){showToastNotification("Please select a gender to complete registration.");return;} btn.disabled=true; btn.innerHTML=`<svg class="animate-spin h-2.5 w-2.5 mr-1 text-white inline-block" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> Confirming...`; const pLoad={action:'register',existingPid:document.getElementById('existingPid_880055').value.trim(),fullName_880055:document.getElementById('fullName_880055').value.trim(),phone_880055:document.getElementById('phone_880055').value.trim(),age_880055:document.getElementById('age_880055').value.trim(),gender_880055:gVal,village_880055:document.getElementById('village_880055').value.trim(),consultant_880055:document.getElementById('consultant_880055').value,date_880055:document.getElementById('date_880055').value,amount:""}; try { const res=await fetch(GOOGLE_APPS_SCRIPT_URL,{method:'POST',mode:'cors',redirect:'follow',headers:{'Content-Type':'application/json'},body:JSON.stringify(pLoad)}); const data=await res.json(); if(data.result==='success'){resetRegistrationForm();showToastNotification("Registration successful");fetchTodayData();}else{showToastNotification("Registration failed: "+data.message);} } catch(err){showToastNotification("Database communication error.");} finally{btn.disabled=false;btn.innerHTML=`<svg class="w-2.5 h-2.5 drop-shadow-sm" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg>Confirm`;} }
-async function fetchTodayData() { toggleSyncState(true); try{const res=await fetch(`${GOOGLE_APPS_SCRIPT_URL}?action=fetchToday&t=${Date.now()}`,{method:'GET',mode:'cors',redirect:'follow'});const data=await res.json();if(data.result==='success'){opdPatients=data.records;renderDataTables();}else{showToastNotification("Database Sync Error: "+data.message);}}catch(err){}finally{toggleSyncState(false);} }
-async function verifyPaidAmount(pid) { const amtInp=document.getElementById(`amt_${pid}`); const modeSel=document.getElementById(`paymode_${pid}`); const btn=document.getElementById(`btn_verify_${pid}`); const amtVal=amtInp.value.trim(); const payModeVal=modeSel.value; if(!amtVal||isNaN(amtVal)||parseFloat(amtVal)<=0){showToastNotification("Please specify a valid numeric fee.");return;} btn.disabled=true; btn.innerHTML=`<svg class="animate-spin h-3 w-3 text-white mx-auto" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>`; try { const pLoad={action:'updateAmount',pid:pid,amount:amtVal,payMode:payModeVal}; const res=await fetch(GOOGLE_APPS_SCRIPT_URL,{method:'POST',mode:'cors',redirect:'follow',headers:{'Content-Type':'application/json'},body:JSON.stringify(pLoad)}); const data=await res.json(); if(data.result==='success'){btn.className="px-2 py-1 rounded-md bg-emerald-600 text-white font-bold text-[6.5px] uppercase shadow-sm";btn.innerHTML="✓";const row=document.getElementById(`row_waiting_${pid}`);if(row){row.style.transition="all 0.4s ease";row.style.opacity="0";row.style.transform="translateX(50px)";setTimeout(()=>fetchTodayData(),400);}else{fetchTodayData();}}else{showToastNotification("Verification failed: "+data.message);btn.disabled=false;btn.innerHTML="Verify";} } catch(err){showToastNotification("Verification communication failed.");btn.disabled=false;btn.innerHTML="Verify";} }
-function confirmDeleteOPDRecord(pid) { pendingDeletePid=pid; document.getElementById('deleteModalPid').innerText=pid; document.getElementById('deleteModal').classList.remove('hidden'); }
-function closeDeleteModal() { pendingDeletePid=null; document.getElementById('deleteModal').classList.add('hidden'); }
-function executeDeleteRecord() { if(!pendingDeletePid) return; const pid=pendingDeletePid; closeDeleteModal(); fetch(GOOGLE_APPS_SCRIPT_URL,{method:'POST',mode:'cors',redirect:'follow',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'delete',pid:pid})}).then(r=>r.json()).then(data=>{if(data.result==='success'){showToastNotification("Record removed");fetchTodayData();}else showToastNotification("Purge rejected: "+data.message);}).catch(()=>showToastNotification("Failed to communicate purge request.")); }
-function renderDataTables() { const aB=document.getElementById('allOpdTableBody'); const mB=document.getElementById('morningOpdTableBody'); const eB=document.getElementById('eveningOpdTableBody'); aB.innerHTML=''; mB.innerHTML=''; eB.innerHTML=''; let uSNo=1,mSNo=1,eSNo=1; let mSt={total:0,online:0,offline:0,amount:0,cashAmt:0}; let eSt={total:0,online:0,offline:0,amount:0,cashAmt:0}; opdPatients.forEach(p=>{const tStr=normalizeTimeFormat(p.time);const isEve=isTimeEvening(tStr);let payMod=p.payMode||p.paymentMode||'Cash';let amt=parseFloat(p.paidAmount||0);let isOnl=(payMod!=='Cash'&&payMod!=='Others');if(!p.paidAmount){const aR=document.createElement('tr');aR.id=`row_waiting_${p.pid}`;aR.className="hover:bg-slate-100/50 border-b border-slate-100 transition-all duration-300";const amtSec=`<div class="flex items-center gap-1.5 justify-center"><input type="number" id="amt_${p.pid}" placeholder="INR" class="w-12 px-1 py-1 text-[7.5px] text-center border rounded-md border-slate-200 bg-white font-bold text-slate-900 focus:outline-none focus:ring-1 focus:ring-amber-500"><select id="paymode_${p.pid}" class="w-14 px-1 py-1 text-[7.5px] border rounded-md border-slate-200 bg-white font-bold text-slate-900 focus:outline-none focus:ring-1 focus:ring-amber-500"><option value="Cash">Cash</option><option value="PhonePe">PhonePe</option><option value="Google Pay">GPay</option><option value="Paytm">Paytm</option><option value="Others">Others</option></select><button id="btn_verify_${p.pid}" onclick="verifyPaidAmount('${p.pid}')" class="px-2 py-1 rounded-md bg-teal-600 hover:bg-teal-500 text-white font-black text-[6.5px] uppercase tracking-wider shadow-sm transition-all">Verify</button></div>`;const prnWait=`<button onclick="openVitalsModal('${p.pid}')" class="px-2 py-1 rounded-md bg-slate-700 text-white font-bold text-[6.5px] uppercase tracking-wider flex items-center gap-1 hover:bg-slate-600 transition-all shadow-sm mx-auto"><svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>OP Slip</button>`;aR.innerHTML=`<td class="px-2 py-1.5 font-bold">${uSNo++}</td><td class="px-2 py-1.5 text-slate-500 whitespace-nowrap">${p.date}</td><td class="px-2 py-1.5 text-slate-500 font-mono whitespace-nowrap">${tStr}</td><td class="px-2 py-1.5 text-blue-600 font-black">${p.pid}</td><td class="px-2 py-1.5 text-slate-900 font-bold">${p.consultant}</td><td class="px-2 py-1.5 font-mono text-indigo-600 font-bold">${p.token}</td><td class="px-2 py-1.5 font-bold text-slate-900">${p.name}</td><td class="px-2 py-1.5">${p.age}</td><td class="px-2 py-1.5">${p.gender}</td><td class="px-2 py-1.5 text-slate-500">${p.village}</td><td class="px-2 py-1.5 text-center">${amtSec}</td><td class="px-2 py-1.5 text-center">${prnWait}</td><td class="px-2 py-1.5 text-center"><button onclick="confirmDeleteOPDRecord('${p.pid}')" class="p-1 rounded-md text-rose-600 hover:bg-rose-50 transition-colors"><svg class="w-3 h-3 mx-auto" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button></td><td class="px-2 py-1.5 font-mono">${p.phone}</td>`;aB.appendChild(aR);}else{if(!isEve){mSt.total++;mSt.amount+=amt;if(isOnl)mSt.online++;else{mSt.offline++;mSt.cashAmt+=amt;}}else{eSt.total++;eSt.amount+=amt;if(isOnl)eSt.online++;else{eSt.offline++;eSt.cashAmt+=amt;}}const sR=document.createElement('tr');sR.className="hover:bg-slate-100/50 border-b border-slate-100";const prn=`<button onclick="openVitalsModal('${p.pid}')" class="px-2 py-1 rounded-md bg-slate-700 text-white font-bold text-[6.5px] uppercase tracking-wider flex items-center gap-1 hover:bg-slate-600 transition-all shadow-sm mx-auto"><svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>OP Slip</button>`;const rec=`<button onclick="printPaymentReceipt('${p.pid}')" class="px-2 py-1 rounded-md bg-teal-600 text-white font-bold text-[6.5px] uppercase tracking-wider flex items-center gap-1 hover:bg-teal-500 transition-all shadow-sm mx-auto"><svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 8h6m-5 0a3 3 0 110 6H9l3 3m-3-6h6m6 1a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Receipt</button>`;const cR=`<td class="px-2 py-1.5 text-slate-500 whitespace-nowrap">${p.date}</td><td class="px-2 py-1.5 text-slate-500 font-mono whitespace-nowrap">${tStr}</td><td class="px-2 py-1.5 text-blue-600 font-black">${p.pid}</td><td class="px-2 py-1.5 text-slate-900 font-bold">${p.consultant}</td><td class="px-2 py-1.5 font-mono text-indigo-600 font-bold">${p.token}</td><td class="px-2 py-1.5 font-bold text-slate-900">${p.name}</td><td class="px-2 py-1.5">${p.age}</td><td class="px-2 py-1.5">${p.gender}</td><td class="px-2 py-1.5 text-slate-500">${p.village}</td><td class="px-2 py-1.5 font-bold text-emerald-600">INR ${p.paidAmount}</td><td class="px-2 py-1.5 font-bold text-slate-600">${payMod}</td><td class="px-2 py-1.5 text-center">${prn}</td><td class="px-2 py-1.5 text-center">${rec}</td><td class="px-2 py-1.5 font-mono">${p.phone}</td>`;if(!isEve){sR.innerHTML=`<td class="px-2 py-1.5 font-bold">${mSNo++}</td>`+cR;mB.appendChild(sR);}else{sR.innerHTML=`<td class="px-2 py-1.5 font-bold">${eSNo++}</td>`+cR;eB.appendChild(sR);}}}); if(uSNo===1)aB.innerHTML=`<tr><td colspan="14" class="px-5 py-6 text-center text-slate-400 font-bold uppercase tracking-widest">No active unpaid registrations</td></tr>`; if(mSNo===1)mB.innerHTML=`<tr><td colspan="15" class="px-5 py-6 text-center text-slate-400 font-bold uppercase tracking-widest">No verified morning sessions</td></tr>`; if(eSNo===1)eB.innerHTML=`<tr><td colspan="15" class="px-5 py-6 text-center text-slate-400 font-bold uppercase tracking-widest">No verified evening sessions</td></tr>`; document.getElementById('stat-morn-total').innerText=mSt.total;document.getElementById('stat-morn-online').innerText=mSt.online;document.getElementById('stat-morn-offline').innerText=mSt.offline;document.getElementById('stat-morn-cash-amt').innerText=`₹${mSt.cashAmt}`;document.getElementById('stat-morn-amount').innerText=`₹${mSt.amount}`; document.getElementById('stat-eve-total').innerText=eSt.total;document.getElementById('stat-eve-online').innerText=eSt.online;document.getElementById('stat-eve-offline').innerText=eSt.offline;document.getElementById('stat-eve-cash-amt').innerText=`₹${eSt.cashAmt}`;document.getElementById('stat-eve-amount').innerText=`₹${eSt.amount}`; }
-function submitVitalsAndPrint() { const pid=document.getElementById('vitalsPid').value; const vitals={temp:document.getElementById('vitalTemp').value.trim(),weight:document.getElementById('vitalWeight').value.trim(),spo2:document.getElementById('vitalSpo2').value.trim(),pr:document.getElementById('vitalPr').value.trim(),bpSys:document.getElementById('vitalBpSys').value.trim(),bpDia:document.getElementById('vitalBpDia').value.trim()}; closeVitalsModal(); printOPTicket(pid,vitals); }
-function printOPTicket(pid,vitals={}) { const p=opdPatients.find(x=>x.pid===pid); if(!p)return; const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']; const pDate=new Date(p.date); const wDay=isNaN(pDate.getTime())?'':days[pDate.getDay()]; let dName="డా|| ఆర్. ఆంజనేయులు ",dDeg="M.B.B.S., M.D. (Paed)",dSpec="పిల్లల మరియు పురిటి పిల్లల వైద్య నిపుణులు",dReg="Regd No. 54702"; if(p.consultant.includes("Sujata")){dName="డా|| ఇ. సుజాత ఆంజనేయులు";dDeg="M.B.B.S., M.S. (OBG)";dSpec="స్త్రీ మరియు ప్రసూతి వ్యాధి నిపుణులు";dReg="Regd No. 62254";}else if(p.consultant.includes("Chandrasekhar")){dName="డా|| ఎ. చంద్రశేఖర్ రెడ్డి";dDeg="M.S. (ENT)";dSpec="చెవి, ముక్కు, గొంతు వైద్యులు";dReg="Cell: 7013738036";}else if(p.consultant.includes("Chanti Babu")){dName="డా|| చంటి బాబు";dDeg="M.S. (Ortho)";dSpec="కీళ్ల నొప్పులు మరియు ఎముకల వైద్య నిపుణులు";dReg="Regd No. 71832";} const nTok=p.token.replace(/\D/g,''); const vT=vitals.temp?`<strong style="font-size:12px; color:#000;"> ${vitals.temp} </strong>`:` __________ `; const vW=vitals.weight?`<strong style="font-size:12px; color:#000;"> ${vitals.weight} </strong>`:`__________`; const vS=vitals.spo2?`<strong style="font-size:12px; color:#000;"> ${vitals.spo2} </strong>`:`__________`; const vP=vitals.pr?`<strong style="font-size:12px; color:#000;"> ${vitals.pr} </strong>`:`__________`; const vBS=vitals.bpSys?`<strong style="font-size:12px; color:#000;"> ${vitals.bpSys} </strong>`:`____`; const vBD=vitals.bpDia?`<strong style="font-size:12px; color:#000;"> ${vitals.bpDia} </strong>`:`____`; const html=`<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>OP Ticket [${pid}]</title><link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Telugu:wght@400;700;800&family=Roboto+Slab:wght@400;700;900&display=swap" rel="stylesheet"><style>@page { size: A4 portrait; margin: 0mm; } * { box-sizing: border-box; } body { font-family: 'Roboto Slab', 'Noto Serif Telugu', serif; margin: 0; padding: 0; background-color: #ffffff; -webkit-print-color-adjust: exact; print-color-adjust: exact; } .print-wrapper { width: 210mm; height: 297mm; margin: 0 auto; padding: 8mm; background-color: #ffffff; } .a4-container { width: 100%; height: 100%; padding: 8mm; background-color: #ffffff; border: 1.5px solid #000000; border-radius: 0; display: flex; flex-direction: column; } .header-brand { display: grid; grid-template-columns: 110px 1fr 90px; align-items: center; gap: 15px; padding-bottom: 6px; position: relative; } .logo-container { display: flex; align-items: center; justify-content: center; width: 110px; height: 110px; flex-shrink: 0; } .logo { width: 100%; height: 100%; object-fit: contain; } .brand-text { flex-grow: 1; padding-left: 15px; text-align: center; } .hospital-english-name { font-size: 21px; font-weight: 900; color: #1e3a8a; margin: 0; letter-spacing: -0.2px; text-transform: uppercase; white-space: nowrap; } .hospital-tagline { font-size: 10px; font-weight: 800; color: #0891b2; margin: 2px 0; letter-spacing: 1px; text-transform: uppercase; } .hospital-telugu-name { font-size: 18px; font-weight: 800; color: #b91c1c; margin: 2px 0 4px 0; } .hospital-address { font-size: 9px; color: #475569; margin: 0; font-weight: 700; text-align: center; } .header-divider { border: 0; height: 1.5px; background: #000000; margin: 0 0 10px 0; } .demographics-area { display: grid; grid-template-columns: 80px 1fr; gap: 15px; border-bottom: 1.5px dashed #000000; padding-bottom: 10px; margin-bottom: 10px; } .token-raw-column { display: flex; align-items: center; justify-content: center; border-right: 1px solid #e2e8f0; padding-right: 12px; } .token-raw-value { font-size: 64px; font-weight: 900; color: #000000; line-height: 1; margin: 0; } .patient-details-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 8px; font-size: 11px; } .line-field { border-bottom: none; padding-bottom: 1px; font-weight: 700; color: #0f172a; } .label-dim { color: #64748b; font-weight: 700; text-transform: uppercase; font-size: 9px; margin-right: 6px; } .doctor-opposite-row { display: grid; grid-template-columns: 1.5fr 1fr; gap: 15px; background-color: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 8px; margin-bottom: 10px; } .doctor-info-left { display: flex; flex-direction: column; justify-content: center; } .doctor-name-main { font-size: 14px; font-weight: 800; color: #b91c1c; } .doctor-sub-details { font-size:10px; font-weight:700; color:#334155; margin-top:2px; padding-left:25px; } .doctor-reg { font-size: 9px; font-weight: 700; color: #1e3a8a; } .patient-metadata-right { display: grid; grid-template-columns: 1fr; gap: 3px; font-size: 10px; font-weight: 700; color: #334155; align-content: center; border-left: 1px solid #e2e8f0; padding-left: 12px; } .clinical-workspace { display: grid; grid-template-columns: 1fr 180px; gap: 15px; flex-grow: 1; border-top: 1.5px solid #000000; padding-top: 10px; } .clinical-left-rx { position: relative; display: flex; flex-direction: column; } .clinical-right-vitals { border-left: 1px dashed #cbd5e1; padding-left: 12px; display: flex; flex-direction: column; } .rx-symbol { font-size:32px; font-weight:900; color:#000000; line-height:1; margin-top:100px; margin-bottom:8px; margin-left:140px; text-align:left; } .blank-prescription-box { flex-grow: 1; min-height: 260px; border: 1px dashed #e2e8f0; border-radius: 6px; padding: 8px; font-size: 9px; color: #cbd5e1; font-weight: bold; } .vital-line { margin-bottom: 10px; font-weight: 700; font-size: 10px; color: #334155; border-bottom: 1px dashed #cbd5e1; padding-bottom: 4px; display: flex; justify-content: space-between; } .prescription-footer { margin-top: auto; } .sig-block { text-align: right; font-weight: 800; font-size: 11px; margin-bottom: 8px; color: #0f172a; } .footer-notes-divider { border: 0; height: 2px; background: #000000; margin: 6px 0; } .notes-container-telugu { display: grid; grid-template-columns: 1fr; gap: 3px; font-size: 9px; font-weight: 800; color: #000000; line-height: 1.3; margin-bottom: 6px; } .note-item { position: relative; padding-left: 10px; } .note-item::before { content: "•"; position: absolute; left: 0; color: #b91c1c; } .branding-credits { text-align: center; font-size: 8px; color: #000000; margin-top: 4px; letter-spacing: 0.5px; font-weight: 900; text-transform: uppercase; } @media print { body { background:#ffffff; } .print-wrapper { width:210mm !important; height:297mm !important; padding:8mm !important; margin:0 auto !important; } .a4-container { width:100% !important; height:100% !important; border:1.5px solid #000000 !important; border-radius:0 !important; padding:8mm !important; } }</style></head><body><div class="print-wrapper"><div class="a4-container"><div class="header-brand"><div class="logo-container"><img src="https://sanjeeva-hspl.github.io/SM-IMG/02-SMH-HOSPITAL%20LOGO.png" class="logo" alt="SMH Logo"></div><div class="brand-text"><h1 class="hospital-english-name">Sanjeeva Multispecialty Hospital</h1><div class="hospital-tagline">HEALTH CARE WITH ETHICS</div><h2 class="hospital-telugu-name">శ్రీ సంజీవ మల్టీ స్పెషాలిటీ హాస్పిటల్</h2><p class="hospital-address">D.No: 1-7-26, PEDDANNA STREET, ALLAGADDA, NANDYALA DIST.</p></div><div style="display:flex; flex-direction:column; align-items:center; justify-content:center; flex-shrink:0;"><img src="https://sanjeeva-hspl.github.io/SM-IMG/OPRegister.png" style="width:65px; height:auto; margin-bottom:4px;" alt="Scan"><div style="font-size:14px; font-weight:900; color:#1e3a8a;">9100349825</div><div style="font-size:8px; font-weight:800; color:#475569;">WWW.SANJEEVAHOSPITAL.IN</div></div></div><hr class="header-divider"><div class="demographics-area"><div class="token-raw-column"><div class="token-raw-value">${nTok}</div></div><div class="patient-details-grid"><div class="line-field" style="grid-column: span 2;"><span class="label-dim">Name:</span><span style="font-size: 13px;">${p.name}</span></div><div class="line-field"><span class="label-dim">Age / Gender:</span><span>${p.age} / ${p.gender}</span></div><div class="line-field" style="grid-column: span 2;"><span class="label-dim">Address:</span><span>${p.village}</span></div></div></div><div class="doctor-opposite-row"><div class="doctor-info-left"><div class="doctor-name-main">${dName}</div><div class="doctor-sub-details">${dDeg}</div><div class="doctor-reg">${dSpec} | ${dReg}</div></div><div class="patient-metadata-right"><div><span class="label-dim">PID:</span>${p.pid}</div><div><span class="label-dim">Date:</span>${p.date}</div><div><span class="label-dim">Time:</span>${normalizeTimeFormat(p.time)}</div><div><span class="label-dim">Day:</span>${wDay}</div></div></div><div class="clinical-workspace"><div class="clinical-left-rx"><div class="rx-symbol">Rx</div></div><div class="clinical-right-vitals"><div class="vital-line"><span>Temp:</span><span>${vT} °F</span></div><div class="vital-line"><span>Weight:</span><span>${vW} kg</span></div><div class="vital-line"><span>SpO2:</span><span>${vS} %</span></div><div class="vital-line"><span>PR:</span><span>${vP} bpm</span></div><div class="vital-line"><span>BP:</span><span>${vBS} / ${vBD} mmHg</span></div></div></div><div class="prescription-footer"><div class="sig-block">Doctor Signature</div><hr class="footer-notes-divider"><div class="notes-container-telugu"><div class="note-item">Link FPA, Volo FPA, Universal Sompo, FHPL, Bajaj, Heritage, Navi TPA మొదలగు ఇన్సూరెన్స్ కార్డు కలవారికి క్యాష్‌లెస్ ట్రీట్‌మెంట్ సదుపాయం కలదు.</div><div class="note-item">అల్ట్రాసౌండ్ స్కానింగ్ (ULTRA SOUND SCAN) సౌకర్యం కలదు.</div><div class="note-item">అన్నీ రకాల లాప్రోస్కోపిక్ ఆపరేషన్స్ చేయబడును.</div><div class="note-item">అన్ని రకాల ఆపరేషన్లు మరియు వ్యాక్సిన్లు ప్రతిరోజు వేయబడును.</div><div class="note-item">పై మందులు 3 రోజులు దాటితే వెనక్కి తీసుకోబడవు.</div></div><div class="branding-credits">© 2026 SANJEEVA MULTISPECIALTY HOSPITAL • ALLAGADDA • MANAGED BY SRI VEDA ORG</div></div></div></div></body></html>`; const f=document.getElementById('printFrame'); const d=f.contentWindow.document; d.open(); d.write(html); d.close(); setTimeout(()=>{f.contentWindow.focus();f.contentWindow.print();},350); }
-function printPaymentReceipt(pid) { showToastNotification('Receipt Module Configuration Pending.'); }
+const GOOGLE_APPS_SCRIPT_URL="https://op-system.contact-sanjeevahospital.workers.dev/"; 
+let opdPatients=[]; 
+let pendingDeletePid=null;
+document.getElementById('date_880055').value=new Date().toISOString().split('T')[0]; 
+initLiveClock(); 
+initLoginFocusControl();
+
+function initLoginFocusControl() { 
+    const u=document.getElementById('loginUsername'); 
+    const p=document.getElementById('loginPassword'); 
+    if(u&&p) { 
+        u.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();p.focus();}}); 
+    } 
+}
+function toggleSyncState(isActive) { 
+    document.getElementById('syncSpinner').style.display=isActive?'inline-block':'none'; 
+    document.getElementById('syncIcon').style.display=isActive?'none':'inline-block'; 
+}
+function showToastNotification(msg) { 
+    const t=document.getElementById('toastMessage'); 
+    document.getElementById('toastText').innerText=msg; 
+    t.classList.remove('translate-y-10','opacity-0','pointer-events-none'); 
+    setTimeout(()=>t.classList.add('translate-y-10','opacity-0','pointer-events-none'),3000); 
+}
+function selectGender(g) { 
+    document.getElementById('gender_880055').value=g; 
+    const mb=document.getElementById('genderBtn_Male'); 
+    const fb=document.getElementById('genderBtn_Female'); 
+    const actClass="flex-1 py-1.5 rounded-md border text-[8px] font-bold transition-all duration-200 bg-blue-600 border-blue-600 text-white"; 
+    const inactClass="flex-1 py-1.5 rounded-md border text-[8px] font-bold transition-all duration-200 bg-slate-50 border-slate-200 text-slate-700"; 
+    if(g==='Male'){mb.className=actClass;fb.className=inactClass;}else if(g==='Female'){fb.className=actClass;mb.className=inactClass;} 
+}
+function openVitalsModal(pid) { 
+    document.getElementById('vitalsPid').value=pid; 
+    document.getElementById('vitalTemp').value=''; 
+    document.getElementById('vitalWeight').value=''; 
+    document.getElementById('vitalSpo2').value=''; 
+    document.getElementById('vitalPr').value=''; 
+    document.getElementById('vitalBpSys').value=''; 
+    document.getElementById('vitalBpDia').value=''; 
+    document.getElementById('vitalsModal').classList.remove('hidden'); 
+}
+function closeVitalsModal() { 
+    document.getElementById('vitalsModal').classList.add('hidden'); 
+}
+function resetRegistrationForm() { 
+    document.getElementById('op-registration-form').reset(); 
+    document.getElementById('existingPid_880055').value=""; 
+    document.getElementById('date_880055').value=new Date().toISOString().split('T')[0]; 
+    document.getElementById('gender_880055').value=""; 
+    const inactClass="flex-1 py-1.5 rounded-md border text-[8px] font-bold transition-all duration-200 bg-slate-50 border-slate-200 text-slate-700"; 
+    document.getElementById('genderBtn_Male').className=inactClass; 
+    document.getElementById('genderBtn_Female').className=inactClass; 
+    showToastNotification("Form reset. Ready for new registration."); 
+}
+function initLiveClock() { 
+    const dE=document.getElementById('liveDateStr'); 
+    const dyE=document.getElementById('liveDayStr'); 
+    const tE=document.getElementById('liveTimeStr'); 
+    function update(){
+        const n=new Date();
+        dE.innerText=n.toLocaleString('en-US',{year:'numeric',month:'short',day:'numeric'});
+        dyE.innerText=n.toLocaleString('en-US',{weekday:'long'});
+        tE.innerText=n.toLocaleString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true}).replace("am","AM").replace("pm","PM");
+        evaluateShiftIndicatorsAndSorting();
+    } 
+    update();
+    setInterval(update,1000); 
+}
+function normalizeTimeFormat(ts) { 
+    if(!ts) return "12:00 AM"; 
+    let c = ts.toString().trim().toUpperCase(); 
+    if(c.includes('T') && (c.endsWith('Z')||c.includes('+')||c.includes('-'))) { 
+        try { 
+            const d=new Date(c); 
+            if(!isNaN(d.getTime())) { 
+                let h=d.getHours(); let m=d.getMinutes(); let a=h>=12?'PM':'AM'; h=h%12; h=h?h:12; return `${h<10?'0'+h:h}:${m<10?'0'+m:m} ${a}`; 
+            } 
+        } catch(e){} 
+    } 
+    const m = c.match(/^(\d{1,2})[:\s](\d{2})\s*(AM|PM)$/); 
+    if(m) { let h=m[1]; return `${h.length===1?'0'+h:h}:${m[2]} ${m[3]}`; } 
+    return c.replace(/\s+/g, ' ').replace(/(\d{1,2})\s(\d{2})\s(AM|PM)/, '$1:$2 $3'); 
+}
+function isTimeEvening(ts) { 
+    if(!ts) return false; 
+    let nTs = normalizeTimeFormat(ts); 
+    if(nTs.includes('PM')) { const p = nTs.split(':'); const h = parseInt(p[0], 10); if(h === 12 || h < 3) return false; return true; } return false; 
+}
+function evaluateShiftIndicatorsAndSorting() { 
+    const h=new Date().getHours(); 
+    const mb=document.getElementById('morningShiftActiveBadge'); 
+    const eb=document.getElementById('eveningShiftActiveBadge'); 
+    const ms=document.getElementById('morningShiftSection'); 
+    const es=document.getElementById('eveningShiftSection'); 
+    const pc=document.getElementById('shiftsContainer'); 
+    if(h<15){mb.classList.remove('hidden');eb.classList.add('hidden');if(pc&&es&&ms&&es.nextSibling!==ms)pc.insertBefore(ms,es);}else{mb.classList.add('hidden');eb.classList.remove('hidden');if(pc&&ms&&es&&ms.nextSibling!==es)pc.insertBefore(es,ms);} 
+}
+
+async function handleStaffLogin(e) { 
+    e.preventDefault(); 
+    const btn=document.getElementById('loginSubmitBtn'); 
+    const u=document.getElementById('loginUsername').value.trim(); 
+    const p=document.getElementById('loginPassword').value.trim(); 
+    const err=document.getElementById('loginErrorMessage'); 
+    btn.disabled=true; 
+    btn.innerHTML=`<svg class="animate-spin h-3 w-3 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> Authenticating...`; 
+    
+    try { 
+        // ఫ్రంట్-ఎండ్ GET బదులు POST కి మార్చబడింది, ఎందుకంటే వర్కర్ POST కోసం చూస్తోంది
+        const pLoad = { action: 'login', username: u, password: p };
+        const res = await fetch(GOOGLE_APPS_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'cors',
+            redirect: 'follow',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(pLoad)
+        }); 
+        const data = await res.json(); 
+        
+        // data.result బదులు data.status కి మార్చబడింది
+        if(data.status === 'success'){
+            btn.innerHTML=`✓ Authorized!`;
+            err.classList.add('hidden');
+            setTimeout(()=>{
+                document.getElementById('loginOverlay').classList.add('hidden');
+                document.getElementById('appContainer').classList.remove('hidden');
+                document.getElementById('activeOperatorBadge').innerText=`${data.username} (Authorized staff)`;
+                fetchTodayData();
+            },800);
+        }else{
+            err.innerText=data.message || data.error || "Login Failed";
+            err.classList.remove('hidden');
+            btn.innerHTML=`<span>Authorize Terminal</span>`;
+            btn.disabled=false;
+        } 
+    } catch(errEx){
+        err.innerText="Authentication Connection Error.";
+        err.classList.remove('hidden');
+        btn.innerHTML=`<span>Authorize Terminal</span>`;
+        btn.disabled=false;
+    } 
+}
+
+function handleLogout() { 
+    document.getElementById('loginForm').reset(); 
+    document.getElementById('loginOverlay').classList.remove('hidden'); 
+    document.getElementById('appContainer').classList.add('hidden'); 
+}
+
+async function verifyPatientSearch() { 
+    const pidVal=document.getElementById('verifyPidInput').value.trim(); 
+    const mobVal=document.getElementById('verifyMobileInput').value.trim(); 
+    const qVal=pidVal||mobVal; 
+    if(!qVal){showToastNotification('Please enter Patient ID or Mobile Number to verify.');return;} 
+    
+    const btn=document.getElementById('verifySearchBtn'); 
+    btn.disabled=true; 
+    btn.innerHTML=`<svg class="animate-spin h-2.5 w-2.5 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> Searching...`; 
+    showToastNotification(`Searching for records: ${qVal}...`); 
+    
+    try { 
+        const res=await fetch(`${GOOGLE_APPS_SCRIPT_URL}?action=verify&query=${encodeURIComponent(qVal)}`); 
+        const data=await res.json(); 
+        
+        // data.result బదులు data.status
+        if(data.status === 'success'){
+            if(data.data){ // data.found బదులు data.data చెక్ చేస్తున్నాం
+                document.getElementById('existingPid_880055').value=data.data.ipNo || data.data.pid || "";
+                document.getElementById('fullName_880055').value=data.data.patientName || data.data.name || "";
+                document.getElementById('age_880055').value=data.data.age || "";
+                document.getElementById('village_880055').value=data.data.village || "";
+                document.getElementById('phone_880055').value=data.data.phone || "";
+                if(data.data.gender) selectGender(data.data.gender);
+                showToastNotification(`Patient found! Details autofilled. ID: ${data.data.ipNo || data.data.pid}`);
+            }else{
+                document.getElementById('existingPid_880055').value="";
+                showToastNotification('No existing records found. Proceed as new.');
+            }
+        }else{
+            showToastNotification("Search error: "+data.message);
+        } 
+    } catch(err){
+        showToastNotification("Database search communication error.");
+    } finally{
+        btn.disabled=false;
+        btn.innerHTML=`Verify`;
+    } 
+}
+
+async function handlePatientRegistration(e) { 
+    e.preventDefault(); 
+    const btn=document.getElementById('submit-btn'); 
+    const gVal=document.getElementById('gender_880055').value; 
+    if(!gVal){showToastNotification("Please select a gender to complete registration.");return;} 
+    btn.disabled=true; 
+    btn.innerHTML=`<svg class="animate-spin h-2.5 w-2.5 mr-1 text-white inline-block" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> Confirming...`; 
+    
+    const pLoad={
+        action:'register',
+        existingPid:document.getElementById('existingPid_880055').value.trim(),
+        fullName_880055:document.getElementById('fullName_880055').value.trim(),
+        phone_880055:document.getElementById('phone_880055').value.trim(),
+        age_880055:document.getElementById('age_880055').value.trim(),
+        gender_880055:gVal,
+        village_880055:document.getElementById('village_880055').value.trim(),
+        consultant_880055:document.getElementById('consultant_880055').value,
+        date_880055:document.getElementById('date_880055').value,
+        amount:""
+    }; 
+    
+    try { 
+        const res=await fetch(GOOGLE_APPS_SCRIPT_URL,{method:'POST',mode:'cors',redirect:'follow',headers:{'Content-Type':'application/json'},body:JSON.stringify(pLoad)}); 
+        const data=await res.json(); 
+        
+        // data.result బదులు data.status
+        if(data.status === 'success'){
+            resetRegistrationForm();
+            showToastNotification("Registration successful");
+            fetchTodayData();
+        }else{
+            showToastNotification("Registration failed: "+data.message);
+        } 
+    } catch(err){
+        showToastNotification("Database communication error.");
+    } finally{
+        btn.disabled=false;
+        btn.innerHTML=`<svg class="w-2.5 h-2.5 drop-shadow-sm" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg>Confirm`;
+    } 
+}
+
+async function fetchTodayData() { 
+    toggleSyncState(true); 
+    const todayStr = new Date().toISOString().split('T')[0];
+    try{
+        // వర్కర్ కి తగ్గట్టుగా get_today అని మార్చబడింది
+        const res=await fetch(`${GOOGLE_APPS_SCRIPT_URL}?action=get_today&date=${todayStr}&t=${Date.now()}`,{method:'GET',mode:'cors',redirect:'follow'});
+        const data=await res.json();
+        
+        // data.result బదులు data.status
+        if(data.status === 'success'){
+            opdPatients = data.data || data.records || [];
+            renderDataTables();
+        }else{
+            showToastNotification("Database Sync Error: "+data.message);
+        }
+    }catch(err){
+        // silently fail or show toast
+    }finally{
+        toggleSyncState(false);
+    } 
+}
+
+async function verifyPaidAmount(pid) { 
+    const amtInp=document.getElementById(`amt_${pid}`); 
+    const modeSel=document.getElementById(`paymode_${pid}`); 
+    const btn=document.getElementById(`btn_verify_${pid}`); 
+    const amtVal=amtInp.value.trim(); 
+    const payModeVal=modeSel.value; 
+    
+    if(!amtVal||isNaN(amtVal)||parseFloat(amtVal)<=0){showToastNotification("Please specify a valid numeric fee.");return;} 
+    btn.disabled=true; 
+    btn.innerHTML=`<svg class="animate-spin h-3 w-3 text-white mx-auto" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>`; 
+    
+    try { 
+        const pLoad={action:'updateAmount',pid:pid,amount:amtVal,payMode:payModeVal}; 
+        const res=await fetch(GOOGLE_APPS_SCRIPT_URL,{method:'POST',mode:'cors',redirect:'follow',headers:{'Content-Type':'application/json'},body:JSON.stringify(pLoad)}); 
+        const data=await res.json(); 
+        
+        // data.result బదులు data.status
+        if(data.status === 'success'){
+            btn.className="px-2 py-1 rounded-md bg-emerald-600 text-white font-bold text-[6.5px] uppercase shadow-sm";
+            btn.innerHTML="✓";
+            const row=document.getElementById(`row_waiting_${pid}`);
+            if(row){
+                row.style.transition="all 0.4s ease";
+                row.style.opacity="0";
+                row.style.transform="translateX(50px)";
+                setTimeout(()=>fetchTodayData(),400);
+            }else{
+                fetchTodayData();
+            }
+        }else{
+            showToastNotification("Verification failed: "+data.message);
+            btn.disabled=false;
+            btn.innerHTML="Verify";
+        } 
+    } catch(err){
+        showToastNotification("Verification communication failed.");
+        btn.disabled=false;
+        btn.innerHTML="Verify";
+    } 
+}
+
+function confirmDeleteOPDRecord(pid) { 
+    pendingDeletePid=pid; 
+    document.getElementById('deleteModalPid').innerText=pid; 
+    document.getElementById('deleteModal').classList.remove('hidden'); 
+}
+
+function closeDeleteModal() { 
+    pendingDeletePid=null; 
+    document.getElementById('deleteModal').classList.add('hidden'); 
+}
+
+function executeDeleteRecord() { 
+    if(!pendingDeletePid) return; 
+    const pid=pendingDeletePid; 
+    closeDeleteModal(); 
+    fetch(GOOGLE_APPS_SCRIPT_URL,{method:'POST',mode:'cors',redirect:'follow',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'delete',pid:pid})})
+    .then(r=>r.json())
+    .then(data=>{
+        // data.result బదులు data.status
+        if(data.status === 'success'){
+            showToastNotification("Record removed");
+            fetchTodayData();
+        }else showToastNotification("Purge rejected: "+data.message);
+    }).catch(()=>showToastNotification("Failed to communicate purge request.")); 
+}
+
+function renderDataTables() { 
+    const aB=document.getElementById('allOpdTableBody'); 
+    const mB=document.getElementById('morningOpdTableBody'); 
+    const eB=document.getElementById('eveningOpdTableBody'); 
+    aB.innerHTML=''; mB.innerHTML=''; eB.innerHTML=''; 
+    let uSNo=1,mSNo=1,eSNo=1; 
+    let mSt={total:0,online:0,offline:0,amount:0,cashAmt:0}; 
+    let eSt={total:0,online:0,offline:0,amount:0,cashAmt:0}; 
+    
+    opdPatients.forEach(p=>{
+        const tStr=normalizeTimeFormat(p.time);
+        const isEve=isTimeEvening(tStr);
+        let payMod=p.payMode||p.paymentMode||'Cash';
+        let amt=parseFloat(p.paidAmount||0);
+        let isOnl=(payMod!=='Cash'&&payMod!=='Others');
+        
+        if(!p.paidAmount){
+            const aR=document.createElement('tr');
+            aR.id=`row_waiting_${p.pid}`;
+            aR.className="hover:bg-slate-100/50 border-b border-slate-100 transition-all duration-300";
+            const amtSec=`<div class="flex items-center gap-1.5 justify-center"><input type="number" id="amt_${p.pid}" placeholder="INR" class="w-12 px-1 py-1 text-[7.5px] text-center border rounded-md border-slate-200 bg-white font-bold text-slate-900 focus:outline-none focus:ring-1 focus:ring-amber-500"><select id="paymode_${p.pid}" class="w-14 px-1 py-1 text-[7.5px] border rounded-md border-slate-200 bg-white font-bold text-slate-900 focus:outline-none focus:ring-1 focus:ring-amber-500"><option value="Cash">Cash</option><option value="PhonePe">PhonePe</option><option value="Google Pay">GPay</option><option value="Paytm">Paytm</option><option value="Others">Others</option></select><button id="btn_verify_${p.pid}" onclick="verifyPaidAmount('${p.pid}')" class="px-2 py-1 rounded-md bg-teal-600 hover:bg-teal-500 text-white font-black text-[6.5px] uppercase tracking-wider shadow-sm transition-all">Verify</button></div>`;
+            const prnWait=`<button onclick="openVitalsModal('${p.pid}')" class="px-2 py-1 rounded-md bg-slate-700 text-white font-bold text-[6.5px] uppercase tracking-wider flex items-center gap-1 hover:bg-slate-600 transition-all shadow-sm mx-auto"><svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>OP Slip</button>`;
+            aR.innerHTML=`<td class="px-2 py-1.5 font-bold">${uSNo++}</td><td class="px-2 py-1.5 text-slate-500 whitespace-nowrap">${p.date}</td><td class="px-2 py-1.5 text-slate-500 font-mono whitespace-nowrap">${tStr}</td><td class="px-2 py-1.5 text-blue-600 font-black">${p.pid}</td><td class="px-2 py-1.5 text-slate-900 font-bold">${p.consultant}</td><td class="px-2 py-1.5 font-mono text-indigo-600 font-bold">${p.token}</td><td class="px-2 py-1.5 font-bold text-slate-900">${p.name}</td><td class="px-2 py-1.5">${p.age}</td><td class="px-2 py-1.5">${p.gender}</td><td class="px-2 py-1.5 text-slate-500">${p.village}</td><td class="px-2 py-1.5 text-center">${amtSec}</td><td class="px-2 py-1.5 text-center">${prnWait}</td><td class="px-2 py-1.5 text-center"><button onclick="confirmDeleteOPDRecord('${p.pid}')" class="p-1 rounded-md text-rose-600 hover:bg-rose-50 transition-colors"><svg class="w-3 h-3 mx-auto" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button></td><td class="px-2 py-1.5 font-mono">${p.phone}</td>`;
+            aB.appendChild(aR);
+        }else{
+            if(!isEve){
+                mSt.total++;mSt.amount+=amt;if(isOnl)mSt.online++;else{mSt.offline++;mSt.cashAmt+=amt;}
+            }else{
+                eSt.total++;eSt.amount+=amt;if(isOnl)eSt.online++;else{eSt.offline++;eSt.cashAmt+=amt;}
+            }
+            const sR=document.createElement('tr');
+            sR.className="hover:bg-slate-100/50 border-b border-slate-100";
+            const prn=`<button onclick="openVitalsModal('${p.pid}')" class="px-2 py-1 rounded-md bg-slate-700 text-white font-bold text-[6.5px] uppercase tracking-wider flex items-center gap-1 hover:bg-slate-600 transition-all shadow-sm mx-auto"><svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>OP Slip</button>`;
+            const rec=`<button onclick="printPaymentReceipt('${p.pid}')" class="px-2 py-1 rounded-md bg-teal-600 text-white font-bold text-[6.5px] uppercase tracking-wider flex items-center gap-1 hover:bg-teal-500 transition-all shadow-sm mx-auto"><svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 8h6m-5 0a3 3 0 110 6H9l3 3m-3-6h6m6 1a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Receipt</button>`;
+            const cR=`<td class="px-2 py-1.5 text-slate-500 whitespace-nowrap">${p.date}</td><td class="px-2 py-1.5 text-slate-500 font-mono whitespace-nowrap">${tStr}</td><td class="px-2 py-1.5 text-blue-600 font-black">${p.pid}</td><td class="px-2 py-1.5 text-slate-900 font-bold">${p.consultant}</td><td class="px-2 py-1.5 font-mono text-indigo-600 font-bold">${p.token}</td><td class="px-2 py-1.5 font-bold text-slate-900">${p.name}</td><td class="px-2 py-1.5">${p.age}</td><td class="px-2 py-1.5">${p.gender}</td><td class="px-2 py-1.5 text-slate-500">${p.village}</td><td class="px-2 py-1.5 font-bold text-emerald-600">INR ${p.paidAmount}</td><td class="px-2 py-1.5 font-bold text-slate-600">${payMod}</td><td class="px-2 py-1.5 text-center">${prn}</td><td class="px-2 py-1.5 text-center">${rec}</td><td class="px-2 py-1.5 font-mono">${p.phone}</td>`;
+            if(!isEve){
+                sR.innerHTML=`<td class="px-2 py-1.5 font-bold">${mSNo++}</td>`+cR;mB.appendChild(sR);
+            }else{
+                sR.innerHTML=`<td class="px-2 py-1.5 font-bold">${eSNo++}</td>`+cR;eB.appendChild(sR);
+            }
+        }
+    }); 
+    if(uSNo===1)aB.innerHTML=`<tr><td colspan="14" class="px-5 py-6 text-center text-slate-400 font-bold uppercase tracking-widest">No active unpaid registrations</td></tr>`; 
+    if(mSNo===1)mB.innerHTML=`<tr><td colspan="15" class="px-5 py-6 text-center text-slate-400 font-bold uppercase tracking-widest">No verified morning sessions</td></tr>`; 
+    if(eSNo===1)eB.innerHTML=`<tr><td colspan="15" class="px-5 py-6 text-center text-slate-400 font-bold uppercase tracking-widest">No verified evening sessions</td></tr>`; 
+    document.getElementById('stat-morn-total').innerText=mSt.total;
+    document.getElementById('stat-morn-online').innerText=mSt.online;
+    document.getElementById('stat-morn-offline').innerText=mSt.offline;
+    document.getElementById('stat-morn-cash-amt').innerText=`₹${mSt.cashAmt}`;
+    document.getElementById('stat-morn-amount').innerText=`₹${mSt.amount}`; 
+    document.getElementById('stat-eve-total').innerText=eSt.total;
+    document.getElementById('stat-eve-online').innerText=eSt.online;
+    document.getElementById('stat-eve-offline').innerText=eSt.offline;
+    document.getElementById('stat-eve-cash-amt').innerText=`₹${eSt.cashAmt}`;
+    document.getElementById('stat-eve-amount').innerText=`₹${eSt.amount}`; 
+}
+
+function submitVitalsAndPrint() { 
+    const pid=document.getElementById('vitalsPid').value; 
+    const vitals={
+        temp:document.getElementById('vitalTemp').value.trim(),
+        weight:document.getElementById('vitalWeight').value.trim(),
+        spo2:document.getElementById('vitalSpo2').value.trim(),
+        pr:document.getElementById('vitalPr').value.trim(),
+        bpSys:document.getElementById('vitalBpSys').value.trim(),
+        bpDia:document.getElementById('vitalBpDia').value.trim()
+    }; 
+    closeVitalsModal(); 
+    printOPTicket(pid,vitals); 
+}
+
+function printOPTicket(pid,vitals={}) { 
+    const p=opdPatients.find(x=>x.pid===pid); 
+    if(!p)return; 
+    const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']; 
+    const pDate=new Date(p.date); 
+    const wDay=isNaN(pDate.getTime())?'':days[pDate.getDay()]; 
+    let dName="డా|| ఆర్. ఆంజనేయులు ",dDeg="M.B.B.S., M.D. (Paed)",dSpec="పిల్లల మరియు పురిటి పిల్లల వైద్య నిపుణులు",dReg="Regd No. 54702"; 
+    
+    if(p.consultant.includes("Sujata")){
+        dName="డా|| ఇ. సుజాత ఆంజనేయులు";dDeg="M.B.B.S., M.S. (OBG)";dSpec="స్త్రీ మరియు ప్రసూతి వ్యాధి నిపుణులు";dReg="Regd No. 62254";
+    }else if(p.consultant.includes("Chandrasekhar")){
+        dName="డా|| ఎ. చంద్రశేఖర్ రెడ్డి";dDeg="M.S. (ENT)";dSpec="చెవి, ముక్కు, గొంతు వైద్యులు";dReg="Cell: 7013738036";
+    }else if(p.consultant.includes("Chanti Babu")){
+        dName="డా|| చంటి బాబు";dDeg="M.S. (Ortho)";dSpec="కీళ్ల నొప్పులు మరియు ఎముకల వైద్య నిపుణులు";dReg="Regd No. 71832";
+    } 
+    
+    const nTok=p.token ? p.token.replace(/\D/g,'') : '1'; 
+    const vT=vitals.temp?`<strong style="font-size:12px; color:#000;"> ${vitals.temp} </strong>`:` __________ `; 
+    const vW=vitals.weight?`<strong style="font-size:12px; color:#000;"> ${vitals.weight} </strong>`:`__________`; 
+    const vS=vitals.spo2?`<strong style="font-size:12px; color:#000;"> ${vitals.spo2} </strong>`:`__________`; 
+    const vP=vitals.pr?`<strong style="font-size:12px; color:#000;"> ${vitals.pr} </strong>`:`__________`; 
+    const vBS=vitals.bpSys?`<strong style="font-size:12px; color:#000;"> ${vitals.bpSys} </strong>`:`____`; 
+    const vBD=vitals.bpDia?`<strong style="font-size:12px; color:#000;"> ${vitals.bpDia} </strong>`:`____`; 
+    
+    const html=`<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>OP Ticket [${pid}]</title><link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Telugu:wght@400;700;800&family=Roboto+Slab:wght@400;700;900&display=swap" rel="stylesheet"><style>@page { size: A4 portrait; margin: 0mm; } * { box-sizing: border-box; } body { font-family: 'Roboto Slab', 'Noto Serif Telugu', serif; margin: 0; padding: 0; background-color: #ffffff; -webkit-print-color-adjust: exact; print-color-adjust: exact; } .print-wrapper { width: 210mm; height: 297mm; margin: 0 auto; padding: 8mm; background-color: #ffffff; } .a4-container { width: 100%; height: 100%; padding: 8mm; background-color: #ffffff; border: 1.5px solid #000000; border-radius: 0; display: flex; flex-direction: column; } .header-brand { display: grid; grid-template-columns: 110px 1fr 90px; align-items: center; gap: 15px; padding-bottom: 6px; position: relative; } .logo-container { display: flex; align-items: center; justify-content: center; width: 110px; height: 110px; flex-shrink: 0; } .logo { width: 100%; height: 100%; object-fit: contain; } .brand-text { flex-grow: 1; padding-left: 15px; text-align: center; } .hospital-english-name { font-size: 21px; font-weight: 900; color: #1e3a8a; margin: 0; letter-spacing: -0.2px; text-transform: uppercase; white-space: nowrap; } .hospital-tagline { font-size: 10px; font-weight: 800; color: #0891b2; margin: 2px 0; letter-spacing: 1px; text-transform: uppercase; } .hospital-telugu-name { font-size: 18px; font-weight: 800; color: #b91c1c; margin: 2px 0 4px 0; } .hospital-address { font-size: 9px; color: #475569; margin: 0; font-weight: 700; text-align: center; } .header-divider { border: 0; height: 1.5px; background: #000000; margin: 0 0 10px 0; } .demographics-area { display: grid; grid-template-columns: 80px 1fr; gap: 15px; border-bottom: 1.5px dashed #000000; padding-bottom: 10px; margin-bottom: 10px; } .token-raw-column { display: flex; align-items: center; justify-content: center; border-right: 1px solid #e2e8f0; padding-right: 12px; } .token-raw-value { font-size: 64px; font-weight: 900; color: #000000; line-height: 1; margin: 0; } .patient-details-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 8px; font-size: 11px; } .line-field { border-bottom: none; padding-bottom: 1px; font-weight: 700; color: #0f172a; } .label-dim { color: #64748b; font-weight: 700; text-transform: uppercase; font-size: 9px; margin-right: 6px; } .doctor-opposite-row { display: grid; grid-template-columns: 1.5fr 1fr; gap: 15px; background-color: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 8px; margin-bottom: 10px; } .doctor-info-left { display: flex; flex-direction: column; justify-content: center; } .doctor-name-main { font-size: 14px; font-weight: 800; color: #b91c1c; } .doctor-sub-details { font-size:10px; font-weight:700; color:#334155; margin-top:2px; padding-left:25px; } .doctor-reg { font-size: 9px; font-weight: 700; color: #1e3a8a; } .patient-metadata-right { display: grid; grid-template-columns: 1fr; gap: 3px; font-size: 10px; font-weight: 700; color: #334155; align-content: center; border-left: 1px solid #e2e8f0; padding-left: 12px; } .clinical-workspace { display: grid; grid-template-columns: 1fr 180px; gap: 15px; flex-grow: 1; border-top: 1.5px solid #000000; padding-top: 10px; } .clinical-left-rx { position: relative; display: flex; flex-direction: column; } .clinical-right-vitals { border-left: 1px dashed #cbd5e1; padding-left: 12px; display: flex; flex-direction: column; } .rx-symbol { font-size:32px; font-weight:900; color:#000000; line-height:1; margin-top:100px; margin-bottom:8px; margin-left:140px; text-align:left; } .blank-prescription-box { flex-grow: 1; min-height: 260px; border: 1px dashed #e2e8f0; border-radius: 6px; padding: 8px; font-size: 9px; color: #cbd5e1; font-weight: bold; } .vital-line { margin-bottom: 10px; font-weight: 700; font-size: 10px; color: #334155; border-bottom: 1px dashed #cbd5e1; padding-bottom: 4px; display: flex; justify-content: space-between; } .prescription-footer { margin-top: auto; } .sig-block { text-align: right; font-weight: 800; font-size: 11px; margin-bottom: 8px; color: #0f172a; } .footer-notes-divider { border: 0; height: 2px; background: #000000; margin: 6px 0; } .notes-container-telugu { display: grid; grid-template-columns: 1fr; gap: 3px; font-size: 9px; font-weight: 800; color: #000000; line-height: 1.3; margin-bottom: 6px; } .note-item { position: relative; padding-left: 10px; } .note-item::before { content: "•"; position: absolute; left: 0; color: #b91c1c; } .branding-credits { text-align: center; font-size: 8px; color: #000000; margin-top: 4px; letter-spacing: 0.5px; font-weight: 900; text-transform: uppercase; } @media print { body { background:#ffffff; } .print-wrapper { width:210mm !important; height:297mm !important; padding:8mm !important; margin:0 auto !important; } .a4-container { width:100% !important; height:100% !important; border:1.5px solid #000000 !important; border-radius:0 !important; padding:8mm !important; } }</style></head><body><div class="print-wrapper"><div class="a4-container"><div class="header-brand"><div class="logo-container"><img src="https://sanjeeva-hspl.github.io/SM-IMG/02-SMH-HOSPITAL%20LOGO.png" class="logo" alt="SMH Logo"></div><div class="brand-text"><h1 class="hospital-english-name">Sanjeeva Multispecialty Hospital</h1><div class="hospital-tagline">HEALTH CARE WITH ETHICS</div><h2 class="hospital-telugu-name">శ్రీ సంజీవ మల్టీ స్పెషాలిటీ హాస్పిటల్</h2><p class="hospital-address">D.No: 1-7-26, PEDDANNA STREET, ALLAGADDA, NANDYALA DIST.</p></div><div style="display:flex; flex-direction:column; align-items:center; justify-content:center; flex-shrink:0;"><img src="https://sanjeeva-hspl.github.io/SM-IMG/OPRegister.png" style="width:65px; height:auto; margin-bottom:4px;" alt="Scan"><div style="font-size:14px; font-weight:900; color:#1e3a8a;">9100349825</div><div style="font-size:8px; font-weight:800; color:#475569;">WWW.SANJEEVAHOSPITAL.IN</div></div></div><hr class="header-divider"><div class="demographics-area"><div class="token-raw-column"><div class="token-raw-value">${nTok}</div></div><div class="patient-details-grid"><div class="line-field" style="grid-column: span 2;"><span class="label-dim">Name:</span><span style="font-size: 13px;">${p.name}</span></div><div class="line-field"><span class="label-dim">Age / Gender:</span><span>${p.age} / ${p.gender}</span></div><div class="line-field" style="grid-column: span 2;"><span class="label-dim">Address:</span><span>${p.village}</span></div></div></div><div class="doctor-opposite-row"><div class="doctor-info-left"><div class="doctor-name-main">${dName}</div><div class="doctor-sub-details">${dDeg}</div><div class="doctor-reg">${dSpec} | ${dReg}</div></div><div class="patient-metadata-right"><div><span class="label-dim">PID:</span>${p.pid}</div><div><span class="label-dim">Date:</span>${p.date}</div><div><span class="label-dim">Time:</span>${normalizeTimeFormat(p.time)}</div><div><span class="label-dim">Day:</span>${wDay}</div></div></div><div class="clinical-workspace"><div class="clinical-left-rx"><div class="rx-symbol">Rx</div></div><div class="clinical-right-vitals"><div class="vital-line"><span>Temp:</span><span>${vT} °F</span></div><div class="vital-line"><span>Weight:</span><span>${vW} kg</span></div><div class="vital-line"><span>SpO2:</span><span>${vS} %</span></div><div class="vital-line"><span>PR:</span><span>${vP} bpm</span></div><div class="vital-line"><span>BP:</span><span>${vBS} / ${vBD} mmHg</span></div></div></div><div class="prescription-footer"><div class="sig-block">Doctor Signature</div><hr class="footer-notes-divider"><div class="notes-container-telugu"><div class="note-item">Link FPA, Volo FPA, Universal Sompo, FHPL, Bajaj, Heritage, Navi TPA మొదలగు ఇన్సూరెన్స్ కార్డు కలవారికి క్యాష్‌లెస్ ట్రీట్‌మెంట్ సదుపాయం కలదు.</div><div class="note-item">అల్ట్రాసౌండ్ స్కానింగ్ (ULTRA SOUND SCAN) సౌకర్యం కలదు.</div><div class="note-item">అన్నీ రకాల లాప్రోస్కోపిక్ ఆపరేషన్స్ చేయబడును.</div><div class="note-item">అన్ని రకాల ఆపరేషన్లు మరియు వ్యాక్సిన్లు ప్రతిరోజు వేయబడును.</div><div class="note-item">పై మందులు 3 రోజులు దాటితే వెనక్కి తీసుకోబడవు.</div></div><div class="branding-credits">© 2026 SANJEEVA MULTISPECIALTY HOSPITAL • ALLAGADDA • MANAGED BY SRI VEDA ORG</div></div></div></div></body></html>`; 
+    
+    const f=document.getElementById('printFrame'); 
+    const d=f.contentWindow.document; 
+    d.open(); 
+    d.write(html); 
+    d.close(); 
+    setTimeout(()=>{f.contentWindow.focus();f.contentWindow.print();},350); 
+}
+
+function printPaymentReceipt(pid) { 
+    showToastNotification('Receipt Module Configuration Pending.'); 
+}
 </script>
 </body>
 </html>
