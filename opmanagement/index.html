@@ -324,7 +324,7 @@ async function verifyPatientSearch() {
                 showToastNotification('No existing records found. Proceed as new.');
             }
         }else{
-            showToastNotification("Search error: "+data.message);
+            showToastNotification("Search error: " + (data.message || data.error || "Unknown Error"));
         } 
     } catch(err){
         showToastNotification("Database search communication error.");
@@ -365,7 +365,7 @@ async function handlePatientRegistration(e) {
             showToastNotification("Registration successful");
             fetchTodayData();
         }else{
-            showToastNotification("Registration failed: "+data.message);
+            showToastNotification("Registration failed: " + (data.message || data.error || "Unknown Error"));
         } 
     } catch(err){
         showToastNotification("Database communication error.");
@@ -388,7 +388,7 @@ async function fetchTodayData() {
             opdPatients = data.data || data.records || [];
             renderDataTables();
         }else{
-            showToastNotification("Database Sync Error: "+data.message);
+            showToastNotification("Database Sync Error: " + (data.message || data.error || "Unknown Error"));
         }
     }catch(err){
         // silently fail or show toast
@@ -427,7 +427,7 @@ async function verifyPaidAmount(pid) {
                 fetchTodayData();
             }
         }else{
-            showToastNotification("Verification failed: "+data.message);
+            showToastNotification("Verification failed: " + (data.message || data.error || "Unknown Error"));
             btn.disabled=false;
             btn.innerHTML="Verify";
         } 
@@ -460,7 +460,7 @@ function executeDeleteRecord() {
         if(data.status === 'success'){
             showToastNotification("Record removed");
             fetchTodayData();
-        }else showToastNotification("Purge rejected: "+data.message);
+        }else showToastNotification("Purge rejected: " + (data.message || data.error || "Unknown Error"));
     }).catch(()=>showToastNotification("Failed to communicate purge request.")); 
 }
 
