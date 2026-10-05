@@ -292,43 +292,53 @@ function initLiveClock(){const timeSpan=document.getElementById('liveTimestamp')
 /* CM014 - Interface Theme Adjuster */
 function initThemeToggle(){const btn=document.getElementById('themeToggle');btn.addEventListener('click',()=>{document.documentElement.classList.toggle('dark');});}
 
-/* CM015 - Data Fetching Request to Secure Wildcard Backend */
+/* CM015 - Data Fetching Request to Secure Wildcard Backend (REVERTED TO GET WITH PROPER DATE AND LIMIT) */
 async function fetchTodayData(){
-  if(!activeDoctorSessionKey) return;
+  if(!activeDoctorSessionKey) {
+    showToastNotification("Database Error: Missing Session Key.");
+    return;
+  }
+  
   toggleSyncState(true);
   
   const filterDateRaw = document.getElementById('selectedDateFilter').value;
   let dbFormattedDate = "";
   
   if(filterDateRaw){
+    // Convert YYYY-MM-DD from calendar input to "D MMM YYYY" format for the database
     const parts = filterDateRaw.split('-');
     const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
     dbFormattedDate = `${parseInt(parts[2],10)} ${months[parseInt(parts[1],10)-1]} ${parts[0]}`;
   } else {
+    // Fallback to today in "D MMM YYYY" format
     const dObj = new Date();
     const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
     dbFormattedDate = `${dObj.getDate()} ${months[dObj.getMonth()]} ${dObj.getFullYear()}`;
   }
   
   try {
-    const response = await fetch(`${CLOUDFLARE_WORKER_URL}api/records-by-date`, {
-      method: 'POST',
+    // Restored the GET method to ensure the session key is passed to your backend exactly as expected
+    const url = `${CLOUDFLARE_WORKER_URL}?action=fetchToday&username=${encodeURIComponent(activeDoctorSessionKey)}&filterDate=${encodeURIComponent(dbFormattedDate)}&limit=400&t=${Date.now()}`;
+    
+    const response = await fetch(url, {
+      method: 'GET',
       mode: 'cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ date: dbFormattedDate })
+      redirect: 'follow'
     });
     
     const data = await response.json();
     
-    if(data.success){
-      opdPatients = data.data.slice(0, 400); 
+    if(data.result === 'success'){
+      let records = data.records || [];
+      // Slicing to enforce the 400 record limit on the frontend
+      opdPatients = records.slice(0, 400); 
       renderDataTables();
     } else {
-      showToastNotification("Database Error: " + data.message);
+      showToastNotification("Database Error: " + (data.message || "Unknown error"));
     }
   } catch(err) {
     console.error("Fetch Date Error:", err);
-    showToastNotification("Network or Connection Error");
+    showToastNotification("Database Error: Connection Failed.");
   } finally {
     toggleSyncState(false);
   }
