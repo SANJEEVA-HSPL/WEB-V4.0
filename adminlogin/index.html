@@ -214,7 +214,7 @@ body{font-family:'Roboto Slab','Noto Serif Telugu',serif;}
 <p class="text-[9px] text-slate-500 dark:text-slate-400 uppercase tracking-wider mt-0.5">Lab billing and scanned reports</p>
 </div>
 </div>
-<span id="labCountBadge" class="px-3 py-1 bg-teal-50 dark:bg-teal-950 text-teal-800 dark:text-teal-300 font-black rounded-full text-[9px] border border-teal-100 dark:border-teal-900 uppercase">0 Lab Entries</span>
+<span id="labCountBadge" class="px-3 py-1 bg-teal-50 dark:bg-teal-950 text-teal-800 dark:text-teal-300 font-black rounded-full text-[9px] border border-teal-100 dark:border-teal-900 uppercase">INR 0 | 0 Lab Entries</span>
 </div>
 <div class="overflow-x-auto">
 <table class="w-full text-left border-collapse min-w-[800px]">
@@ -343,7 +343,8 @@ body{font-family:'Roboto Slab','Noto Serif Telugu',serif;}
 const CONF_LINKS = { api: "https://doctore-op-login.contact-sanjeevahospital.workers.dev/", logo: "https://sanjeeva-hspl.github.io/SM-IMG/02-SMH-HOSPITAL%20LOGO.png" };
 let opdPatients = []; let labRecords = []; let activeDoctorSessionKey = "";
 document.getElementById('mainLogo').src = CONF_LINKS.logo; document.getElementById('loginLogo').src = CONF_LINKS.logo;
-document.getElementById('selectedDateFilter').value = new Date().toISOString().split('T')[0];
+const tzOffset = (new Date()).getTimezoneOffset() * 60000;
+document.getElementById('selectedDateFilter').value = new Date(Date.now() - tzOffset).toISOString().split('T')[0];
 initLiveClock(); initLoginFocusControl();
 
 /* CM017 - Utilities */
@@ -365,7 +366,6 @@ async function handleStaffLogin(event) {
     submitBtn.innerHTML = `<svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> Authenticating...`; 
     
     try { 
-        // Updated logic using URL object for safety
         const url = new URL(CONF_LINKS.api);
         url.searchParams.append('action', 'login');
         url.searchParams.append('username', user);
@@ -420,7 +420,6 @@ async function fetchTodayData() {
     } 
     
     try { 
-        // Updated logic using URL object for safety
         const url = new URL(CONF_LINKS.api);
         url.searchParams.append('action', 'fetchToday');
         url.searchParams.append('username', activeDoctorSessionKey);
@@ -434,7 +433,8 @@ async function fetchTodayData() {
         if(data.result === 'success') { 
             opdPatients = (data.records || []).slice(0, 400); 
             renderDataTables(); 
-            fetchLabData(dbFormattedDate); 
+            const rawDateForLab = filterDateRaw || new Date(Date.now() - tzOffset).toISOString().split('T')[0];
+            fetchLabData(rawDateForLab); 
         } else { 
             showToastNotification("Database Error: " + (data.message || "Unknown error")); 
         } 
@@ -475,11 +475,10 @@ function printPaymentReceipt(pid) { const patient = opdPatients.find(p => p.pid 
 async function fetchLabData(dateStr) { 
     const d = dateStr || document.getElementById('selectedDateFilter').value; 
     try { 
-        // Updated logic using URL object for safety
         const url = new URL(CONF_LINKS.api);
         url.searchParams.append('action', 'laboratory-data');
         url.searchParams.append('date', d);
-        url.searchParams.append('limit', '50');
+        url.searchParams.append('limit', '200');
 
         const res = await fetch(url.toString()); 
         const json = await res.json(); 
@@ -494,7 +493,7 @@ async function fetchLabData(dateStr) {
         console.error(e); 
     } 
 }
-function renderLabTable() { const tbody = document.getElementById('labTableBody'); tbody.innerHTML = ''; if(labRecords.length === 0) { tbody.innerHTML = `<tr><td colspan="7" class="px-6 py-8 text-center text-slate-400 font-bold uppercase tracking-widest">No Laboratory Records Found For This Date</td></tr>`; document.getElementById('labCountBadge').innerText = `0 Lab Entries`; return; } labRecords.forEach((r, i) => { const tr = document.createElement('tr'); tr.className = "hover:bg-slate-100/50 dark:hover:bg-slate-800/30 border-b border-slate-100 dark:border-slate-800/60 font-semibold text-[11px]"; let tTime = r.time || '-'; if(tTime.includes('(')) { tTime = tTime.split('(')[1].replace(')', '').trim(); } tr.innerHTML = `<td class="px-3 py-2">${i+1}</td><td class="px-3 py-2 font-mono">${tTime}</td><td class="px-3 py-2">${r.date||'-'}</td><td class="px-3 py-2 font-bold text-medical-600">${r.patient_id||'-'}</td><td class="px-3 py-2 font-bold">${toTitleCase(r.patient_name||'-')}</td><td class="px-3 py-2 text-emerald-600 font-bold">INR ${r.total_amount||'0'}</td><td class="px-3 py-2 text-center"><button onclick="viewLabReport('${r.patient_id}')" class="px-2 py-1 bg-teal-100 text-teal-700 hover:bg-teal-200 rounded text-[9px] font-bold uppercase">View Report</button></td>`; tbody.appendChild(tr); }); document.getElementById('labCountBadge').innerText = `${labRecords.length} Lab Entries`; }
+function renderLabTable() { const tbody = document.getElementById('labTableBody'); tbody.innerHTML = ''; if(labRecords.length === 0) { tbody.innerHTML = `<tr><td colspan="7" class="px-6 py-8 text-center text-slate-400 font-bold uppercase tracking-widest">No Laboratory Records Found For This Date</td></tr>`; document.getElementById('labCountBadge').innerText = `INR 0 | 0 Lab Entries`; return; } let totalLabAmt = 0; labRecords.forEach((r, i) => { totalLabAmt += parseFloat(r.total_amount || 0); const tr = document.createElement('tr'); tr.className = "hover:bg-slate-100/50 dark:hover:bg-slate-800/30 border-b border-slate-100 dark:border-slate-800/60 font-semibold text-[11px]"; let tTime = r.time || '-'; if(tTime.includes('(')) { tTime = tTime.split('(')[1].replace(')', '').trim(); } tr.innerHTML = `<td class="px-3 py-2">${i+1}</td><td class="px-3 py-2 font-mono">${tTime}</td><td class="px-3 py-2">${r.date||'-'}</td><td class="px-3 py-2 font-bold text-medical-600">${r.patient_id||'-'}</td><td class="px-3 py-2 font-bold">${toTitleCase(r.patient_name||'-')}</td><td class="px-3 py-2 text-emerald-600 font-bold">INR ${r.total_amount||'0'}</td><td class="px-3 py-2 text-center"><button onclick="viewLabReport('${r.patient_id}')" class="px-2 py-1 bg-teal-100 text-teal-700 hover:bg-teal-200 rounded text-[9px] font-bold uppercase">View Report</button></td>`; tbody.appendChild(tr); }); document.getElementById('labCountBadge').innerText = `INR ${totalLabAmt} | ${labRecords.length} Lab Entries`; }
 function viewLabReport(pid) { const r = labRecords.find(x => x.patient_id === pid); if(!r) return; const list = document.getElementById('labReportTestsList'); list.innerHTML = ''; if(r.tests && r.tests.length > 0) { r.tests.forEach(t => { list.innerHTML += `<li class="border-b border-slate-100 dark:border-slate-700 py-1.5 flex justify-between items-center"><span>${t.test_description}</span><span class="font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">INR ${t.amount}</span></li>`; }); } else { list.innerHTML = '<li class="py-2 text-slate-400 text-center italic">No specific tests recorded.</li>'; } document.getElementById('labReportModalTitle').innerText = `Lab Report - ${toTitleCase(r.patient_name)} (${r.patient_id})`; document.getElementById('labReportModal').classList.remove('hidden'); }
 function closeLabReportModal() { document.getElementById('labReportModal').classList.add('hidden'); }
 
@@ -502,7 +501,6 @@ function closeLabReportModal() { document.getElementById('labReportModal').class
 async function fetchFormData(formName) { 
     document.getElementById('formTableContainer').innerHTML = '<div class="p-4 text-center text-slate-500 animate-pulse font-bold tracking-widest uppercase">Loading form data...</div>'; 
     try { 
-        // Updated logic using URL object for safety
         const url = new URL(CONF_LINKS.api);
         url.searchParams.append('action', 'forms-data');
         url.searchParams.append('form', formName);
